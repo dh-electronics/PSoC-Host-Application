@@ -1,0 +1,5 @@
+{
+"func" : "writeLed",
+"object" : "LED_STATUS",
+"on" : true
+}

@@ -1,0 +1,7 @@
+#!/bin/sh
+cd /usr/lib
+
+cd /etc/init.d
+update-rc.d json-server disable
+sync
+

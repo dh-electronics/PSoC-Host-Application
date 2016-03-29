@@ -1,0 +1,11 @@
+TEMPLATE = subdirs
+CONFIG -= QT
+
+C-API.file = C-API/C-API.pro
+JSON-API.file = JSON-API/JSON-API.pro
+DHCOM_HAL.file = DHCOM_HAL/DHCOM_HAL.pro
+SUBDIRS = DHCOM_HAL C-API JSON-API PIPES-API TestStand
+
+C-API.depends = DHCOM_HAL
+JSON-API.depends = C-API
+PIPES-API.depends = C-API
