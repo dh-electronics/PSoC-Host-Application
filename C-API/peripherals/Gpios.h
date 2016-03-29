@@ -3,7 +3,7 @@
 
 
 #ifdef __cplusplus
-namespace bigfish
+namespace drc01
 {
 #endif
 
@@ -18,10 +18,10 @@ enum GPIO
     RA5 = 0x05,
     RA6 = 0x06,
     RA7 = 0x07,
-    RA8 = 0x08,     // LED_CAN
+    RA8 = 0x08,     // LED_RUN
     RA9 = 0x09,
-    RA10 = 0x0A,    // Relay 1
-    RA11 = 0x0B,    // Relay 2
+    RA10 = 0x0A,    // LED_LAN
+    RA11 = 0x0B,    // LED_BUS
 
     RB0 = 0x10,
     RB1 = 0x11,
@@ -35,8 +35,8 @@ enum GPIO
     RB9 = 0x19,
 
     RC0 = 0x20,
-    RC1 = 0x21,     // LED_RS232_A
-    RC2 = 0x22      // LED_RS232_B
+    RC1 = 0x21,     // LED_ERR
+    RC2 = 0x22
 };
 
 

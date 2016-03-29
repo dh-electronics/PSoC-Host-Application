@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 
-namespace bigfish
+namespace drc01
 {
 
 
@@ -21,7 +21,6 @@ public:
     static const uint16_t DISPLAY_SHOW_WAIT_MS     = 12; // 9, 10
 
     Display(SpiProto &proto);
-    ~Display() {}
 
     virtual RESULT enable(bool on);
     virtual RESULT clear();

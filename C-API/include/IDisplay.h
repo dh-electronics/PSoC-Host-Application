@@ -4,13 +4,15 @@
 enum RESULT;
 
 
-namespace bigfish
+namespace drc01
 {
 
 
 class IDisplay
 {
 public:
+    virtual ~IDisplay() {}
+
     virtual RESULT enable(bool on)              =0;
     virtual RESULT clear()                      =0;
     virtual RESULT invert(bool on)              =0;

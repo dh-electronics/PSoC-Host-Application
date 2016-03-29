@@ -3,24 +3,17 @@
 
 #include <IApiManager.h>
 #include "resultcodes.h"
-#include "inputs.h"
-#include "relais.h"
-#include "dacs.h"
 #include "leds.h"
-#include <peripherals/Input.h>
 #include <peripherals/Led.h>
 #include <peripherals/Buttons.h>
-#include <peripherals/Dac.h>
-#include <peripherals/Relay.h>
 #include <peripherals/Display.h>
 #include <peripherals/Eeprom.h>
-#include <peripherals/SR.h>
 #include <spi/SpiProto.h>
 #include <hal/System.h>
 #include <hal/GPIO.h>
 
 
-namespace bigfish
+namespace drc01
 {
 
 
@@ -32,9 +25,6 @@ public:
     static ApiManager * self() { return self_; }
 
     virtual void            active(bool active = true);         // used for detecting client access to api
-    virtual IInput *        getInput(INPUT input) const;
-    virtual IRelay *        getRelay(RELAY relay) const;
-    virtual IDac *          getDac(DAC dac) const;
     virtual ILed *          getLed(LED led) const;
     virtual IButtons *      getButtons() const                  { return buttons_; }
     virtual IDisplay *      getDisplay() const                  { return display_; }
@@ -61,8 +51,7 @@ private:
 
     enum PIC_SW
     {
-        PIC_SW_1V4 = 0x0104,     // v.1.4
-        PIC_SW_2V0 = 0x0200,     // v.2.0
+        PIC_SW_0V1 = 0x0001,     // v.0.1
     };
 
     enum HW_REV
@@ -73,7 +62,7 @@ private:
     };
 
     ApiManager();
-    ~ApiManager();
+    virtual ~ApiManager();
 
     bool        start();
     bool        createPeripherals();
@@ -90,10 +79,6 @@ private:
     SpiProto &  proto() { return proto_; }
 
     SpiProto        proto_;
-    SR *            sr_;
-    Input *         inputs_[Input::COUNT];
-    Relay *         relais_[Relay::COUNT];
-    Dac *           dacs_[Dac::COUNT];
     Led *           leds_[Led::COUNT];
     Buttons *       buttons_;
     Display *       display_;

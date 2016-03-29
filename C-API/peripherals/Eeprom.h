@@ -4,7 +4,7 @@
 #include <IEeprom.h>
 
 
-namespace bigfish
+namespace drc01
 {
 
 
@@ -15,7 +15,6 @@ class Eeprom : public IEeprom
 {
 public:
     Eeprom(SpiProto &proto);
-    ~Eeprom() {}
 
     virtual RESULT write(uint16_t *data, uint16_t byteOffset, uint8_t wordCount);
 

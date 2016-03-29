@@ -5,7 +5,6 @@
 #include <stdint.h>
 #include <assert.h>
 #include <spi/Response.h>
-#include <spi/InputMode.h>
 
 
 #ifdef __cplusplus
@@ -18,12 +17,7 @@ enum CMD
 {
     CMD_NULL            = 0x00,
     CMD_MODE_WRITE      = 0x01,
-    CMD_DAC_WRITE       = 0x02,
     CMD_GPIO_WRITE      = 0x03,
-    CMD_INPUT_MODE      = 0x04,
-    CMD_INPUT_THRESHOLD = 0x05,
-    CMD_INPUT_READ      = 0x06,
-    CMD_SR_WRITE        = 0x07,
     CMD_BUTTONS_READ    = 0x08,
     CMD_WATCHDOG_WRITE  = 0x09,
     CMD_DISPLAY_CLEAR   = 0x0A,
@@ -36,10 +30,6 @@ enum CMD
 
     CMD_PING            = 0x13, // pings the PIC with an argument and returns the same argument
     CMD_EEPROM_WRITE    = 0x14, // programs the EEPROM
-
-    CMD_INPUT_SET       = 0x20, // since protocol v. 2.0
-    CMD_INPUT_PU_SH     = 0x21, // since protocol v. 2.0
-    CMD_INPUT_STATUS    = 0x22, // since protocol v. 2.0
 
     CMD_DISPLAY_CMD         = 0x80, // INTERNAL: up to 14 cbytes data (display command and params) + 2 bytes PIC CMD and CRC
     CMD_DISPLAY_DATA        = 0x81, // INTERNAL: up to 14 cbytes data + 2 bytes PIC CMD and CRC

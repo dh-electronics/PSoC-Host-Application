@@ -2,10 +2,10 @@
 #include <stddef.h>
 
 
-using namespace bigfish;
+using namespace drc01;
 
 
-const char * bigfish::getResultCodeString(RESULT result)
+const char * drc01::getResultCodeString(RESULT result)
 {
     static const char *resultStrings[] = {
         "RESULT_OK",

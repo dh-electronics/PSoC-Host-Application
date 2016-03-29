@@ -2,7 +2,6 @@ TARGET = json-server
 TEMPLATE = app
 CONFIG -= qt
 
-POCO = /opt/poco-1.4.6p4-arm
 message("POCO is supposed to be at: $$POCO, make and install it by: $cd POCO ; configure-dhcom.sh ; sudo make install")
 
 HEADERS = \

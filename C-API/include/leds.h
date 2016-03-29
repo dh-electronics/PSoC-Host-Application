@@ -11,9 +11,10 @@ extern "C" {
 
 enum LED
 {
-    LED_RS232_A, LED_RS232_B,
-    LED_CAN,
-    LED_READY, LED_STATUS, LED_ALARM, LED_UPLINK
+    LED_RUN,
+    LED_LAN,
+    LED_BUS,
+    LED_ERR
 };
 
 

@@ -12,7 +12,7 @@
 #include <stdint.h>
 
 
-namespace bigfish
+namespace drc01
 {
 
 class SpiProto
@@ -38,7 +38,7 @@ public:
     uint32_t    getTimeoutsCounter() const;
     uint32_t    getResetsCounter() const;
 
-    bool init(dhcom::SPI::CHIPSELECT chipSelect);
+    bool init();
     bool start();
     void stop();
 

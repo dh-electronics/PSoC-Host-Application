@@ -1,19 +1,13 @@
 #pragma once
 
 #include "resultcodes.h"
-#include "inputs.h"
-#include "relais.h"
-#include "dacs.h"
 #include "leds.h"
 
 
-namespace bigfish
+namespace drc01
 {
 
 
-class IInput;
-class IRelay;
-class IDac;
 class ILed;
 class IButtons;
 class IDisplay;
@@ -26,9 +20,6 @@ public:
     static IApiManager *getIface();
 
     virtual void            active(bool active = true)      =0;
-    virtual IInput *        getInput(INPUT input) const     =0;
-    virtual IRelay *        getRelay(RELAY relay) const     =0;
-    virtual IDac *          getDac(DAC dac) const           =0;
     virtual ILed *          getLed(LED led) const           =0;
     virtual IButtons *      getButtons() const              =0;
     virtual IDisplay *      getDisplay() const              =0;

@@ -6,14 +6,14 @@
 #include <Poco/Mutex.h>
 
 
-namespace bigfish
+namespace drc01
 {
 
 
 class Led : public ILed
 {
 public:
-    static const int COUNT     = 7;
+    static const int COUNT     = 4;
 
     virtual int get() const { return state_; }
     void restore();

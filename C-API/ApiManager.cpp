@@ -1,10 +1,6 @@
 #include "ApiManager.h"
 #include "resultcodes.h"
-#include "peripherals/Input.h"
-#include "peripherals/Relay.h"
-#include "peripherals/Dac.h"
 #include "peripherals/LedOnGpio.h"
-#include "peripherals/LedOnSR.h"
 #include "peripherals/Buttons.h"
 #include "peripherals/Display.h"
 #include "peripherals/Eeprom.h"
@@ -16,9 +12,11 @@
 #include <string.h>
 #include <new>
 #include <syslog.h>
+#include <unistd.h>
+#include <stdio.h>
 
 
-using namespace bigfish;
+using namespace drc01;
 using namespace dhcom;
 using namespace std;
 
@@ -27,23 +25,13 @@ ApiManager * ApiManager::self_ = NULL;
 
 
 ApiManager::ApiManager()
-    : sr_(NULL)
-    , buttons_(NULL)
+    : buttons_(NULL)
     , display_(NULL)
     , eeprom_(NULL)
     , picVersion_(0)
     , hwRevision_(0)
     , active_(false)
 {
-    for(int i = 0; i < Input::COUNT; ++i)
-        inputs_[i] = NULL;
-
-    for(int i = 0; i < Relay::COUNT; ++i)
-        relais_[i] = NULL;
-
-    for(int i = 0; i < Dac::COUNT; ++i)
-        dacs_[i] = NULL;
-
     for(int i = 0; i < Led::COUNT; ++i)
         leds_[i] = NULL;
 }
@@ -62,7 +50,7 @@ ApiManager::~ApiManager()
 
 bool ApiManager::start()
 {
-    openlog("bigfish", LOG_PERROR, LOG_USER);
+    openlog("drc-01", LOG_PERROR, LOG_USER);
     syslog(LOG_INFO, "SW version %hhx.%hhx, Starting...", uint8_t(API_VERSION >> 8), uint8_t(API_VERSION));
 
     if(!detectCpu())
@@ -71,17 +59,18 @@ bool ApiManager::start()
         return false;
     }
 
-    SPI::CHIPSELECT chipSelect;
     switch(system_.getHardware())
     {
     case System::HARDWARE_DHCOM_AM33:
-        chipSelect = SPI::CS_1;
         syslog(LOG_INFO, "Running on AM33 CPU...");
         break;
 
     case System::HARDWARE_DHCOM_AM35:
-        chipSelect = SPI::CS_0;
         syslog(LOG_INFO, "Running on AM35 CPU...");
+        break;
+
+    case System::HARDWARE_DHCOM_IMX6_REV300:
+        syslog(LOG_INFO, "Running on IMX6 CPU...");
         break;
 
     default:
@@ -96,7 +85,7 @@ bool ApiManager::start()
     }
     syslog(LOG_INFO, "Running on HW revision %d...", getHwRevision());
 
-    if(!proto_.init(chipSelect))
+    if(!proto_.init())
     {
         syslog(LOG_ERR, "Cannot initialize SPI protocol. Stopping.");
         return false;
@@ -112,30 +101,12 @@ bool ApiManager::start()
     const uint16_t picVersion = getPicVersion();
     syslog(LOG_INFO, "PIC SW version %hhx.%hhx", uint8_t(picVersion >> 8), uint8_t(picVersion));
 
-    if(picVersion == PIC_SW_1V4)
+    if(!writePicHwRevision())
     {
-        // old pic SW is uncapable to run on new HW
-        if(getHwRevision() >= HW_REV_200)
-        {
-            syslog(LOG_ERR, "PIC SW incompatible to HW. Please update PIC. Stopping.");
-            return false;
-        }
-    }
-    else if(picVersion >= PIC_SW_2V0)
-    {
-        if(!writePicHwRevision())
-        {
-            syslog(LOG_ERR, "Cannot write HW revision to PIC. Stopping.");
-            return false;
-        }
-    }
-    else
-    {
-        syslog(LOG_ERR, "Unknown PIC version. Please update PIC. Stopping.");
+        syslog(LOG_ERR, "Cannot write HW revision to PIC. Stopping.");
         return false;
     }
 
-    printf("write pic mode");fflush(stdout);
     // pic must be in the active mode before peripherals are created
     if(!writePicMode(true))
     {
@@ -199,75 +170,11 @@ RESULT ApiManager::closeApi()
 
 bool ApiManager::createPeripherals()
 {
-    // creating the Shift Register service - dependent on PIC SW ver
-    sr_ = (getPicVersion() == PIC_SW_1V4)
-            ? static_cast <SR*> (new(nothrow) SR1v4(proto_))
-            : static_cast <SR*> (new(nothrow) SR2v0(proto_));
-    if(!sr_)
-        return false;
-
-    // creating the inputs
-    // input object is dependant on PIC Protocol (PIC SW ver)
-    if(getPicVersion() == PIC_SW_1V4)
-    {
-        inputs_[0] = new(nothrow) Input1v4(proto_, 0, *sr_, 1, 2);
-        inputs_[1] = new(nothrow) Input1v4(proto_, 1, *sr_, 3, 4);
-        inputs_[2] = new(nothrow) Input1v4(proto_, 2, *sr_, 5, 6);
-        inputs_[3] = new(nothrow) Input1v4(proto_, 3, *sr_, 7, 0);
-    }
-    else
-    {
-        inputs_[0] = new(nothrow) Input2v0(proto_, 0);
-        inputs_[1] = new(nothrow) Input2v0(proto_, 1);
-        inputs_[2] = new(nothrow) Input2v0(proto_, 2);
-        inputs_[3] = new(nothrow) Input2v0(proto_, 3);
-    }
-    // checking that all inputs have been created
-    for(int i = 0; i < Input::COUNT; ++i)
-    {
-        if(!inputs_[i])
-            return false;
-    }
-
-    // creating the relais - not dependant on PIC SW ver or HW rev
-    relais_[0] = new(nothrow) Relay(proto_, RA10);
-    relais_[1] = new(nothrow) Relay(proto_, RA11);
-    for(int i = 0; i < Relay::COUNT; ++i)
-    {
-        if(!relais_[i])
-            return false;
-    }
-
-    // creating the dacs - not dependant on PIC SW ver or HW rev
-    for(int i = 0; i < Dac::COUNT; ++i)
-    {
-        Dac *dac = new(nothrow) Dac(proto_, i);
-        if(!dac)
-            return false;
-
-        dacs_[i] = dac;
-    }
-
     // creating the Leds on GPIO - not dependent on SW ver or HW rev
-    leds_[LED_RS232_A]  = new(nothrow) LedOnGpio(proto_, RC1);
-    leds_[LED_RS232_B]  = new(nothrow) LedOnGpio(proto_, RC2);
-    leds_[LED_CAN]      = new(nothrow) LedOnGpio(proto_, RA8);
-
-    // creating the Leds on SR - pin number dependent on HW rev
-    if(getHwRevision() == HW_REV_100)
-    {
-        leds_[LED_READY]    = new(nothrow) LedOnSR(*sr_, 13);
-        leds_[LED_STATUS]   = new(nothrow) LedOnSR(*sr_, 14);
-        leds_[LED_ALARM]    = new(nothrow) LedOnSR(*sr_, 12);
-        leds_[LED_UPLINK]   = new(nothrow) LedOnSR(*sr_, 15);
-    }
-    else
-    {
-        leds_[LED_READY]    = new(nothrow) LedOnSR(*sr_, 2);
-        leds_[LED_STATUS]   = new(nothrow) LedOnSR(*sr_, 1);
-        leds_[LED_ALARM]    = new(nothrow) LedOnSR(*sr_, 3);
-        leds_[LED_UPLINK]   = new(nothrow) LedOnSR(*sr_, 0);
-    }
+    leds_[LED_RUN]  = new(nothrow) LedOnGpio(proto_, RA8);
+    leds_[LED_LAN]  = new(nothrow) LedOnGpio(proto_, RA10);
+    leds_[LED_BUS]  = new(nothrow) LedOnGpio(proto_, RA11);
+    leds_[LED_ERR]  = new(nothrow) LedOnGpio(proto_, RC1);
 
     // checking all leds are created
     for(int i = 0; i < Led::COUNT; ++i)
@@ -297,22 +204,12 @@ bool ApiManager::createPeripherals()
 
 void ApiManager::deletePeripherals()
 {
-    for(int i = 0; i < Input::COUNT; ++i)
-        delete inputs_[i];
-
-    for(int i = 0; i < Relay::COUNT; ++i)
-        delete relais_[i];
-
-    for(int i = 0; i < Dac::COUNT; ++i)
-        delete dacs_[i];
-
     for(int i = 0; i < Led::COUNT; ++i)
         delete leds_[i];
 
     delete buttons_;
     delete display_;
     delete eeprom_;
-    delete sr_;
 }
 
 
@@ -321,30 +218,6 @@ void ApiManager::active(bool active)
     active_ = active;
     if(!active)
         readyLedBlinkTimestamp_.update();
-}
-
-
-IInput * ApiManager::getInput(INPUT input) const
-{
-    if(input < 0 || input >= Input::COUNT)
-        return NULL;
-    return inputs_[input];
-}
-
-
-IRelay * ApiManager::getRelay(RELAY relay) const
-{
-    if(relay < 0 || relay >= Relay::COUNT)
-        return NULL;
-    return relais_[relay];
-}
-
-
-IDac * ApiManager::getDac(DAC dac) const
-{
-    if(dac < 0 || dac >= Dac::COUNT)
-        return NULL;
-    return dacs_[dac];
 }
 
 
@@ -407,7 +280,7 @@ int32_t ApiManager::periodicActions()
     if(timeLeft <= 0)
     {
         readyLedBlinkTimestamp_.update();
-        ILed *led = getLed(LED_READY);
+        ILed *led = getLed(LED_RUN);
         led->write(!led->get());
         return READY_LED_BLINK_PERIOD_mS;
     }
@@ -480,24 +353,46 @@ bool ApiManager::detectCpu()
     char *line = NULL;
     size_t size;
 
+    enum { IMPL_Unknown, IMPL_TI, IMPL_Freescale }
+         implementer = IMPL_Unknown;
+    enum { ARCH_Unknown, ARCH_CortexA8, ARCH_CortexA9 }
+         architecture = ARCH_Unknown;
+
     while(getline(&line, &size, file) != -1)
     {
-        if(strstr(line, "CPU implementer") && !strstr(line, "0x41"))
-            break;
+        if(strstr(line, "CPU implementer"))
+        {
+            if(strstr(line, "0x41"))
+                implementer = IMPL_TI;                   // TI
+            else if(strstr(line, "0x41"))           // TODO: check with PROC
+                implementer = IMPL_Freescale;            // Freescale
+            else
+                break;                              // Unknown
+        }
 
-        if(strstr(line, "CPU architecture") && !strstr(line, "7"))
-            break;
+        if(strstr(line, "CPU architecture"))
+        {
+            if(strstr(line, "7"))
+                architecture = ARCH_CortexA8;
+            else if(strstr(line, "8"))              // TODO: check with PROC
+                architecture = ARCH_CortexA9;
+            else
+                break;                              // Unknown
+        }
 
         if(strstr(line, "CPU variant"))
         {
-            if(strstr(line, "0x3"))
+            if(IMPL_TI == implementer && ARCH_CortexA8 == architecture)
             {
-                hw = System::HARDWARE_DHCOM_AM33;
+                if(strstr(line, "0x3"))
+                    hw = System::HARDWARE_DHCOM_AM33;
+                else if(strstr(line, "0x1"))
+                    hw = System::HARDWARE_DHCOM_AM35;
                 break;
             }
-            else if(strstr(line, "0x1"))
+            else if(IMPL_Freescale == implementer && ARCH_CortexA9 == architecture && strstr(line, "0x1")) // TODO: check with PROC
             {
-                hw = System::HARDWARE_DHCOM_AM35;
+                hw = System::HARDWARE_DHCOM_IMX6_REV300;
                 break;
             }
         }
@@ -569,7 +464,6 @@ bool ApiManager::writePicHwRevision()
     int16_t writtenRevision = getHwRevision() > uint32_t(HW_REV_200) ? uint32_t(HW_REV_200) : getHwRevision();
     set_16(cmd.data(), 0, writtenRevision);
     Response <0> rsp;
-    // dump(&rsp, sizeof(rsp));
     return RESULT_OK == proto_.xmit(cmd, rsp);
 }
 
@@ -600,15 +494,6 @@ void ApiManager::stateRestore()
 {
     if(!writePicMode(true))
         return;
-
-    for(int i = 0; i < Input::COUNT; ++i)
-        inputs_[i]->restore();
-
-    for(uint8_t i = 0; i < Relay::COUNT; ++i)
-        relais_[i]->restore();
-
-    for(uint8_t i = 0; i < Dac::COUNT; ++i)
-        dacs_[i]->restore();
 
     for(uint8_t i = 0; i < Led::COUNT; ++i)
         leds_[i]->restore();

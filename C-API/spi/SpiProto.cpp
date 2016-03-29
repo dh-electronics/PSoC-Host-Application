@@ -7,7 +7,7 @@
 #include <syslog.h>
 
 
-using namespace bigfish;
+using namespace drc01;
 using namespace Poco;
 using namespace dhcom;
 using namespace std;
@@ -72,10 +72,10 @@ uint32_t SpiProto::getResetsCounter() const
 }
 
 
-bool SpiProto::init(SPI::CHIPSELECT chipSelect)
+bool SpiProto::init()
 {
     // create the spi interface
-    spi_ = new(nothrow) SPI(SPI::DEVICE_SPI1, chipSelect);
+    spi_ = new(nothrow) SPI(SPI::DEVICE_SPI1);
     if(!spi_)
     {
         syslog(LOG_ERR, "Cannot create SPI device.");
