@@ -167,9 +167,6 @@ void JsonState::EndObject(rapidjson::SizeType)
     static const HandlerFuncPtr handlers[] = {
         &JsonState::funcResetStats, &JsonState::funcGetErrorCounters,
         &JsonState::funcGetVersions,
-        &JsonState::funcWriteInputMode, &JsonState::funcWriteInputThreshold, &JsonState::funcReadInput, &JsonState::funcWriteInputPullup, &JsonState::funcWriteInputShunt,
-        &JsonState::funcWriteRelay, &JsonState::funcWatchdog,
-        &JsonState::funcWriteDac,
         &JsonState::funcDisplayEnable, &JsonState::funcDisplayClear, &JsonState::funcDisplayInvert,
         &JsonState::funcDisplaySetPos, &JsonState::funcDisplayText,
         &JsonState::funcDisplaySelectFont, &JsonState::funcDisplayShow,
@@ -239,10 +236,7 @@ JsonState::FUNC    JsonState::funcFromStr(const char *str, size_t length)
 {
     static const char * const funcNames[FUNC_LAST_FUNC_DUMMY] = {
         "resetStatistics", "getErrorCounters", "getVersions",
-        "writeInputMode", "writeInputThreshold",
-        "readInput", "writeInputPullup", "writeInputShunt",
-        "writeRelay", "watchdog",
-        "writeDac",
+        "watchdog",
         "displayEnable", "displayClear", "displayInvert",
         "displaySetPos", "displayText",
         "displaySelectFont", "displayShow",
@@ -266,12 +260,8 @@ JsonState::OBJECT    JsonState::objectFromStr(const char *str, size_t length)
 {
     static const int OBJECTS = 15;
     static const char * const objectNames[OBJECTS] = {
-        "INPUT_1", "INPUT_2", "INPUT_3", "INPUT_4",
-        "RELAY_1", "RELAY_2",
-        "DAC_1", "DAC_2",
-        "LED_RS232_A", "LED_RS232_B",
-        "LED_CAN", "LED_READY",
-        "LED_STATUS", "LED_ALARM", "LED_UPLINK"
+        "LED_RUN", "LED_LAN",
+        "LED_BUS", "LED_ERR"
     };
 
     for(int i = 0; i < OBJECTS; ++i)
@@ -300,29 +290,8 @@ void JsonState::checkObjectIs(OBJECT minObj, OBJECT maxObj)
 }
 
 
-INPUT JsonState::objectAsInput()
-{
-    checkObjectIs(OBJECT_INPUT_1, OBJECT_INPUT_4);
-    return INPUT(object_ - OBJECT_INPUT_1);
-}
-
-
-RELAY JsonState::objectAsRelay()
-{
-    checkObjectIs(OBJECT_RELAY_1, OBJECT_RELAY_2);
-    return RELAY(object_ - OBJECT_RELAY_1);
-}
-
-
-DAC JsonState::objectAsDac()
-{
-    checkObjectIs(OBJECT_DAC_1, OBJECT_DAC_2);
-    return DAC(object_ - OBJECT_DAC_1);
-}
-
-
 LED JsonState::objectAsLed()
 {
-    checkObjectIs(OBJECT_LED_RS232_A, OBJECT_LED_UPLINK);
-    return LED(object_ - OBJECT_LED_RS232_A);
+    checkObjectIs(OBJECT_LED_RUN, OBJECT_LED_ERR);
+    return LED(object_ - OBJECT_LED_RUN);
 }

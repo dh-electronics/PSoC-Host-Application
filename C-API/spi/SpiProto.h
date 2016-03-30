@@ -38,7 +38,7 @@ public:
     uint32_t    getTimeoutsCounter() const;
     uint32_t    getResetsCounter() const;
 
-    bool init();
+    bool init(const dhcom::System &sys);
     bool start();
     void stop();
 

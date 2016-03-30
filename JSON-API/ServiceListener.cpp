@@ -4,6 +4,7 @@
 #include <Poco/Net/NetException.h>
 #include <iostream>
 #include <new>
+#include <stdio.h>
 
 
 using namespace Poco;

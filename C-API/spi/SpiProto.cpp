@@ -5,6 +5,7 @@
 #include <string.h>
 #include <cassert>
 #include <syslog.h>
+#include <unistd.h>
 
 
 using namespace drc01;
@@ -72,10 +73,10 @@ uint32_t SpiProto::getResetsCounter() const
 }
 
 
-bool SpiProto::init()
+bool SpiProto::init(const dhcom::System &sys)
 {
     // create the spi interface
-    spi_ = new(nothrow) SPI(SPI::DEVICE_SPI1);
+    spi_ = new(nothrow) SPI(sys, SPI::DEVICE_SPI1);
     if(!spi_)
     {
         syslog(LOG_ERR, "Cannot create SPI device.");
@@ -92,7 +93,7 @@ bool SpiProto::init()
             break;
         }
 
-        printf("spi params");fflush(stdout);
+        // printf("spi params");fflush(stdout);
         status = spi_->setCommParams(SPI::MODE_0, 8, SPI_FREQ);
         if(status != STATUS_SUCCESS)
         {

@@ -85,7 +85,7 @@ bool ApiManager::start()
     }
     syslog(LOG_INFO, "Running on HW revision %d...", getHwRevision());
 
-    if(!proto_.init())
+    if(!proto_.init(system_))
     {
         syslog(LOG_ERR, "Cannot initialize SPI protocol. Stopping.");
         return false;

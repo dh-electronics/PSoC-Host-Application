@@ -23,7 +23,7 @@ SOURCES = \
 INCLUDEPATH = $$POCO/include rapidjson-master/include ../C-API/include
 message("Includes: " $$INCLUDEPATH)
 
-LIBS += -L$$POCO/lib -L../C-API -lc-api -L../DHCOM_HAL -lDHCOM_HAL
+LIBS += -L$$POCO/lib -L../C-API -lc-api -L../DHCOM_HAL -lDHCOM_HAL -lpthread
 
 CONFIG(debug, debug | release) {
     message("Configuring DEBUG build")
@@ -49,11 +49,8 @@ CONFIG(release, debug | release) {
     LIBS += -lPocoFoundation -lPocoNet
     QMAKE_CXXFLAGS += -g0 -O3
 
-    debian_package_path = /tmp/bigfish
+    debian_package_path = /tmp/drc-01
     target.path = $$debian_package_path/root
-
-    pipeserver.path = $$debian_package_path/root
-    pipeserver.files = $$OUT_PWD/../PIPES-API/pipe-server
 
     poco.path = $$debian_package_path/usr/lib
     poco.files = $$POCO/lib/libPocoFoundation.so.16 $$POCO/lib/libPocoNet.so.16
@@ -67,10 +64,10 @@ CONFIG(release, debug | release) {
     debian.path = $$debian_package_path
     debian.commands = \
 svn export --force $$PWD/../DEBIAN_PACKAGE $$debian_package_path ;\
-dpkg -b $$debian_package_path $$OUT_PWD/../bigfish.deb ;\
+dpkg -b $$debian_package_path $$OUT_PWD/../drc-01.deb ;\
 rm -rf $$debian_package_path
 
-    INSTALLS = target pipeserver hal api poco debian
+    INSTALLS = target hal api poco debian
 }
 
 

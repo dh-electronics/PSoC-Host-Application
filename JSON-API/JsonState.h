@@ -2,9 +2,6 @@
 
 
 #include "resultcodes.h"
-#include "inputs.h"
-#include "relais.h"
-#include "dacs.h"
 #include "leds.h"
 #include <rapidjson/reader.h>
 #include <string>
@@ -60,9 +57,6 @@ private:
         FUNC_INVALID = 0,
         FUNC_RESET_STATISTICS, FUNC_GET_ERROR_COUNTERS,
         FUNC_GET_VERSIONS,
-        FUNC_WRITE_INPUT_MODE, FUNC_WRITE_INPUT_THRESOLD, FUNC_READ_INPUT, FUNC_WRITE_INPUT_PULLUP, FUNC_WRITE_INPUT_SHUNT,
-        FUNC_WRITE_RELAY, FUNC_WATCHDOG,
-        FUNC_WRITE_DAC,
         FUNC_DISPLAY_ENABLE, FUNC_DISPLAY_CLEAR, FUNC_DISPLAY_INVERT, FUNC_DISPLAY_SET_POS, FUNC_DISPLAY_TEXT, FUNC_DISPLAY_SELECT_FONT, FUNC_DISPLAY_SHOW,
         FUNC_READ_BUTTONS,
         FUNC_WRITE_LED,
@@ -75,23 +69,12 @@ private:
     enum OBJECT
     {
         OBJECT_INVALID = 0,
-        OBJECT_INPUT_1, OBJECT_INPUT_2, OBJECT_INPUT_3, OBJECT_INPUT_4,
-        OBJECT_RELAY_1, OBJECT_RELAY_2,
-        OBJECT_DAC_1, OBJECT_DAC_2,
-        OBJECT_LED_RS232_A, OBJECT_LED_RS232_B, OBJECT_LED_CAN, OBJECT_LED_READY, OBJECT_LED_STATUS, OBJECT_LED_ALARM, OBJECT_LED_UPLINK
+        OBJECT_LED_RUN, OBJECT_LED_LAN, OBJECT_LED_BUS, OBJECT_LED_ERR
     };
 
     void funcResetStats(WriteStream &writeStream);
     void funcGetErrorCounters(WriteStream &writeStream);
     void funcGetVersions(WriteStream &writeStream);
-    void funcWriteInputMode(WriteStream &writeStream);
-    void funcWriteInputThreshold(WriteStream &writeStream);
-    void funcReadInput(WriteStream &writeStream);
-    void funcWriteInputPullup(WriteStream &writeStream);
-    void funcWriteInputShunt(WriteStream &writeStream);
-    void funcWriteRelay(WriteStream &writeStream);
-    void funcWatchdog(WriteStream &writeStream);
-    void funcWriteDac(WriteStream &writeStream);
     void funcDisplayEnable(WriteStream &writeStream);
     void funcDisplayClear(WriteStream &writeStream);
     void funcDisplayInvert(WriteStream &writeStream);
@@ -112,9 +95,6 @@ private:
     void        writeStandardOk(WriteStream &writeStream);
 
     void checkObjectIs(OBJECT minObj, OBJECT maxObj);
-    INPUT objectAsInput();
-    RELAY objectAsRelay();
-    DAC objectAsDac();
     LED objectAsLed();
 
     typedef void (JsonState::*HandlerFuncPtr)(WriteStream &);
