@@ -236,7 +236,6 @@ JsonState::FUNC    JsonState::funcFromStr(const char *str, size_t length)
 {
     static const char * const funcNames[FUNC_LAST_FUNC_DUMMY] = {
         "resetStatistics", "getErrorCounters", "getVersions",
-        "watchdog",
         "displayEnable", "displayClear", "displayInvert",
         "displaySetPos", "displayText",
         "displaySelectFont", "displayShow",

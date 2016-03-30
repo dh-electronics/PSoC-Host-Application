@@ -1,5 +1,5 @@
 {
 "func" : "writeLed",
-"object" : "LED_ALARM",
+"object" : "LED_ERR",
 "on" : true
 }

@@ -1,5 +1,5 @@
 {
 "func" : "writeLed",
-"object" : "LED_UPLINK",
+"object" : "LED_ERR",
 "on" : false
 }

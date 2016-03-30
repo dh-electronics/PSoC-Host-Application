@@ -1,5 +1,5 @@
 {
 "func" : "writeLed",
-"object" : "LED_RS232_B",
+"object" : "LED_BUS",
 "on" : true
 }
