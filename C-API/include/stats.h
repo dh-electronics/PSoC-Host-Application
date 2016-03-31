@@ -9,7 +9,7 @@ extern "C" {
 #include "resultcodes.h"
 
 
-#define API_VERSION 0x0203
+#define API_VERSION 0x0001
 
 
 unsigned int getCrcErrorCounter(enum RESULT *result);

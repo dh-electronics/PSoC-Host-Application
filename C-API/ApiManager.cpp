@@ -91,7 +91,6 @@ bool ApiManager::start()
         return false;
     }
 
-    printf("pic version");fflush(stdout);
     if(readPicVersion() != RESULT_OK)
     {
         syslog(LOG_ERR, "Cannot read PIC sw version. Stopping.");

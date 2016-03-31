@@ -19,7 +19,6 @@ enum CMD
     CMD_MODE_WRITE      = 0x01,
     CMD_GPIO_WRITE      = 0x03,
     CMD_BUTTONS_READ    = 0x08,
-    CMD_WATCHDOG_WRITE  = 0x09,
     CMD_DISPLAY_CLEAR   = 0x0A,
     CMD_DISPLAY_SHOW    = 0x0B,
     CMD_DISPLAY_SETPOS  = 0x0C,
