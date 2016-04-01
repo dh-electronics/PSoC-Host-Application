@@ -11,7 +11,7 @@ extern "C" {
 
 struct BUTTONS
 {
-    char up:1, dn:1, m:1, esc:1, ok:1;
+    char esc:1, dn:1, m:1, ok:1, up:1;
 };
 
 
