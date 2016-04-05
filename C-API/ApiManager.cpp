@@ -341,6 +341,30 @@ CPU revision	: 7
 Hardware	: DHCM3517
 Revision	: 0020
 Serial		: 0000000000000000
+
+===== Cpuinfo for iMX6DL =====
+processor	: 0
+model name	: ARMv7 Processor rev 10 (v7l)
+Features	: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpd32
+CPU implementer	: 0x41
+CPU architecture: 7
+CPU variant	: 0x2
+CPU part	: 0xc09
+CPU revision	: 10
+
+processor	: 1
+model name	: ARMv7 Processor rev 10 (v7l)
+Features	: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpd32
+CPU implementer	: 0x41
+CPU architecture: 7
+CPU variant	: 0x2
+CPU part	: 0xc09
+CPU revision	: 10
+
+Hardware	: Freescale i.MX6 Quad/DualLite (Device Tree)
+Revision	: 0000
+Serial		: 0000000000000000
+
 */
 bool ApiManager::detectCpu()
 {
@@ -352,48 +376,25 @@ bool ApiManager::detectCpu()
     char *line = NULL;
     size_t size;
 
-    enum { IMPL_Unknown, IMPL_TI, IMPL_Freescale }
-         implementer = IMPL_Unknown;
-    enum { ARCH_Unknown, ARCH_CortexA8, ARCH_CortexA9 }
-         architecture = ARCH_Unknown;
-
     while(getline(&line, &size, file) != -1)
     {
-        if(strstr(line, "CPU implementer"))
-        {
-            if(strstr(line, "0x41"))
-                implementer = IMPL_TI;                   // TI
-            else if(strstr(line, "0x41"))           // TODO: check with PROC
-                implementer = IMPL_Freescale;            // Freescale
-            else
-                break;                              // Unknown
-        }
+        if(strstr(line, "CPU implementer") && !strstr(line, "0x41"))
+            break;                              // Not An ARM!
 
-        if(strstr(line, "CPU architecture"))
-        {
-            if(strstr(line, "7"))
-                architecture = ARCH_CortexA8;
-            else if(strstr(line, "8"))              // TODO: check with PROC
-                architecture = ARCH_CortexA9;
-            else
-                break;                              // Unknown
-        }
+        if(strstr(line, "CPU architecture") && !strstr(line, "7"))
+            break;                              // Unknown ARCH
 
         if(strstr(line, "CPU variant"))
         {
-            if(IMPL_TI == implementer && ARCH_CortexA8 == architecture)
-            {
-                if(strstr(line, "0x3"))
-                    hw = System::HARDWARE_DHCOM_AM33;
-                else if(strstr(line, "0x1"))
-                    hw = System::HARDWARE_DHCOM_AM35;
-                break;
-            }
-            else if(IMPL_Freescale == implementer && ARCH_CortexA9 == architecture && strstr(line, "0x1")) // TODO: check with PROC
-            {
+            if(strstr(line, "0x3"))
+                hw = System::HARDWARE_DHCOM_AM33;
+            else if(strstr(line, "0x1"))
+                hw = System::HARDWARE_DHCOM_AM35;
+            else if(strstr(line, "0x2"))
                 hw = System::HARDWARE_DHCOM_IMX6_REV300;
-                break;
-            }
+            else
+                hw = System::HARDWARE_INVALID;
+            break;
         }
     }
 
