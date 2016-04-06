@@ -1,0 +1,6 @@
+#!/bin/sh
+cd /usr/lib
+
+systemctl enable json-server
+sync
+

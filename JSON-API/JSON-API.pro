@@ -53,7 +53,7 @@ CONFIG(release, debug | release) {
     target.path = $$debian_package_path/root
 
     poco.path = $$debian_package_path/usr/lib
-    poco.files = $$POCO/lib/libPocoFoundation.so.16 $$POCO/lib/libPocoNet.so.16
+    poco.files = $$POCO/lib/libPocoFoundation.so.31 $$POCO/lib/libPocoNet.so.31
 
     api.path = $$poco.path
     api.files = $$OUT_PWD/../C-API/libc-api.so.1
@@ -62,10 +62,7 @@ CONFIG(release, debug | release) {
     hal.files = $$OUT_PWD/../DHCOM_HAL/libDHCOM_HAL.so.1
 
     debian.path = $$debian_package_path
-    debian.commands = \
-svn export --force $$PWD/../DEBIAN_PACKAGE $$debian_package_path ;\
-dpkg -b $$debian_package_path $$OUT_PWD/../drc-01.deb ;\
-rm -rf $$debian_package_path
+    debian.commands = generate_debian_package.sh
 
     INSTALLS = target hal api poco debian
 }
