@@ -48,23 +48,6 @@ CONFIG(release, debug | release) {
     message("Configuring RELEASE build")
     LIBS += -lPocoFoundation -lPocoNet
     QMAKE_CXXFLAGS += -g0 -O3
-
-    debian_package_path = /tmp/drc-01
-    target.path = $$debian_package_path/root
-
-    poco.path = $$debian_package_path/usr/lib
-    poco.files = $$POCO/lib/libPocoFoundation.so.31 $$POCO/lib/libPocoNet.so.31
-
-    api.path = $$poco.path
-    api.files = $$OUT_PWD/../C-API/libc-api.so.1
-
-    hal.path = $$poco.path
-    hal.files = $$OUT_PWD/../DHCOM_HAL/libDHCOM_HAL.so.1
-
-    debian.path = $$debian_package_path
-    debian.commands = generate_debian_package.sh
-
-    INSTALLS = target hal api poco debian
 }
 
 

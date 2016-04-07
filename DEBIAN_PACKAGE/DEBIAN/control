@@ -3,7 +3,7 @@ Version: 0.1
 Architecture: armhf
 Maintainer: Peter Kishalov <pkishalov@dh-electronics.de>
 Installed-Size: 25M
-Depends:
+Depends: poco-1.6.1
 Section: misc
 Priority: optional
 Homepage: http://www.dh-electronics.com

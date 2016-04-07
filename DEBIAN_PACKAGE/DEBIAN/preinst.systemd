@@ -1,4 +1,7 @@
 #! /bin/bash
 
-systemctl stop json-server
+systemctl status json-server
+if [[ $? == 0 ]] ; then
+	systemctl stop json-server
+fi
 

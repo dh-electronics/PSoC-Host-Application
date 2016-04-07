@@ -3,12 +3,11 @@ Description=DRC-01 JSON Server
 After=network.target
 
 [Service]
-Type=oneshot
 ExecStart=/root/json-server
 ExecStop=/bin/kill -SIGINT $MAINPID
 ExecReload=/bin/kill -SIGINT $MAINPID
 KillMode=process
-Restart=on-failure
+Restart=no
 
 [Install]
 WantedBy=multi-user.target

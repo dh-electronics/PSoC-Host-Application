@@ -1,37 +1,33 @@
 #! /bin/bash
 # $1 - source dir ($$PWD)
-# $2 - poco dir ($$POCO)
-# $3 - output dir ($$OUT_PWD)
-# $4 - arch: armhf | armel
-# $5 - service manager: systemd | init.d
+# $2 - output dir ($$OUT_PWD)
+# $3 - arch: armhf | armel
+# $4 - init manager: systemd | init.d
 
-if [[ $4 != "armel" && $4 != "armhf" ]] ; then
-	echo ERROR: unknown cpu arch $4, must be armhf|armel
+if [[ $3 != "armel" && $3 != "armhf" ]] ; then
+	echo ERROR: unknown cpu arch $3, must be armhf|armel
 	exit -1
 fi
 
-if [[ $5 != "systemd" && $5 != "init.d" ]] ; then
-	echo ERROR: unknown service manager $5, must be systemd|init.d 
+if [[ $4 != "systemd" && $4 != "init.d" ]] ; then
+	echo ERROR: unknown init manager $4, must be systemd|init.d 
 	exit -1
 fi
 
 TMP=/tmp/drc-01
 svn export --force $1/DEBIAN_PACKAGE $TMP
-mkdir -p $TMP/etc $TMP/usr/lib $TMP/root
+mkdir -p $TMP/usr/lib $TMP/root
 
-cd $2/lib
-cp libPocoFoundation.so.31 libPocoNet.so.31 $TMP/usr/lib
-cd -
-
-cd $3
+cd $2
 cp C-API/libc-api.so.1 DHCOM_HAL/libDHCOM_HAL.so.1 $TMP/usr/lib
+cp JSON-API/json-server $TMP/root
 cd -
 
 cd $TMP/DEBIAN
-sed "s/Architecture:.*/Architecture:$4/" <control >control.edited
+sed "s/Architecture:.*/Architecture:$3/" <control >control.edited
 mv control.edited control
 
-if [[ $5 == "systemd" ]] ; then
+if [[ $4 == "systemd" ]] ; then
 	mv preinst.systemd preinst
 	mv postinst.systemd postinst
 	rm *.update-rc
@@ -46,5 +42,5 @@ else
 fi
 cd -
 
-dpkg -b $TMP $3/drc-01.deb
+dpkg -b $TMP $2/drc-01.deb
 rm -rf $TMP

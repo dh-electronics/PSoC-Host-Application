@@ -2,5 +2,6 @@
 cd /usr/lib
 
 systemctl enable json-server
+systemctl start json-server
 sync
 
