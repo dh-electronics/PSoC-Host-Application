@@ -60,37 +60,11 @@ RESULT Display::setPosition(int x, int y)
 }
 
 
-RESULT Display::text(const char *text)
+RESULT Display::bitmap(const unsigned char *data, int width, int height, BMP_FUNC func)
 {
-    assert(text);
-    const size_t textLength = strlen(text);
-    const uint8_t chunkSize = SPI_PACKET_SIZE - 2;
-    for(size_t pos = 0; pos < textLength; )
-    {
-        const size_t symbolsLeft = textLength - pos;
-        const uint8_t symbolsToXfer = (symbolsLeft > chunkSize) ? chunkSize : symbolsLeft;
+    assert(data);
 
-        CommandUnion cu;
-        cu.cmd.command_ = CMD_DISPLAY_TEXT;
-        uint8_t cmdLength = symbolsToXfer + 2;
-        memcpy(cu.cmd.data_, &text[pos], symbolsToXfer);
-        cmdCalcCrc(&cu.cmd, cmdLength);
-
-        ResponseUnion ru;
-        const RESULT res = proto_.xmit(&cu.cmd, cmdLength, &ru.rsp, 2, SpiProto::CMD_WAIT_MS + DISPLAY_SYMBOL_WAIT_MS * symbolsToXfer);
-        if(RESULT_OK != res)
-            return res;
-
-        pos += symbolsToXfer;
-    }
 
     return RESULT_OK;
 }
 
-
-RESULT Display::show()
-{
-    Command <0> cmd(CMD_DISPLAY_SHOW);
-    Response <0> rsp;
-    return proto_.xmit(cmd, rsp, DISPLAY_SHOW_WAIT_MS);
-}

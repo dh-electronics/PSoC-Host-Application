@@ -1,6 +1,6 @@
 #include <eeprom.h>
-#include <IApiManager.h>
-#include <IEeprom.h>
+#include <peripherals/IApiManager.h>
+#include <peripherals/IEeprom.h>
 #include <cassert>
 
 

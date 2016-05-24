@@ -14,11 +14,6 @@ include/display.h \
 include/buttons.h \
 include/leds.h \
 include/eeprom.h \
-include/ILed.h \
-include/IButtons.h \
-include/IDisplay.h \
-include/IEeprom.h \
-include/IApiManager.h \
 include/helpers.h \
 ApiManager.h \
 spi/Command.h \
@@ -26,6 +21,11 @@ spi/Response.h \
 spi/GenericHelpers.h \
 spi/MasterHelpers.h \
 spi/SpiProto.h \
+peripherals/ILed.h \
+peripherals/IButtons.h \
+peripherals/IDisplay.h \
+peripherals/IEeprom.h \
+peripherals/IApiManager.h \
 peripherals/Led.h \
 peripherals/LedOnGpio.h \
 peripherals/Buttons.h \

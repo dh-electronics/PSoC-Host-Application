@@ -9,6 +9,9 @@ extern "C" {
 #include "resultcodes.h"
 
 
+enum BMP_FUNC { BMP_FUNC_PUT, BMP_FUNC_SLIDEUP, BMP_FUNC_SLIDEDOWN };
+
+
 enum RESULT displayEnable(int on);
 
 
@@ -18,16 +21,10 @@ enum RESULT displayClear();
 enum RESULT displayInvert(int on);
 
 
-enum RESULT displaySelectFont(int font);
-
-
 enum RESULT displaySetPos(int x, int y);
 
 
-enum RESULT displayText(char *text);
-
-
-enum RESULT displayShow();
+enum RESULT displayBitmap(unsigned char *data, int width, int height, enum BMP_FUNC func);
 
 
 #ifdef __cplusplus

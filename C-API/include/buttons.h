@@ -9,9 +9,14 @@ extern "C" {
 #include "resultcodes.h"
 
 
+/// Represents the PCAP BUttons states.
 struct BUTTONS
 {
-    char esc:1, dn:1, m:1, ok:1, up:1;
+    char esc:1, //< button Esc was pressed
+        dn:1,   //< button Down was pressed
+        m:1,    //< button Middle was pressed
+        ok:1,   //< button Ok was pressed
+        up:1;   //< button Up was pressed
 };
 
 

@@ -2,7 +2,7 @@
 
 
 #include "display.h"
-#include <IDisplay.h>
+#include <peripherals/IDisplay.h>
 #include <stdint.h>
 
 
@@ -27,8 +27,7 @@ public:
     virtual RESULT invert(bool on);
     virtual RESULT selectFont(int font);
     virtual RESULT setPosition(int x, int y);
-    virtual RESULT text(const char *text);
-    virtual RESULT show();
+    virtual RESULT bitmap(const unsigned char *data, int width, int height, BMP_FUNC func);
 
 private:
     SpiProto & proto_;

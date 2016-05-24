@@ -1,6 +1,6 @@
 #include <display.h>
-#include <IApiManager.h>
-#include <IDisplay.h>
+#include <peripherals/IApiManager.h>
+#include <peripherals/IDisplay.h>
 #include <cassert>
 
 
@@ -92,7 +92,7 @@ RESULT displaySetPos(int x, int y)
 }
 
 
-RESULT displayText(char *txt)
+RESULT displayBitmap(unsigned char *data, int width, int height, BMP_FUNC func)
 {
     IApiManager *man = IApiManager::getIface();
     if(man)
@@ -100,24 +100,7 @@ RESULT displayText(char *txt)
         man->active();
         IDisplay *display = man->getDisplay();
         assert(display);
-        return display->text(txt);
-    }
-    else
-    {
-        return RESULT_API_NOT_OPEN;
-    }
-}
-
-
-RESULT displayShow()
-{
-    IApiManager *man = IApiManager::getIface();
-    if(man)
-    {
-        man->active();
-        IDisplay *display = man->getDisplay();
-        assert(display);
-        return display->show();
+        return display->bitmap(data, width, height, func);
     }
     else
     {

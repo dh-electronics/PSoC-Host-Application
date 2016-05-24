@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include <IEeprom.h>
+#include <peripherals/IEeprom.h>
 
 
 namespace drc01
