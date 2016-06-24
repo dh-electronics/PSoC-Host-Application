@@ -19,10 +19,10 @@ enum CMD
     CMD_MODE_WRITE      = 0x01,
     CMD_GPIO_WRITE      = 0x03,
     CMD_BUTTONS_READ    = 0x08,
-    CMD_DISPLAY_CLEAR   = 0x0A,
-    CMD_DISPLAY_SHOW    = 0x0B,
-    CMD_DISPLAY_SETPOS  = 0x0C,
-    CMD_DISPLAY_TEXT    = 0x0D,
+    CMD_DISPLAY_FRAME   = 0x0A, // start of frame
+    //    0x0B,
+    //    0x0C,
+    CMD_DISPLAY_WRITE   = 0x0D, // data to display
     CMD_VERSION_READ    = 0x0E,
     CMD_MODE_READ       = 0x0F,
     CMD_HWREV_WRITE     = 0x10, // since protocol v. 2.0
