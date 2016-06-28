@@ -2,20 +2,24 @@
 
 
 #include "resultcodes.h"
+#include <stddef.h>
 
 
-enum BUTTONS
+enum BUTTON
 {
-    BUTTONS_ESC = 0,
-    BUTTONS_DN,
-    BUTTONS_MID,
-    BUTTONS_OK,
-    BUTTONS_UP
+    BUTTON_ESC = 0,
+    BUTTON_DN = 1,
+    BUTTON_MID = 2,
+    BUTTON_OK = 3,
+    BUTTON_UP = 4
 };
 
 
-typedef void buttonsCallback(enum BUTTONS button, bool pressed);
+typedef void buttonsCallback(enum BUTTON button, bool pressed);
 
 enum RESULT setButtonsCallback(buttonsCallback *callback);
 
 enum RESULT handleButtons();
+
+bool    getButtonState(enum BUTTON button, enum RESULT *res = NULL);
+

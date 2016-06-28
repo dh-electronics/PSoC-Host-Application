@@ -11,35 +11,50 @@ using namespace drc01;
 using namespace Poco;
 
 
-const BUTTONS Buttons::ZERO_BUTTONS = {0, 0, 0, 0, 0};
-
-
 Buttons::Buttons(SpiProto &proto)
     : proto_(proto)
-    , buttons_(ZERO_BUTTONS)
 {
+    for(uint8_t i = 0; i < NUM_BUTTONS; ++i)
+        states_[i] = false;
 }
 
 
-BUTTONS Buttons::read(RESULT *result)
+void Buttons::setCallback(buttonsCallback *callback)
+{
+    callback_ = callback;
+}
+
+
+RESULT Buttons::handleEvents()
 {
     Command <0> cmd(CMD_BUTTONS_READ);
     Response <1> rsp;
 
     ScopedLock <FastMutex> lock(accessMutex_);
     const RESULT res = proto_.xmit(cmd, rsp);
-    if(RESULT_OK == res)
+    if(RESULT_OK == res && callback_)
     {
-        union {
-          BUTTONS bts;
-          uint8_t raw;
-        };
-        raw = get_8(rsp.data(), 0);
-        buttons_ = bts;
+        uint8_t evt = get_8(rsp.data(), 0);
+        for(uint8_t i = 0; i < 2; ++i) // 2 events packed (an event in each tetrade)
+        {
+            const uint8_t idx = evt & 0x07;
+            if(idx >= NUM_BUTTONS)
+                break;
+
+            const bool state = evt & 0x08;
+            states_[idx] = state;
+
+            callback_(BUTTON(idx), state);
+
+            evt >>= 4;
+        }
     }
 
-    if(result)
-        *result = res;
+    return res;
+}
 
-    return buttons_;
+
+bool Buttons::getState(enum BUTTON button) const
+{
+    return states_[button];
 }

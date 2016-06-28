@@ -18,17 +18,19 @@ class SpiProto;
 class Buttons : public IButtons
 {
 public:
-    static const BUTTONS ZERO_BUTTONS;
-
     Buttons(SpiProto &proto);
     virtual ~Buttons() {}
 
-    virtual BUTTONS read(RESULT *result);
-    virtual BUTTONS get() const { return buttons_; }
+    virtual void   setCallback(buttonsCallback *callback);
+    virtual RESULT handleEvents();
+    virtual bool   getState(enum BUTTON button) const;
 
 private:
-    SpiProto &              proto_;
-    BUTTONS                 buttons_;
+    static const int NUM_BUTTONS = 5;
+    SpiProto &      proto_;
+    buttonsCallback *callback_;
+    bool            states_[NUM_BUTTONS];
+
     mutable Poco::FastMutex accessMutex_;
 };
 

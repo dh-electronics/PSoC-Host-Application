@@ -14,8 +14,10 @@ namespace drc01
 class IButtons
 {
 public:
-    virtual RESULT setCallback(buttonsCallback *callback)   =0;
-    virtual RESULT handleButtons()                                 =0;
+    virtual void   setCallback(buttonsCallback *callback)   =0;
+    virtual RESULT handleEvents()                           =0;
+    virtual bool   getState(enum BUTTON button) const       =0;
+
 };
 
 
