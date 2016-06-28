@@ -64,7 +64,7 @@ private:
 };
 
 
-} // namespace bigfish
+}
 
 
 #endif	/* MASTERHELPERS_H */

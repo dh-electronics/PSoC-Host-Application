@@ -1,5 +1,4 @@
-#ifndef ERRORCODES_H
-#define ERRORCODES_H
+#pragma once
 
 
 enum RESULT
@@ -14,5 +13,3 @@ enum RESULT
     RESULT_SEE_ERRNO
 };
 
-
-#endif // ERRORCODES_H

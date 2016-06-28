@@ -1,5 +1,4 @@
-#ifndef C_API_H_
-#define C_API_H_
+#pragma once
 
 #include <resultcodes.h>
 #include <init.h>
@@ -10,4 +9,3 @@
 #include <leds.h>
 #include <eeprom.h>
 
-#endif

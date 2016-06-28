@@ -1,34 +1,44 @@
-#ifndef DISPLAY_H_
-#define DISPLAY_H_
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#pragma once
 
 
 #include "resultcodes.h"
 
 
-enum BMP_FUNC { BMP_FUNC_PUT, BMP_FUNC_SLIDEUP, BMP_FUNC_SLIDEDOWN };
+struct Bitmap
+{
+    Bitmap(int w, int h);
+    Bitmap(const Bitmap &other);
+    ~Bitmap();
+
+    const int width;
+    const int height;
+    unsigned char *data;
+};
+
+
+struct FT_Bitmap;
 
 
 enum RESULT displayEnable(int on);
 
 
-enum RESULT displayClear();
+enum RESULT displayFill(bool white = false);
 
 
-enum RESULT displayInvert(int on);
+enum RESULT displayFillRect(int x, int y, int w, int h, bool white = true);
 
 
-enum RESULT displaySetPos(int x, int y);
+enum RESULT displayDrawRect(int x, int y, int w, int h, bool white = true);
 
 
-enum RESULT displayBitmap(unsigned char *data, int width, int height, enum BMP_FUNC func);
+enum RESULT displayInvertRect(int x, int y, int w, int h);
 
 
-#ifdef __cplusplus
-}
-#endif
+enum RESULT displayBitmap(int x, int y, const Bitmap &bmp);
+enum RESULT displayBitmap(int x, int y, const FT_Bitmap &bmp);
 
-#endif // DISPLAY_H_
+
+enum RESULT displayFlush();
+
+
+enum RESULT displaySwap();

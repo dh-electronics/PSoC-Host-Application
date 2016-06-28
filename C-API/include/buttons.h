@@ -1,33 +1,21 @@
-#ifndef BUTTONS_H_
-#define BUTTONS_H_
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#pragma once
 
 
 #include "resultcodes.h"
 
 
-/// Represents the PCAP BUttons states.
-struct BUTTONS
+enum BUTTONS
 {
-    char esc:1, //< button Esc was pressed
-        dn:1,   //< button Down was pressed
-        m:1,    //< button Middle was pressed
-        ok:1,   //< button Ok was pressed
-        up:1;   //< button Up was pressed
+    BUTTONS_ESC = 0,
+    BUTTONS_DN,
+    BUTTONS_MID,
+    BUTTONS_OK,
+    BUTTONS_UP
 };
 
 
-struct BUTTONS readButtons(enum RESULT *result);
+typedef void buttonsCallback(enum BUTTONS button, bool pressed);
 
+enum RESULT setButtonsCallback(buttonsCallback *callback);
 
-struct BUTTONS getButtons(enum RESULT *result);
-
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif // BUTTONS_H_
+enum RESULT handleButtons();

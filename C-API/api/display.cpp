@@ -24,7 +24,7 @@ RESULT displayEnable(int on)
 }
 
 
-RESULT displayClear()
+RESULT displayFill(bool white)
 {
     IApiManager *man = IApiManager::getIface();
     if(man)
@@ -32,7 +32,7 @@ RESULT displayClear()
         man->active();
         IDisplay *display = man->getDisplay();
         assert(display);
-        return display->clear();
+        return display->fill(white);
     }
     else
     {
@@ -41,7 +41,7 @@ RESULT displayClear()
 }
 
 
-RESULT displayInvert(int on)
+RESULT displayFillRect(int x, int y, int w, int h, bool white)
 {
     IApiManager *man = IApiManager::getIface();
     if(man)
@@ -49,7 +49,7 @@ RESULT displayInvert(int on)
         man->active();
         IDisplay *display = man->getDisplay();
         assert(display);
-        return display->invert(on);
+        return display->fillRect(x, y, w, h, white);
     }
     else
     {
@@ -58,7 +58,8 @@ RESULT displayInvert(int on)
 }
 
 
-RESULT displaySelectFont(int font)
+
+RESULT displayDrawRect(int x, int y, int w, int h, bool white)
 {
     IApiManager *man = IApiManager::getIface();
     if(man)
@@ -66,7 +67,7 @@ RESULT displaySelectFont(int font)
         man->active();
         IDisplay *display = man->getDisplay();
         assert(display);
-        return display->selectFont(font);
+        return display->drawRect(x, y, w, h, white);
     }
     else
     {
@@ -75,7 +76,8 @@ RESULT displaySelectFont(int font)
 }
 
 
-RESULT displaySetPos(int x, int y)
+
+RESULT displayInvertRect(int x, int y, int w, int h)
 {
     IApiManager *man = IApiManager::getIface();
     if(man)
@@ -83,7 +85,7 @@ RESULT displaySetPos(int x, int y)
         man->active();
         IDisplay *display = man->getDisplay();
         assert(display);
-        return display->setPosition(x, y);
+        return display->invertRect(x, y, w, h);
     }
     else
     {
@@ -92,7 +94,8 @@ RESULT displaySetPos(int x, int y)
 }
 
 
-RESULT displayBitmap(unsigned char *data, int width, int height, BMP_FUNC func)
+
+RESULT displayBitmap(int x, int y, const Bitmap &bmp)
 {
     IApiManager *man = IApiManager::getIface();
     if(man)
@@ -100,7 +103,59 @@ RESULT displayBitmap(unsigned char *data, int width, int height, BMP_FUNC func)
         man->active();
         IDisplay *display = man->getDisplay();
         assert(display);
-        return display->bitmap(data, width, height, func);
+        return display->bitmap(x, y, bmp);
+    }
+    else
+    {
+        return RESULT_API_NOT_OPEN;
+    }
+}
+
+
+
+RESULT displayBitmap(int x, int y, const FT_Bitmap &bmp)
+{
+    IApiManager *man = IApiManager::getIface();
+    if(man)
+    {
+        man->active();
+        IDisplay *display = man->getDisplay();
+        assert(display);
+        return display->bitmap(x, y, bmp);
+    }
+    else
+    {
+        return RESULT_API_NOT_OPEN;
+    }
+}
+
+
+RESULT displayFlush()
+{
+    IApiManager *man = IApiManager::getIface();
+    if(man)
+    {
+        man->active();
+        IDisplay *display = man->getDisplay();
+        assert(display);
+        return display->flush();
+    }
+    else
+    {
+        return RESULT_API_NOT_OPEN;
+    }
+}
+
+
+RESULT displaySwap()
+{
+    IApiManager *man = IApiManager::getIface();
+    if(man)
+    {
+        man->active();
+        IDisplay *display = man->getDisplay();
+        assert(display);
+        return display->swap();
     }
     else
     {

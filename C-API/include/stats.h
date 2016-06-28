@@ -1,9 +1,4 @@
-#ifndef STATS_H_
-#define STATS_H_
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#pragma once
 
 
 #include "resultcodes.h"
@@ -38,9 +33,3 @@ unsigned int getPicVersion(enum RESULT *result);
 
 unsigned int getHwRevision(enum RESULT *result);
 
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif // STATS_H_

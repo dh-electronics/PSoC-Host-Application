@@ -23,15 +23,30 @@ public:
     Display(SpiProto &proto);
 
     virtual RESULT enable(bool on);
-    virtual RESULT clear();
-    virtual RESULT invert(bool on);
-    virtual RESULT selectFont(int font);
-    virtual RESULT setPosition(int x, int y);
-    virtual RESULT bitmap(const unsigned char *data, int width, int height, BMP_FUNC func);
+    virtual RESULT fill(bool white);
+    virtual RESULT fillRect(int x, int y, int w, int h, bool white);
+    virtual RESULT drawRect(int x, int y, int w, int h, bool white);
+    virtual RESULT invertRect(int x, int y, int w, int h);
+
+    virtual RESULT bitmap(int x, int y, const Bitmap &bmp);
+    virtual RESULT bitmap(int x, int y, const FT_Bitmap &bmp);
+
+    virtual RESULT flush();
+    virtual RESULT swap();
 
 private:
+    static const int WIDTH = 128;
+    static const int HEIGHT = 64;
+    static const int BUFSIZE = WIDTH * HEIGHT / 8;
+
     SpiProto & proto_;
+    uint8_t     buffers_[2][BUFSIZE];           // two buffers
+    uint8_t     compressedDiff_[BUFSIZE + 3];   // compressed diff
+    uint16_t    compressedSize_;
+    uint16_t    sentByteIdx_;
+    uint8_t     currentBufferIdx_;              // current buffer index
+    uint8_t *   currentBuffer_;                // pointer to current buffer
 };
 
 
-} // namespace bigfish
+}
