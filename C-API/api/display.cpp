@@ -32,7 +32,8 @@ RESULT displayFill(bool white)
         man->active();
         IDisplay *display = man->getDisplay();
         assert(display);
-        return display->fill(white);
+        display->fill(white);
+        return RESULT_OK;
     }
     else
     {
@@ -49,7 +50,8 @@ RESULT displayFillRect(int x, int y, int w, int h, bool white)
         man->active();
         IDisplay *display = man->getDisplay();
         assert(display);
-        return display->fillRect(x, y, w, h, white);
+        display->fillRect(x, y, w, h, white);
+        return RESULT_OK;
     }
     else
     {
@@ -67,7 +69,8 @@ RESULT displayDrawRect(int x, int y, int w, int h, bool white)
         man->active();
         IDisplay *display = man->getDisplay();
         assert(display);
-        return display->drawRect(x, y, w, h, white);
+        display->drawRect(x, y, w, h, white);
+        return RESULT_OK;
     }
     else
     {
@@ -85,7 +88,8 @@ RESULT displayInvertRect(int x, int y, int w, int h)
         man->active();
         IDisplay *display = man->getDisplay();
         assert(display);
-        return display->invertRect(x, y, w, h);
+        display->invertRect(x, y, w, h);
+        return RESULT_OK;
     }
     else
     {
@@ -103,7 +107,8 @@ RESULT displayBitmap(int x, int y, const Bitmap &bmp)
         man->active();
         IDisplay *display = man->getDisplay();
         assert(display);
-        return display->bitmap(x, y, bmp);
+        display->bitmap(x, y, bmp);
+        return RESULT_OK;
     }
     else
     {
@@ -121,7 +126,8 @@ RESULT displayBitmap(int x, int y, const FT_Bitmap &bmp)
         man->active();
         IDisplay *display = man->getDisplay();
         assert(display);
-        return display->bitmap(x, y, bmp);
+        display->bitmap(x, y, bmp);
+        return RESULT_OK;
     }
     else
     {
