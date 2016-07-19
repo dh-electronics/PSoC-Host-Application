@@ -19,10 +19,11 @@ class Display : public IDisplay
 public:
     static const int WIDTH = 128;
     static const int HEIGHT = 64;
+    static const int PITCH = WIDTH / 8;
+    static const int BUFSIZE = PITCH * HEIGHT;
 
-    static const uint16_t DISPLAY_CLEAR_WAIT_MS    = 2;
-    static const uint16_t DISPLAY_SYMBOL_WAIT_MS   = 1;
-    static const uint16_t DISPLAY_SHOW_WAIT_MS     = 12; // 9, 10
+    static const uint16_t DISPLAY_FRAME_WAIT_MS     = 2;
+    static const uint16_t DISPLAY_DATA_WAIT_MS      = 3;
 
     Display(SpiProto &proto);
 
@@ -39,9 +40,6 @@ public:
     virtual RESULT swap();
 
 private:
-    static const int PITCH = WIDTH / 8;
-    static const int BUFSIZE = PITCH * HEIGHT;
-
     uint8_t *   bufferAddress(uint8_t byteX, uint8_t y);
 
     static bool isRectOnScreen(int x, int y, int w, int h, int &xEnd, int &yEnd);

@@ -426,14 +426,16 @@ RESULT Display::flush()
         *d ^= *b;
 
     // compress the diff buffer and send
-    Compressor c(diffBuffer_, compressed_);
-    compressedLength_ = c.compress();
+    {
+        Compressor c(compressed_, diffBuffer_);
+        compressedLength_ = c.compress();
+    }
 
     // copy the buffer
     memcpy(diffBuffer_, buffer_, BUFSIZE);
 
     // frame command
-    Command <0> cmd(CMD_DISPLAY_FRAME);
+    Command <2> cmd(CMD_DISPLAY_FRAME);
     Response <0> rsp;
     uint16_t params = compressedLength_;
     if(displayFilled_)
@@ -446,26 +448,25 @@ RESULT Display::flush()
     set_16(cmd.data(), 0, params);
 
     ScopedLock <FastMutex> lock(accessMutex_);
-    const RESULT res = proto_.xmit(cmd, rsp);
+    const RESULT res = proto_.xmit(cmd, rsp, DISPLAY_FRAME_WAIT_MS);
     if(RESULT_OK != res)
         return res;
 
-    // send the data
     return sendCompressed();
 }
 
 
 RESULT Display::swap()
 {
-    // resent the last compressed buffer
+    // re-send the last compressed buffer
     if(compressedLength_)
     {
         // frame command
-        Command <0> cmd(CMD_DISPLAY_FRAME);
+        Command <2> cmd(CMD_DISPLAY_FRAME);
         Response <0> rsp;
         set_16(cmd.data(), 0, compressedLength_);
         ScopedLock <FastMutex> lock(accessMutex_);
-        const RESULT res = proto_.xmit(cmd, rsp);
+        const RESULT res = proto_.xmit(cmd, rsp, DISPLAY_FRAME_WAIT_MS);
         if(RESULT_OK != res)
             return res;
 
@@ -480,6 +481,23 @@ RESULT Display::swap()
 
 RESULT Display::sendCompressed()
 {
-    // TODO:
+    uint8_t *d = compressed_;
+
+
+    CommandUnion cu;
+    ResponseUnion ru;
+    cu.cmd.command_ = CMD_DISPLAY_DATA;
+
+    uint16_t bytesSend;
+    for(uint16_t bytesLeft = compressedLength_; bytesLeft > 0; bytesLeft -= bytesSend, d += bytesSend)
+    {
+        bytesSend = bytesLeft > SPI_PACKET_SIZE ? SPI_PACKET_SIZE : bytesLeft;
+        memcpy(cu.cmd.data_, d, bytesSend);
+
+        const RESULT res = proto_.xmit(&cu.cmd, bytesSend + 2, &ru.rsp, 2, DISPLAY_DATA_WAIT_MS);
+        if(RESULT_OK != res)
+            return res;
+    }
+
     return RESULT_OK;
 }
