@@ -4,9 +4,9 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <iostream>
 
-
-bool stop = false;
+using namespace std;
 
 
 static void butCallback(enum BUTTON button, bool pressed)
@@ -14,7 +14,6 @@ static void butCallback(enum BUTTON button, bool pressed)
     switch(button)
     {
     case BUTTON_ESC:
-        stop = true;
         break;
 
     case BUTTON_DN:
@@ -36,13 +35,16 @@ static void butCallback(enum BUTTON button, bool pressed)
 void testFillRect()
 {
     displayFill();
+
     for(uint16_t i = 0; i < 1000; ++i)
     {
         displayFillRect(
                     rand() % 200 - 100, rand() % 100 - 50,
                     rand() % 200, rand() % 100,
                     rand() > RAND_MAX / 2);
+
         displayFlush();
+        cout << "display flushed" << endl;
         usleep(100000);
     }
 }
@@ -84,9 +86,10 @@ int main(int argc, char **argv)
     if(RESULT_OK != res)
         exit(1);
 
-    res = setButtonsCallback(butCallback);
+    /* res = setButtonsCallback(butCallback);
     if(RESULT_OK != res)
         exit(2);
+    */
 
     res = displayEnable(true);
     if(RESULT_OK != res)

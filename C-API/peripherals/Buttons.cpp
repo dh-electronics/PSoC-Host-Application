@@ -13,6 +13,7 @@ using namespace Poco;
 
 Buttons::Buttons(SpiProto &proto)
     : proto_(proto)
+    , callback_(NULL)
 {
     for(uint8_t i = 0; i < NUM_BUTTONS; ++i)
         states_[i] = false;

@@ -420,7 +420,7 @@ RESULT Display::flush()
 {
     // create a diff
     uint8_t *b = buffer_;
-    uint8_t *b_end = b + BUFSIZE;
+    const uint8_t * const b_end = b + BUFSIZE;
     uint8_t *d = diffBuffer_;
     for(; b != b_end; ++b, ++d)
         *d ^= *b;
