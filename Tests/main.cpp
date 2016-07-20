@@ -19,65 +19,57 @@ void testSwap()
     for(uint16_t i = 0; i < 10; ++i)
     {
         displaySwap();
-        usleep(500000);
+        usleep(250000);
     }
 }
 
 
 void testFillRect()
 {
+    displayFill();
+    displayFlush();
 
-    for(uint16_t i = 0; i < 10; ++i)
+    for(uint16_t i = 0; i < 100; ++i)
     {
-        const bool white = rand() > RAND_MAX / 2;
-        displayFill(white);
-        displayFlush();
-        usleep(500000);
-
         displayFillRect(
                     rand() % 200 - 100, rand() % 100 - 50,
                     rand() % 200, rand() % 100,
-                    !white);
+                    rand() > RAND_MAX / 2);
 
         displayFlush();
-        usleep(200000);
+        usleep(10000);
     }
 }
 
 
 void testInvertRect()
 {
-    for(uint16_t i = 0; i < 10; ++i)
+    displayFill();
+    displayFlush();
+    for(uint16_t i = 0; i < 100; ++i)
     {
-        displayFill(rand() > RAND_MAX / 2);
-        displayFlush();
-        usleep(500000);
-
         displayInvertRect(
                     rand() % 200 - 100, rand() % 100 - 50,
                     rand() % 200, rand() % 100);
         displayFlush();
-        usleep(200000);
+        usleep(10000);
     }
 }
 
 
 void testDrawRect()
 {
-    for(uint16_t i = 0; i < 10; ++i)
+    displayFill();
+    displayFlush();
+    for(uint16_t i = 0; i < 100; ++i)
     {
-        const bool white = rand() > RAND_MAX / 2;
-        displayFill(white);
-        displayFlush();
-        usleep(500000);
-
         displayDrawRect(
                     rand() % 200 - 100, rand() % 100 - 50,
                     rand() % 200, rand() % 100,
-                    !white);
+                    rand() > RAND_MAX / 2);
 
         displayFlush();
-        usleep(200000);
+        usleep(10000);
     }
 }
 
