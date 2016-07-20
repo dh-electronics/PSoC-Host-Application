@@ -1,34 +1,14 @@
 #include "init.h"
 #include "buttons.h"
 #include "display.h"
+#include "bounce.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <iostream>
 
+
 using namespace std;
-
-
-static void butCallback(enum BUTTON button, bool pressed)
-{
-    switch(button)
-    {
-    case BUTTON_ESC:
-        break;
-
-    case BUTTON_DN:
-        break;
-
-    case BUTTON_MID:
-        break;
-
-    case BUTTON_OK:
-        break;
-
-    case BUTTON_UP:
-        break;
-    }
-}
 
 
 void testSwap()
@@ -108,15 +88,11 @@ int main(int argc, char **argv)
     if(RESULT_OK != res)
         exit(1);
 
-    /* res = setButtonsCallback(butCallback);
-    if(RESULT_OK != res)
-        exit(2);
-    */
-
     res = displayEnable(true);
     if(RESULT_OK != res)
         exit(3);
 
+    Bounce::run();
     testSwap();
     testFillRect();
     testDrawRect();

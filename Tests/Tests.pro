@@ -2,10 +2,12 @@ TARGET = tests
 TEMPLATE = app
 CONFIG -= qt
 
-HEADERS = 
+HEADERS = \ 
+    bounce.h
 
 SOURCES = \  
-    main.cpp
+    main.cpp \
+    bounce.cpp
 
 INCLUDEPATH += $$PWD/../C-API/include
 
