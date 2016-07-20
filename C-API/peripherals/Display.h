@@ -19,8 +19,7 @@ class Display : public IDisplay
 public:
     static const int WIDTH = 128;
     static const int HEIGHT = 64;
-    static const int PITCH = WIDTH / 8;
-    static const int BUFSIZE = PITCH * HEIGHT;
+    static const int BUFSIZE = WIDTH * HEIGHT / 8;
 
     static const uint16_t DISPLAY_FRAME_WAIT_MS     = 2;
     static const uint16_t DISPLAY_DATA_WAIT_MS      = 3;
@@ -40,13 +39,13 @@ public:
     virtual RESULT swap();
 
 private:
-    uint8_t *   bufferAddress(uint8_t byteX, uint8_t y);
+    uint8_t *   bufferAddress(uint8_t x, uint8_t byteY);
 
     static bool isRectOnScreen(int x, int y, int w, int h, int &xEnd, int &yEnd);
 
     typedef void bitwiseOp(uint8_t *, uint8_t);
-    static void columnOp(uint8_t *data, uint8_t mask, uint8_t height, bitwiseOp *op);
-    static void blockOp(uint8_t *data, uint8_t val, uint8_t bytes, uint8_t height, bitwiseOp *op);
+    static void rowOp(uint8_t *data, uint8_t mask, uint8_t width, bitwiseOp *op);
+    static void blockOp(uint8_t *data, uint8_t val, uint8_t width, uint8_t bytes, bitwiseOp *op);
 
     void        horizontalLine(uint8_t xStart, uint8_t xEnd, uint8_t y, bool white);
     void        verticalLine(uint8_t x, uint8_t yStart, uint8_t yEnd, bool white);
@@ -54,8 +53,8 @@ private:
 
     SpiProto &  proto_;
     uint8_t     buffer_[BUFSIZE];               // main buffer
-    uint8_t     diffBuffer_[BUFSIZE];           // buffer used for diff
-    uint8_t     compressed_[BUFSIZE + 3];   // compressed diff of the two buffers
+    uint8_t     diff_[BUFSIZE];                 // buffer used for diff
+    uint8_t     compressed_[BUFSIZE + 3];       // compressed diff of the two buffers
     uint16_t    compressedLength_;
     bool        displayFilled_;
     bool        fillColorWhite_;

@@ -31,51 +31,73 @@ static void butCallback(enum BUTTON button, bool pressed)
 }
 
 
+void testSwap()
+{
+    displayFill();
+    displayFillRect(19, 6, 55, 47, true);
+    displayFlush();
+    for(uint16_t i = 0; i < 10; ++i)
+    {
+        displaySwap();
+        usleep(500000);
+    }
+}
+
 
 void testFillRect()
 {
-    displayFill();
 
-    for(uint16_t i = 0; i < 1000; ++i)
+    for(uint16_t i = 0; i < 10; ++i)
     {
+        const bool white = rand() > RAND_MAX / 2;
+        displayFill(white);
+        displayFlush();
+        usleep(500000);
+
         displayFillRect(
                     rand() % 200 - 100, rand() % 100 - 50,
                     rand() % 200, rand() % 100,
-                    rand() > RAND_MAX / 2);
+                    !white);
 
         displayFlush();
-        cout << "display flushed" << endl;
-        usleep(100000);
+        usleep(200000);
     }
 }
 
 
 void testInvertRect()
 {
-    displayFill();
-    for(uint16_t i = 0; i < 1000; ++i)
+    for(uint16_t i = 0; i < 10; ++i)
     {
+        displayFill(rand() > RAND_MAX / 2);
+        displayFlush();
+        usleep(500000);
+
         displayInvertRect(
                     rand() % 200 - 100, rand() % 100 - 50,
                     rand() % 200, rand() % 100);
         displayFlush();
-        usleep(100000);
+        usleep(200000);
     }
 }
 
 
 void testDrawRect()
 {
-    displayFill();
-    for(uint16_t i = 0; i < 1000; ++i)
+    for(uint16_t i = 0; i < 10; ++i)
     {
+        const bool white = rand() > RAND_MAX / 2;
+        displayFill(white);
+        displayFlush();
+        usleep(500000);
+
         displayDrawRect(
                     rand() % 200 - 100, rand() % 100 - 50,
                     rand() % 200, rand() % 100,
-                    rand() > RAND_MAX / 2);
+                    !white);
 
         displayFlush();
-        usleep(100000);
+        usleep(200000);
     }
 }
 
@@ -95,6 +117,7 @@ int main(int argc, char **argv)
     if(RESULT_OK != res)
         exit(3);
 
+    testSwap();
     testFillRect();
     testDrawRect();
     testInvertRect();

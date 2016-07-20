@@ -8,6 +8,7 @@
 #include <Poco/ScopedLock.h>
 #include <string.h>
 #include <cassert>
+#include <iostream>
 
 
 using namespace drc01;
@@ -23,7 +24,7 @@ Display::Display(SpiProto &proto)
 {
     // zeroing both buffers
     memset(buffer_, 0, BUFSIZE);
-    memset(diffBuffer_, 0, BUFSIZE);
+    memset(diff_, 0, BUFSIZE);
 }
 
 
@@ -43,13 +44,13 @@ void Display::fill(bool white)
     // fill both of the buffers with the color
     const uint8_t color = white ? 0xff : 0;
     memset(buffer_, color, BUFSIZE);
-    memset(diffBuffer_, color, BUFSIZE);
+    memset(diff_, color, BUFSIZE);
 }
 
 
-uint8_t * Display::bufferAddress(uint8_t byteX, uint8_t y)
+uint8_t * Display::bufferAddress(uint8_t x, uint8_t byteY)
 {
-    return buffer_ + byteX + PITCH * y;
+    return buffer_ + byteY * WIDTH + x;
 }
 
 
@@ -107,11 +108,11 @@ static void bitwiseSet(uint8_t *res, uint8_t arg)
 }
 
 
-void Display::columnOp(uint8_t *data, uint8_t val, uint8_t height, bitwiseOp *op)
+void Display::rowOp(uint8_t *data, uint8_t val, uint8_t width, bitwiseOp *op)
 {
     uint8_t *d = data;
-    uint8_t *d_end = d + PITCH * height;
-    for(; d != d_end; d += PITCH)
+    uint8_t *d_end = d + width;
+    for(; d != d_end; ++d)
         op(d, val);
 }
 
@@ -124,14 +125,15 @@ void Display::columnOp(uint8_t *data, uint8_t val, uint8_t height, bitwiseOp *op
  * @param height - vertical height
  * @param op
  */
-void Display::blockOp(uint8_t *data, uint8_t val, uint8_t bytes, uint8_t height, bitwiseOp *op)
+void Display::blockOp(uint8_t *data, uint8_t val, uint8_t width, uint8_t bytes, bitwiseOp *op)
 {
     uint8_t *d = data;
-    for(uint8_t i = 0; i < height; ++i, d += PITCH)
+    uint8_t * const d_end = d + bytes * WIDTH;
+    for(; d !=  d_end; d += WIDTH)  // vertical loop
     {
         uint8_t *ld = d;
-        const uint8_t *ld_end = ld + bytes;
-        for(; ld != ld_end; ++ld)
+        const uint8_t *ld_end = ld + width;
+        for(; ld != ld_end; ++ld)   // horizontal loop
             op(ld, val);
     }
 }
@@ -139,14 +141,36 @@ void Display::blockOp(uint8_t *data, uint8_t val, uint8_t bytes, uint8_t height,
 
 void Display::horizontalLine(uint8_t xStart, uint8_t xEnd, uint8_t y, bool white)
 {
-    // start of the line
-    const uint8_t xStartByte = xStart >> 3;       // divide by 8
-    const uint8_t xStartBit = xStart & 0x07;
-    uint8_t startMask = 1 << xStartBit;
+    const uint8_t yByte = y >> 3;       // divide by 8
+    uint8_t mask = 1 << (y & 0x07);
+    const uint8_t width = xEnd - xStart + 1;
 
-    const uint8_t xEndByte = xEnd >> 3;       // divide by 8
-    const uint8_t xEndBit = xEnd & 0x07;
-    uint8_t endMask = 1 << xEndBit;
+    bitwiseOp *op;
+    if(white)
+    {
+        op = bitwiseOr;
+    }
+    else
+    {
+        op = bitwiseAnd;
+        mask = ~mask;
+    }
+
+    uint8_t *d = bufferAddress(xStart, yByte);
+    rowOp(d, mask, width, op);
+}
+
+
+void Display::verticalLine(uint8_t x, uint8_t yStart, uint8_t yEnd, bool white)
+{
+    // start of the line
+    const uint8_t yStartByte = yStart >> 3;   // divide by 8
+    const uint8_t yStartBit = yStart & 0x07;
+    uint8_t startMask = 0xff << yStartBit;
+
+    const uint8_t yEndByte = yEnd >> 3;       // divide by 8
+    const uint8_t yEndBit = yEnd & 0x07;
+    uint8_t endMask = ~(0xff << yEndBit);
 
     bitwiseOp *op;
     if(white)
@@ -160,14 +184,14 @@ void Display::horizontalLine(uint8_t xStart, uint8_t xEnd, uint8_t y, bool white
         endMask = ~endMask;
     }
 
-    uint8_t *d = bufferAddress(xStartByte, y);
-    if(xStartByte < xEndByte)
+    uint8_t *d = bufferAddress(x, yStartByte);
+    if(yStartByte < yEndByte)
     {
         op(d, startMask);
-        ++d;
+        d += WIDTH;
 
         const uint8_t fillVal = white ? 0xff : 0;
-        for(uint8_t xb = xStartByte + 1; xb < xEndByte; ++xb, ++d)
+        for(uint8_t yb = yStartByte + 1; yb < yEndByte; ++yb, d += WIDTH)
             *d = fillVal;
     }
     else if(white)
@@ -183,28 +207,6 @@ void Display::horizontalLine(uint8_t xStart, uint8_t xEnd, uint8_t y, bool white
 }
 
 
-void Display::verticalLine(uint8_t x, uint8_t yStart, uint8_t yEnd, bool white)
-{
-    const uint8_t xByte = x >> 3;       // divide by 8
-    uint8_t mask = 1 << (x & 0x07);
-    const uint8_t height = yEnd - yStart + 1;
-
-    bitwiseOp *op;
-    if(white)
-    {
-        op = bitwiseOr;
-    }
-    else
-    {
-        op = bitwiseAnd;
-        mask = ~mask;
-    }
-
-    uint8_t *d = bufferAddress(xByte, yStart);
-    columnOp(d, mask, height, op);
-}
-
-
 void Display::fillRect(int x, int y, int w, int h, bool white)
 {
     // check if the rect is outside the screen
@@ -216,23 +218,23 @@ void Display::fillRect(int x, int y, int w, int h, bool white)
 
     // clamp to the screen
     const int xStart = x > 0 ? x : 0;
-    if(xEnd >= WIDTH)
-        xEnd = WIDTH - 1;   // inclusive
+    if(xEnd > WIDTH)
+        xEnd = WIDTH;           // non-inclusive
 
     const int yStart = y > 0 ? y : 0;
-    if(yEnd > HEIGHT)
-        yEnd = HEIGHT;      // non-inclusive
-    const uint8_t columnHeight = yEnd - yStart;
+    if(yEnd >= HEIGHT)
+        yEnd = HEIGHT - 1;      // inclusive
+    const uint8_t rowWidth = xEnd - xStart;
 
     // prepare for drawing
-    uint8_t xStartByte = xStart >> 3;       // divide by 8
-    uint8_t xEndByte = xEnd >> 3;
+    uint8_t yStartByte = yStart >> 3;       // divide by 8
+    uint8_t yEndByte = yEnd >> 3;
 
-    const uint8_t xStartBits = xStart & 0x07;
-    const uint8_t xEndBits = xEnd & 0x07;   // xEndBits are inclusive
+    const uint8_t yStartBits = yStart & 0x07;
+    const uint8_t yEndBits = yEnd & 0x07;   // xEndBits are inclusive
 
-    uint8_t startMask = 0xFF << xStartBits;
-    uint8_t endMask = ~(0xFF << xEndBits);
+    uint8_t startMask = 0xFF << yStartBits;
+    uint8_t endMask = ~(0xFF << yEndBits);
 
     bitwiseOp *op;
     if(white)
@@ -246,19 +248,19 @@ void Display::fillRect(int x, int y, int w, int h, bool white)
         endMask = ~endMask;
     }
 
-    uint8_t *d = bufferAddress(xStartByte, yStart);
-    if(xStartByte < xEndByte)
+    uint8_t *d = bufferAddress(xStart, yStartByte);
+    if(yStartByte < yEndByte)
     {
         // drawing the first column
-        columnOp(d, startMask, columnHeight, op);
-        ++d;
+        rowOp(d, startMask, rowWidth, op);
+        d += WIDTH;
 
         // filling the intermediate block, if any
-        uint8_t bytes = xEndByte - xStartByte;
+        uint8_t bytes = yEndByte - yStartByte;
         if(bytes > 1)
         {
-            blockOp(d, white ? 0xff : 0, --bytes, columnHeight, bitwiseSet);
-            d += bytes;
+            blockOp(d, white ? 0xff : 0, rowWidth, --bytes, bitwiseSet);
+            d += bytes * WIDTH;
         }
     }
     else if(white) // start and end of x is on the same column
@@ -271,7 +273,7 @@ void Display::fillRect(int x, int y, int w, int h, bool white)
     }
 
     // drawing the last (or the only) column
-    columnOp(d, endMask, columnHeight, op);
+    rowOp(d, endMask, rowWidth, op);
 }
 
 
@@ -313,8 +315,8 @@ void Display::drawRect(int x, int y, int w, int h, bool white)
     bool drawTop;
     if(y >= 0)
     {
-       yStart = y;
-       drawTop = true;
+        yStart = y;
+        drawTop = true;
     }
     else
     {
@@ -355,43 +357,42 @@ void Display::invertRect(int x, int y, int w, int h)
     if(!isRectOnScreen(x, y, w, h, xEnd, yEnd))
         return;
 
-    --xEnd; // to inclusive
+    --yEnd; // to inclusive
 
     // clamp to the screen
     const int xStart = x > 0 ? x : 0;
-    if(xEnd >= WIDTH)
-        xEnd = WIDTH - 1;   // inclusive
+    if(xEnd > WIDTH)
+        xEnd = WIDTH;       // non-inclusive
 
     const int yStart = y > 0 ? y : 0;
-    if(yEnd > HEIGHT)
-        yEnd = HEIGHT;      // non-inclusive
+    if(yEnd >= HEIGHT)
+        yEnd = HEIGHT - 1;  // inclusive
 
-    const uint8_t columnHeight = yEnd - yStart;
+    const uint8_t rowWidth = xEnd - xStart;
 
     // prepare for drawing
-    uint8_t xStartByte = xStart >> 3;       // divide by 8
-    uint8_t xEndByte = xEnd >> 3;
+    uint8_t yStartByte = yStart >> 3;       // divide by 8
+    uint8_t yEndByte = yEnd >> 3;
 
-    const uint8_t xStartBits = xStart & 0x07;
-    const uint8_t xEndBits = xEnd & 0x07;   // xEndBits are inclusive
+    const uint8_t yStartBits = yStart & 0x07;
+    const uint8_t yEndBits = yEnd & 0x07;   // xEndBits are inclusive
 
-    uint8_t startMask = 0xFF << xStartBits;
-    uint8_t endMask = ~(0xFF << xEndBits);
-    uint8_t *d = bufferAddress(xStartByte, yStart);
+    uint8_t startMask = 0xFF << yStartBits;
+    uint8_t endMask = ~(0xFF << yEndBits);
+    uint8_t *d = bufferAddress(xStart, yStartByte);
 
-    if(xStartByte < xEndByte)
+    if(yStartByte < yEndByte)
     {
         // drawing the first column
-        columnOp(d, startMask, columnHeight, bitwiseXor);
-
-        ++d;
+        rowOp(d, startMask, rowWidth, bitwiseXor);
+        d += WIDTH;
 
         // inverting the intermediate block, if any
-        uint8_t bytes = xEndByte - xStartByte;
+        uint8_t bytes = yEndByte - yStartByte;
         if(bytes > 1)
         {
-            blockOp(d, 0xff, --bytes, columnHeight, bitwiseXor);
-            d += bytes;
+            blockOp(d, 0xff, rowWidth, --bytes, bitwiseXor);
+            d += bytes * WIDTH;
         }
     }
     else
@@ -400,7 +401,7 @@ void Display::invertRect(int x, int y, int w, int h)
     }
 
     // drawing the last (or the only) column
-    columnOp(d, endMask, columnHeight, bitwiseXor);
+    rowOp(d, endMask, rowWidth, bitwiseXor);
 }
 
 
@@ -421,18 +422,18 @@ RESULT Display::flush()
     // create a diff
     uint8_t *b = buffer_;
     const uint8_t * const b_end = b + BUFSIZE;
-    uint8_t *d = diffBuffer_;
+    uint8_t *d = diff_;
     for(; b != b_end; ++b, ++d)
         *d ^= *b;
 
     // compress the diff buffer and send
     {
-        Compressor c(compressed_, diffBuffer_);
+        Compressor c(compressed_, diff_);
         compressedLength_ = c.compress();
     }
 
     // copy the buffer
-    memcpy(diffBuffer_, buffer_, BUFSIZE);
+    memcpy(diff_, buffer_, BUFSIZE);
 
     // frame command
     Command <2> cmd(CMD_DISPLAY_FRAME);
@@ -481,17 +482,16 @@ RESULT Display::swap()
 
 RESULT Display::sendCompressed()
 {
-    uint8_t *d = compressed_;
-
-
     CommandUnion cu;
     ResponseUnion ru;
-    cu.cmd.command_ = CMD_DISPLAY_DATA;
+    cu.cmd.command_ = CMD_DISPLAY_WRITE;
 
+    const uint8_t MAX_DATA_BYTES = SPI_PACKET_SIZE - 2;
+    const uint8_t *d = compressed_;
     uint16_t bytesSend;
     for(uint16_t bytesLeft = compressedLength_; bytesLeft > 0; bytesLeft -= bytesSend, d += bytesSend)
     {
-        bytesSend = bytesLeft > SPI_PACKET_SIZE ? SPI_PACKET_SIZE : bytesLeft;
+        bytesSend = bytesLeft > MAX_DATA_BYTES ? MAX_DATA_BYTES : bytesLeft;
         memcpy(cu.cmd.data_, d, bytesSend);
 
         const RESULT res = proto_.xmit(&cu.cmd, bytesSend + 2, &ru.rsp, 2, DISPLAY_DATA_WAIT_MS);
