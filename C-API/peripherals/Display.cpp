@@ -407,7 +407,8 @@ void Display::invertRect(int x, int y, int w, int h)
 
 void Display::bitmap(int x, int y, const Bitmap &bmp)
 {
-    // TODO:
+
+
 }
 
 

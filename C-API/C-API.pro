@@ -32,7 +32,8 @@ peripherals/Buttons.h \
 peripherals/Display.h \
 peripherals/Gpios.h \
 peripherals/Eeprom.h \
-    Compressor.h
+    Compressor.h \
+    include/bitmap.h
 
 SOURCES = \ 
 api/buttons.cpp \
@@ -46,7 +47,8 @@ spi/GenericHelpers.c \
 spi/MasterHelpers.cpp \
 peripherals/Led.cpp \
 helpers.cpp \
-    Compressor.cpp
+    Compressor.cpp \
+    api/bitmap.cpp
 
 CONFIG(DHCOM_AM33) || CONFIG(DHCOM_iMX6_rev300) {
     message("Will compile REAL peripherals.")

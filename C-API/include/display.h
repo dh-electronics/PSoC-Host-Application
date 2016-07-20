@@ -4,18 +4,7 @@
 #include "resultcodes.h"
 
 
-struct Bitmap
-{
-    Bitmap(int w, int h);
-    Bitmap(const Bitmap &other);
-    ~Bitmap();
-
-    const int width;
-    const int height;
-    unsigned char *data;
-};
-
-
+struct Bitmap;
 struct FT_Bitmap;
 
 

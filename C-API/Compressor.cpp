@@ -9,15 +9,7 @@ using namespace drc01;
 using namespace std;
 
 
-Compressor::Compressor(uint8_t *dst, const uint8_t *src)
-    : dst_start_(dst)
-    , dst_(dst)
-    , src_(src)
-    , src_end_(src + Display::BUFSIZE)
-{
-}
-
-
+/*
 static void dump(const uint8_t *src, const uint8_t *src_end)
 {
     for(const uint8_t *s = src; s != src_end; ++s)
@@ -26,6 +18,16 @@ static void dump(const uint8_t *src, const uint8_t *src_end)
             putchar('\n');
         printf("%.2hhx ", *s);
     }
+}
+*/
+
+
+Compressor::Compressor(uint8_t *dst, const uint8_t *src)
+    : dst_start_(dst)
+    , dst_(dst)
+    , src_(src)
+    , src_end_(src + Display::BUFSIZE)
+{
 }
 
 
