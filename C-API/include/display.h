@@ -2,10 +2,7 @@
 
 
 #include "resultcodes.h"
-
-
-struct Bitmap;
-struct FT_Bitmap;
+#include "bitmap.h"
 
 
 enum RESULT displayEnable(int on);

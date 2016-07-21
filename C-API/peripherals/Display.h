@@ -48,7 +48,7 @@ private:
 
     void        horizontalLine(uint8_t xStart, uint8_t xEnd, uint8_t y, bool white);
     void        verticalLine(uint8_t x, uint8_t yStart, uint8_t yEnd, bool white);
-    void        bitmap(int x, int y, int width, int height, int pitch, uint8_t *data);
+    void        bitmap(int x, int y, int width, int height, int pitch, const uint8_t *data);
 
     RESULT      sendCompressed();
 

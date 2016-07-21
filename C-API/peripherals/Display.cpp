@@ -17,6 +17,30 @@ using namespace std;
 using namespace Poco;
 
 
+static void bitwiseOr(uint8_t *res, uint8_t arg)
+{
+    *res |= arg;
+}
+
+
+static void bitwiseAnd(uint8_t *res, uint8_t arg)
+{
+    *res &= arg;
+}
+
+
+static void bitwiseXor(uint8_t *res, uint8_t arg)
+{
+    *res ^= arg;
+}
+
+
+static void bitwiseSet(uint8_t *res, uint8_t arg)
+{
+    *res = arg;
+}
+
+
 Display::Display(SpiProto &proto)
     : proto_(proto)
     , compressedLength_(0)
@@ -255,7 +279,8 @@ void Display::bitmap(int x, int y, const Bitmap &bmp)
 
 void Display::bitmap(int x, int y, const FT_Bitmap &bmp)
 {
-    bitmap(x, y, bmp.width, bmp.rows, bmp.pitch, (uint8_t*)bmp.buffer);
+    if(bmp.pixel_mode == 1) // only PIXEL_MODE_MONO
+        bitmap(x, y, bmp.width, bmp.rows, bmp.pitch, (uint8_t*)bmp.buffer);
 }
 
 
@@ -358,30 +383,6 @@ bool Display::isRectOnScreen(int x, int y, int w, int h, int &xEnd, int &yEnd)
 }
 
 
-static void bitwiseOr(uint8_t *res, uint8_t arg)
-{
-    *res |= arg;
-}
-
-
-static void bitwiseAnd(uint8_t *res, uint8_t arg)
-{
-    *res &= arg;
-}
-
-
-static void bitwiseXor(uint8_t *res, uint8_t arg)
-{
-    *res ^= arg;
-}
-
-
-static void bitwiseSet(uint8_t *res, uint8_t arg)
-{
-    *res = arg;
-}
-
-
 void Display::rowOp(uint8_t *data, uint8_t val, uint8_t width, bitwiseOp *op)
 {
     uint8_t *d = data;
@@ -481,11 +482,16 @@ void Display::verticalLine(uint8_t x, uint8_t yStart, uint8_t yEnd, bool white)
 }
 
 
-void Display::bitmap(int x, int y, int width, int height, int pitch, uint8_t *data)
+void Display::bitmap(int x, int y, int width, int height, int pitch, const uint8_t *data)
 {
     int scrXEnd, scrYEnd;
     if(!isRectOnScreen(x, y, width, height, scrXEnd, scrYEnd))
         return;
+
+    if(scrXEnd > WIDTH)
+        scrXEnd = WIDTH;
+    if(scrYEnd > HEIGHT)
+        scrYEnd = HEIGHT;
 
     int scrX, bmpX;
     if(x < 0)
@@ -513,31 +519,31 @@ void Display::bitmap(int x, int y, int width, int height, int pitch, uint8_t *da
 
     const uint8_t bitsInRow = scrXEnd - scrX;
 
-    const int scrByte = scrY >> 8;
+    const int scrByte = scrY >> 3;
     int scrBit = scrY & 0x07;
-    const uint8_t *scr = bufferAddress(scrX, scrByte);
+    uint8_t *scr = bufferAddress(scrX, scrByte);
 
-    const int bmpStartByte = bmpX >> 8;
+    const int bmpStartByte = bmpX >> 3;
     const int bmpStartBit = 7 - (bmpX & 0x07);
     const uint8_t *bmp = data + bmpStartByte + (pitch > 0 ? pitch * bmpY : -pitch * (height - bmpY - 1));
 
     for(int sy = scrY; sy < scrYEnd; ++sy)
     {   // start of the row
-        const uint8_t *bmpRow = bmp;
+        const uint8_t *b = bmp;
         int8_t bmpBit = bmpStartBit;
-        const uint8_t *scrRow = scr;
+        uint8_t *scrRow = scr;
 
         for(int bitsToDo = bitsInRow; bitsToDo; )
         {
-            const uint8_t byte = *bmpRow;
+            const uint8_t byte = *b;
             for(; bitsToDo && bmpBit >= 0; --bitsToDo, --bmpBit, ++scrRow)
                 *scrRow ^= ((byte >> bmpBit) & 0x01) << scrBit;
 
             bmpBit = 7;
-            ++bmpRow;
+            ++b;
         }
 
-        bmp += bmp.pitch;
+        bmp += pitch;
 
         if(++scrBit > 7)
         {

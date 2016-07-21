@@ -7,10 +7,6 @@
 enum RESULT;
 
 
-struct Bitmap;
-struct FT_Bitmap;
-
-
 namespace drc01
 {
 
