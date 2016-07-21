@@ -40,7 +40,6 @@ public:
 
 private:
     uint8_t *   bufferAddress(uint8_t x, uint8_t byteY);
-
     static bool isRectOnScreen(int x, int y, int w, int h, int &xEnd, int &yEnd);
 
     typedef void bitwiseOp(uint8_t *, uint8_t);
@@ -49,6 +48,8 @@ private:
 
     void        horizontalLine(uint8_t xStart, uint8_t xEnd, uint8_t y, bool white);
     void        verticalLine(uint8_t x, uint8_t yStart, uint8_t yEnd, bool white);
+    void        bitmap(int x, int y, int width, int height, int pitch, uint8_t *data);
+
     RESULT      sendCompressed();
 
     SpiProto &  proto_;

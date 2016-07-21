@@ -5,6 +5,7 @@
 #include "spi/Response.h"
 #include "spi/SpiProto.h"
 #include "spi/MasterHelpers.h"
+#include "bitmap.h"
 #include <Poco/ScopedLock.h>
 #include <string.h>
 #include <cassert>
@@ -45,165 +46,6 @@ void Display::fill(bool white)
     const uint8_t color = white ? 0xff : 0;
     memset(buffer_, color, BUFSIZE);
     memset(diff_, color, BUFSIZE);
-}
-
-
-uint8_t * Display::bufferAddress(uint8_t x, uint8_t byteY)
-{
-    return buffer_ + byteY * WIDTH + x;
-}
-
-
-/**
- * @brief isRectOnScreen
- * @param x
- * @param y
- * @param w - width of the rectangle, min value is 1
- * @param h - height of the rectangle, min value is 1
- * @param xEnd - returned end of x, non-inclusive
- * @param yEnd - returned end of y, non-inclusive
- * @return - true means rect intersects with the screen
- */
-bool Display::isRectOnScreen(int x, int y, int w, int h, int &xEnd, int &yEnd)
-{
-    if(w < 1 || h < 1)
-        return false;
-
-    if(y >= HEIGHT || x >= WIDTH)
-        return false;
-
-    xEnd = x + w;
-    if(xEnd <= 0)
-        return false;
-
-    yEnd = y + h;
-    if(yEnd <= 0)
-        return false;
-
-    return true;
-}
-
-
-static void bitwiseOr(uint8_t *res, uint8_t arg)
-{
-    *res |= arg;
-}
-
-
-static void bitwiseAnd(uint8_t *res, uint8_t arg)
-{
-    *res &= arg;
-}
-
-
-static void bitwiseXor(uint8_t *res, uint8_t arg)
-{
-    *res ^= arg;
-}
-
-
-static void bitwiseSet(uint8_t *res, uint8_t arg)
-{
-    *res = arg;
-}
-
-
-void Display::rowOp(uint8_t *data, uint8_t val, uint8_t width, bitwiseOp *op)
-{
-    uint8_t *d = data;
-    uint8_t *d_end = d + width;
-    for(; d != d_end; ++d)
-        op(d, val);
-}
-
-
-/**
- * @brief Display::blockOp fast block-filling function, optimized for CPU cache
- * @param data byte on the left-top
- * @param val - value to use
- * @param bytes - how many bytes horizontally
- * @param height - vertical height
- * @param op
- */
-void Display::blockOp(uint8_t *data, uint8_t val, uint8_t width, uint8_t bytes, bitwiseOp *op)
-{
-    uint8_t *d = data;
-    uint8_t * const d_end = d + bytes * WIDTH;
-    for(; d !=  d_end; d += WIDTH)  // vertical loop
-    {
-        uint8_t *ld = d;
-        const uint8_t *ld_end = ld + width;
-        for(; ld != ld_end; ++ld)   // horizontal loop
-            op(ld, val);
-    }
-}
-
-
-void Display::horizontalLine(uint8_t xStart, uint8_t xEnd, uint8_t y, bool white)
-{
-    const uint8_t yByte = y >> 3;       // divide by 8
-    uint8_t mask = 1 << (y & 0x07);
-    const uint8_t width = xEnd - xStart + 1;
-
-    bitwiseOp *op;
-    if(white)
-    {
-        op = bitwiseOr;
-    }
-    else
-    {
-        op = bitwiseAnd;
-        mask = ~mask;
-    }
-
-    uint8_t *d = bufferAddress(xStart, yByte);
-    rowOp(d, mask, width, op);
-}
-
-
-void Display::verticalLine(uint8_t x, uint8_t yStart, uint8_t yEnd, bool white)
-{
-    // start of the line
-    const uint8_t yStartByte = yStart >> 3;   // divide by 8
-    const uint8_t yStartBit = yStart & 0x07;
-    uint8_t startMask = 0xff << yStartBit;
-
-    const uint8_t yEndByte = yEnd >> 3;       // divide by 8
-    const uint8_t yEndBit = yEnd & 0x07;
-    uint8_t endMask = ~(0xff << yEndBit);
-
-    bitwiseOp *op;
-    if(white)
-    {
-        op = bitwiseOr;
-    }
-    else
-    {
-        op = bitwiseAnd;
-        startMask = ~startMask;
-        endMask = ~endMask;
-    }
-
-    uint8_t *d = bufferAddress(x, yStartByte);
-    if(yStartByte < yEndByte)
-    {
-        op(d, startMask);
-        d += WIDTH;
-
-        const uint8_t fillVal = white ? 0xff : 0;
-        for(uint8_t yb = yStartByte + 1; yb < yEndByte; ++yb, d += WIDTH)
-            *d = fillVal;
-    }
-    else if(white)
-    {
-        endMask &= startMask;
-    }
-    else
-    {
-        endMask |= startMask;
-    }
-
-    op(d, endMask);
 }
 
 
@@ -407,14 +249,13 @@ void Display::invertRect(int x, int y, int w, int h)
 
 void Display::bitmap(int x, int y, const Bitmap &bmp)
 {
-
-
+    bitmap(x, y, bmp.width, bmp.height, bmp.pitch, bmp.data);
 }
 
 
 void Display::bitmap(int x, int y, const FT_Bitmap &bmp)
 {
-    // TODO:
+    bitmap(x, y, bmp.width, bmp.rows, bmp.pitch, (uint8_t*)bmp.buffer);
 }
 
 
@@ -478,6 +319,233 @@ RESULT Display::swap()
     {
         return RESULT_OK;
     }
+}
+
+
+uint8_t * Display::bufferAddress(uint8_t x, uint8_t byteY)
+{
+    return buffer_ + byteY * WIDTH + x;
+}
+
+
+/**
+ * @brief isRectOnScreen
+ * @param x
+ * @param y
+ * @param w - width of the rectangle, min value is 1
+ * @param h - height of the rectangle, min value is 1
+ * @param xEnd - returned end of x, non-inclusive
+ * @param yEnd - returned end of y, non-inclusive
+ * @return - true means rect intersects with the screen
+ */
+bool Display::isRectOnScreen(int x, int y, int w, int h, int &xEnd, int &yEnd)
+{
+    if(w < 1 || h < 1)
+        return false;
+
+    if(y >= HEIGHT || x >= WIDTH)
+        return false;
+
+    xEnd = x + w;
+    if(xEnd <= 0)
+        return false;
+
+    yEnd = y + h;
+    if(yEnd <= 0)
+        return false;
+
+    return true;
+}
+
+
+static void bitwiseOr(uint8_t *res, uint8_t arg)
+{
+    *res |= arg;
+}
+
+
+static void bitwiseAnd(uint8_t *res, uint8_t arg)
+{
+    *res &= arg;
+}
+
+
+static void bitwiseXor(uint8_t *res, uint8_t arg)
+{
+    *res ^= arg;
+}
+
+
+static void bitwiseSet(uint8_t *res, uint8_t arg)
+{
+    *res = arg;
+}
+
+
+void Display::rowOp(uint8_t *data, uint8_t val, uint8_t width, bitwiseOp *op)
+{
+    uint8_t *d = data;
+    uint8_t *d_end = d + width;
+    for(; d != d_end; ++d)
+        op(d, val);
+}
+
+
+/**
+ * @brief Display::blockOp fast block-filling function, optimized for CPU cache
+ * @param data byte on the left-top
+ * @param val - value to use
+ * @param bytes - how many bytes horizontally
+ * @param height - vertical height
+ * @param op
+ */
+void Display::blockOp(uint8_t *data, uint8_t val, uint8_t width, uint8_t bytes, bitwiseOp *op)
+{
+    uint8_t *d = data;
+    uint8_t * const d_end = d + bytes * WIDTH;
+    for(; d !=  d_end; d += WIDTH)  // vertical loop
+    {
+        uint8_t *ld = d;
+        const uint8_t *ld_end = ld + width;
+        for(; ld != ld_end; ++ld)   // horizontal loop
+            op(ld, val);
+    }
+}
+
+
+void Display::horizontalLine(uint8_t xStart, uint8_t xEnd, uint8_t y, bool white)
+{
+    const uint8_t yByte = y >> 3;       // divide by 8
+    uint8_t mask = 1 << (y & 0x07);
+    const uint8_t width = xEnd - xStart + 1;
+
+    bitwiseOp *op;
+    if(white)
+    {
+        op = bitwiseOr;
+    }
+    else
+    {
+        op = bitwiseAnd;
+        mask = ~mask;
+    }
+
+    uint8_t *d = bufferAddress(xStart, yByte);
+    rowOp(d, mask, width, op);
+}
+
+
+void Display::verticalLine(uint8_t x, uint8_t yStart, uint8_t yEnd, bool white)
+{
+    // start of the line
+    const uint8_t yStartByte = yStart >> 3;   // divide by 8
+    const uint8_t yStartBit = yStart & 0x07;
+    uint8_t startMask = 0xff << yStartBit;
+
+    const uint8_t yEndByte = yEnd >> 3;       // divide by 8
+    const uint8_t yEndBit = yEnd & 0x07;
+    uint8_t endMask = ~(0xff << yEndBit);
+
+    bitwiseOp *op;
+    if(white)
+    {
+        op = bitwiseOr;
+    }
+    else
+    {
+        op = bitwiseAnd;
+        startMask = ~startMask;
+        endMask = ~endMask;
+    }
+
+    uint8_t *d = bufferAddress(x, yStartByte);
+    if(yStartByte < yEndByte)
+    {
+        op(d, startMask);
+        d += WIDTH;
+
+        const uint8_t fillVal = white ? 0xff : 0;
+        for(uint8_t yb = yStartByte + 1; yb < yEndByte; ++yb, d += WIDTH)
+            *d = fillVal;
+    }
+    else if(white)
+    {
+        endMask &= startMask;
+    }
+    else
+    {
+        endMask |= startMask;
+    }
+
+    op(d, endMask);
+}
+
+
+void Display::bitmap(int x, int y, int width, int height, int pitch, uint8_t *data)
+{
+    int scrXEnd, scrYEnd;
+    if(!isRectOnScreen(x, y, width, height, scrXEnd, scrYEnd))
+        return;
+
+    int scrX, bmpX;
+    if(x < 0)
+    {
+        scrX = 0;
+        bmpX = -x;
+    }
+    else
+    {
+        scrX = x;
+        bmpX = 0;
+    }
+
+    int scrY, bmpY;
+    if(y < 0)
+    {
+        scrY = 0;
+        bmpY = -y;
+    }
+    else
+    {
+        scrY = y;
+        bmpY = 0;
+    }
+
+    const uint8_t bitsInRow = scrXEnd - scrX;
+
+    const int scrByte = scrY >> 8;
+    int scrBit = scrY & 0x07;
+    const uint8_t *scr = bufferAddress(scrX, scrByte);
+
+    const int bmpStartByte = bmpX >> 8;
+    const int bmpStartBit = 7 - (bmpX & 0x07);
+    const uint8_t *bmp = data + bmpStartByte + (pitch > 0 ? pitch * bmpY : -pitch * (height - bmpY - 1));
+
+    for(int sy = scrY; sy < scrYEnd; ++sy)
+    {   // start of the row
+        const uint8_t *bmpRow = bmp;
+        int8_t bmpBit = bmpStartBit;
+        const uint8_t *scrRow = scr;
+
+        for(int bitsToDo = bitsInRow; bitsToDo; )
+        {
+            const uint8_t byte = *bmpRow;
+            for(; bitsToDo && bmpBit >= 0; --bitsToDo, --bmpBit, ++scrRow)
+                *scrRow ^= ((byte >> bmpBit) & 0x01) << scrBit;
+
+            bmpBit = 7;
+            ++bmpRow;
+        }
+
+        bmp += bmp.pitch;
+
+        if(++scrBit > 7)
+        {
+            scrBit = 0;
+            scr += WIDTH;
+        }
+    }
+
 }
 
 
