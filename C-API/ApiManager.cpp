@@ -293,7 +293,7 @@ int32_t ApiManager::periodicActions()
 void ApiManager::resetPic()
 {
     // Important! When done, persistence is no longer guaranteed
-    syslog(LOG_WARNING, "Have to reset the PIC - counters persistence compromised");
+    syslog(LOG_WARNING, "Have to reset the PIC");
 
     dhcom::GPIO gpio_E(system_, dhcom::GPIO::PORT_GPIO_E);
     if(gpio_E.open() == STATUS_SUCCESS

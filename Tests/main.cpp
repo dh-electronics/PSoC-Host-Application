@@ -69,14 +69,14 @@ void testBitmap()
 
     displayFill();
 
-    for(uint16_t i = 0; i < 100000; ++i)
+    for(uint16_t i = 0; true; ++i)
     {
-        const int xr = (i >> 1) % 140 - 5;
-        const int yr = 70 - i % 77;
+        const int xr = (i >> 1) % 145 - 16;
+        const int yr = 80 - i % 97;
         displayBitmap( xr, yr, rocket);
 
-        const int xa = i % 135 - 5;
-        const int ya = i % 80 - 10;
+        const int xa = i % 152 - 12;
+        const int ya = i % 80 - 8;
         Bitmap &bmp = (i >> 2) & 1 ? alien1 : alien2;
         displayBitmap( xa, ya, bmp);
         displayFlush();
