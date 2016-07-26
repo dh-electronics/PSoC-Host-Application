@@ -2,13 +2,15 @@
 #include <string.h>
 
 
-Bitmap::Bitmap(int w, int h)
+Bitmap::Bitmap(int w, int h, const unsigned char *bytes)
     : width(w)
     , height(h)
     , pitch((width >> 3) + (w & 0x07 ? 1 : 0))
     , size(pitch * height)
 {
     data = new unsigned char[size];
+    if(bytes)
+        memcpy(data, bytes, size);
 }
 
 

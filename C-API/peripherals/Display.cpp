@@ -277,7 +277,7 @@ void Display::bitmap(int x, int y, const Bitmap &bmp)
 }
 
 
-void Display::bitmap(int x, int y, const FT_Bitmap &bmp)
+void Display::bitmap(int x, int y, const FT_Bitmap_ &bmp)
 {
     if(bmp.pixel_mode == 1) // only PIXEL_MODE_MONO
         bitmap(x, y, bmp.width, bmp.rows, bmp.pitch, (uint8_t*)bmp.buffer);

@@ -3,15 +3,17 @@ TEMPLATE = app
 CONFIG -= qt
 
 HEADERS = \ 
-    bounce.h
+    bounce.h \
+    space.h
 
 SOURCES = \  
     main.cpp \
-    bounce.cpp
+    bounce.cpp \
+    space.cpp
 
 INCLUDEPATH += $$PWD/../C-API/include
 
-LIBS += -L$$POCO/lib -L$$OUT_PWD/../C-API/ -lc-api -L../DHCOM_HAL -lDHCOM_HAL
+LIBS += -L$$OUT_PWD/../C-API/ -lc-api -L../DHCOM_HAL -lDHCOM_HAL
 
 CONFIG(debug, debug | release) {
     message("Configuring DEBUG build")

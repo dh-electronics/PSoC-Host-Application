@@ -23,7 +23,7 @@ public:
     virtual void    invertRect(int x, int y, int w, int h)                           =0;
 
     virtual void    bitmap(int x, int y, const Bitmap &bmp)                          =0;
-    virtual void    bitmap(int x, int y, const FT_Bitmap &bmp)                       =0;
+    virtual void    bitmap(int x, int y, const FT_Bitmap_ &bmp)                      =0;
 
     virtual RESULT flush()      =0;
     virtual RESULT swap()       =0;

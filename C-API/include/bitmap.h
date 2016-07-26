@@ -1,9 +1,12 @@
 #pragma once
 
 
+#include <stddef.h>
+
+
 struct Bitmap
 {
-    Bitmap(int w, int h);
+    Bitmap(int w, int h, const unsigned char *bytes = NULL);
     Bitmap(const Bitmap &other);
     ~Bitmap();
 
@@ -15,7 +18,7 @@ struct Bitmap
 };
 
 
-typedef struct  FT_Bitmap_
+struct  FT_Bitmap_
 {
   unsigned int    rows;
   unsigned int    width;
@@ -26,4 +29,4 @@ typedef struct  FT_Bitmap_
   unsigned char   palette_mode;
   void*           palette;
 
-} FT_Bitmap;
+};

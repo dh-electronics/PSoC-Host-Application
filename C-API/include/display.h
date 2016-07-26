@@ -2,7 +2,10 @@
 
 
 #include "resultcodes.h"
-#include "bitmap.h"
+
+
+struct Bitmap;
+struct FT_Bitmap_;
 
 
 enum RESULT displayEnable(int on);
@@ -21,7 +24,7 @@ enum RESULT displayInvertRect(int x, int y, int w, int h);
 
 
 enum RESULT displayBitmap(int x, int y, const Bitmap &bmp);
-enum RESULT displayBitmap(int x, int y, const FT_Bitmap &bmp);
+enum RESULT displayBitmap(int x, int y, const struct FT_Bitmap_ &bmp);
 
 
 enum RESULT displayFlush();

@@ -2,10 +2,7 @@
 #include <stddef.h>
 
 
-using namespace drc01;
-
-
-const char * drc01::getResultCodeString(RESULT result)
+const char * getResultCodeString(RESULT result)
 {
     static const char *resultStrings[] = {
         "RESULT_OK",

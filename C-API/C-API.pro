@@ -3,8 +3,6 @@ TEMPLATE = lib
 CONFIG -= qt
 CONFIG += shared #DUMMY_PERIPHERALS
 
-message("POCO is supposed to be at: $$POCO, make and install it by: $cd POCO ; configure-dhcom.sh ; sudo make install")
-
 HEADERS = \
 include/resultcodes.h \
 include/c-api.h \
@@ -66,10 +64,7 @@ CONFIG(DHCOM_AM33) || CONFIG(DHCOM_iMX6_rev300) {
     error("Must be compiled for DHCOM_AM35 or DHCOM_iMX6_rev300 architecture!")
 }
 
-
-INCLUDEPATH += include $$POCO/include ../DHCOM_HAL/include
-
-LIBS += -L$$POCO/lib
+INCLUDEPATH += include /usr/include/Poco ../DHCOM_HAL/include
 
 CONFIG(debug, debug | release) {
     message("Configuring DEBUG build")

@@ -1,5 +1,6 @@
 #include "bounce.h"
 #include "display.h"
+#include "leds.h"
 #include <unistd.h>
 #include <iostream>
 #include <math.h>
@@ -73,10 +74,12 @@ void Bounce::run()
     }
     i_ = MAXSIZE - 1;
 
+    handleButtons();
     RESULT res = setButtonsCallback(buttonsCallback);
     if(RESULT_OK != res)
         return;
 
+    bool led = false;
     displayFill();
     displayDrawRect(0, 0, 128, 64, true);
     displayFlush();
@@ -89,6 +92,12 @@ void Bounce::run()
 
         handleButtons();
         drawSnake(false);
+
+        if(led)
+        {
+            writeLed(LED_BUS, false);
+            led = false;
+        }
 
         if(up_)
             ++angle_;
@@ -111,6 +120,7 @@ void Bounce::run()
         {
             bX_[i_] = oldX;
             angle_ = -angle_;
+            led = true;
         }
 
         if(newY < Y_MAX && newY >= Y_MIN)
@@ -121,6 +131,13 @@ void Bounce::run()
         {
             bY_[i_] = oldY;
             angle_ = CIRCLE/2 - angle_;
+            led = true;
         }
+
+        if(led)
+            writeLed(LED_BUS, true);
     }
+
+    writeLed(LED_BUS, false);
+
 }
