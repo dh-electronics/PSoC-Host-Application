@@ -1,5 +1,5 @@
 Package: drc-01
-Version: 0.1
+Version: 0.2
 Architecture: armhf
 Maintainer: Peter Kishalov <pkishalov@dh-electronics.de>
 Installed-Size: 25M
@@ -8,4 +8,3 @@ Section: misc
 Priority: optional
 Homepage: http://www.dh-electronics.com
 Description: app package for drc-01
-
