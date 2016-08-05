@@ -1,5 +1,9 @@
 drc-01 package
 
+2016-8-5/PK:
+version 0v3
+ - SPI Freq incremented to 300kHz
+
 2016-7-27/PK:
 version 0v2
  - bitmap API implemented
