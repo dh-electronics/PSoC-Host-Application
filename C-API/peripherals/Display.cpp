@@ -10,6 +10,7 @@
 #include <string.h>
 #include <cassert>
 #include <iostream>
+//#include <stdio.h>
 
 
 using namespace drc01;
@@ -286,15 +287,15 @@ void Display::bitmap(int x, int y, const FT_Bitmap_ &bmp)
 
 RESULT Display::flush()
 {
-    // create a diff
-    uint8_t *b = buffer_;
-    const uint8_t * const b_end = b + BUFSIZE;
-    uint8_t *d = diff_;
-    for(; b != b_end; ++b, ++d)
-        *d ^= *b;
+    { // create a diff
+        uint8_t *b = buffer_;
+        const uint8_t * const b_end = b + BUFSIZE;
+        uint8_t *d = diff_;
+        for(; b != b_end; ++b, ++d)
+            *d ^= *b;
+    }
 
-    // compress the diff buffer and send
-    {
+    { // compress the diff buffer
         Compressor c(compressed_, diff_);
         compressedLength_ = c.compress();
     }
@@ -557,6 +558,9 @@ void Display::bitmap(int x, int y, int width, int height, int pitch, const uint8
 
 RESULT Display::sendCompressed()
 {
+    if(!compressedLength_)
+        return RESULT_OK;
+
     CommandUnion cu;
     ResponseUnion ru;
     cu.cmd.command_ = CMD_DISPLAY_WRITE;

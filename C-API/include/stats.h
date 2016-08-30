@@ -4,7 +4,7 @@
 #include "resultcodes.h"
 
 
-#define API_VERSION 0x0002
+#define API_VERSION 0x0003
 
 
 unsigned int getCrcErrorCounter(enum RESULT *result);

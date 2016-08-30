@@ -3,6 +3,9 @@ TEMPLATE = lib
 CONFIG -= qt
 CONFIG += shared #DUMMY_PERIPHERALS
 
+
+message("Poco is in $$POCO")
+
 HEADERS = \
 include/resultcodes.h \
 include/c-api.h \
@@ -68,12 +71,12 @@ INCLUDEPATH += include /usr/include/Poco ../DHCOM_HAL/include
 
 CONFIG(debug, debug | release) {
     message("Configuring DEBUG build")
-    LIBS += -lPocoFoundationd
+    LIBS += $$POCO/lib/libPocoFoundationd.so.9
     QMAKE_CXXFLAGS += -g3 -O0
 }
 
 CONFIG(release, debug | release) {
     message("Configuring RELEASE build")
-    LIBS += -lPocoFoundation
+    LIBS += $$POCO/lib/libPocoFoundation.so.9
     QMAKE_CXXFLAGS += -g0 -O3
 }

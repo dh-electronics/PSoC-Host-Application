@@ -73,11 +73,11 @@ void Space::run()
     Bitmap alien1(11, 8, bmpAlien1);
     Bitmap alien2(11, 8, bmpAlien2);
 
-    displayFill();
-
     bool led = false;
     for(uint16_t i = 0; running_; ++i)
     {
+        displayFill();
+
         const int xr = (i >> 1) % 145 - 16;
         const int yr = 80 - i % 97;
         displayBitmap( xr, yr, rocket);
@@ -105,8 +105,8 @@ void Space::run()
         if(led)
             writeLed(LED_ERR, false);
 
-        displayBitmap( xr, yr, rocket);
-        displayBitmap( xa, ya, bmp);
+//        displayBitmap( xr, yr, rocket);
+//        displayBitmap( xa, ya, bmp);
     }
 }
 

@@ -36,22 +36,27 @@ uint16_t Compressor::compress()
     // cout << endl;
     // dump(src_, src_end_);
 
-    {   // compression always starts from coding zeros
-        const uint16_t zeros = countZeros(src_);        // count the zero bytes
+    // compression always starts from coding zeros
+    uint16_t zeros = countZeros(src_);  // count the zero bytes
+    if(zeros)
         src_ += zeros;
-        // cout << "zeros:" << zeros << endl;
-        codeNumber(zeros);                              // code the number of zeros
-    }
+    else
+        codeNumber(0);                  // because by definition must be number of zeros, even if 0
 
     uint16_t nonZeros = 0;
     const uint8_t *srcAhead = src_;
-    while(srcAhead != src_end_)
+    while(true)
     {
-        nonZeros += countNonZeros(srcAhead);            // count the non-zero bytes
+        nonZeros += countNonZeros(srcAhead);    // count the non-zero bytes
+        if(!nonZeros)                           // no bytes to code, leave
+            break;
+
+        if(zeros)                               // are there some not yet coded zeros from the last time
+            codeNumber(zeros);
+
         srcAhead = src_ + nonZeros;
 
-        const uint16_t zeros = countZeros(srcAhead);    // count zero bytes onwards
-
+        zeros = countZeros(srcAhead);           // count zero bytes onwards
         if(zeros > 2)
         {   // it is more optimal to code more than two zeros separately
             codeNumber(nonZeros);
@@ -60,7 +65,6 @@ uint16_t Compressor::compress()
             // cout << "zeros:" << zeros << endl;
             nonZeros = 0;
 
-            codeNumber(zeros);
             srcAhead += zeros;
             src_ = srcAhead;
         }
@@ -68,14 +72,14 @@ uint16_t Compressor::compress()
         {   // less than three zeros is not optimal to code separately
             srcAhead += zeros;
             nonZeros += zeros;
+            zeros = 0;
         }
-    }
-
-    if(nonZeros)
-    {
-        // cout << "non-zeros:" << nonZeros << endl;
-        codeNumber(nonZeros);
-        copyData(nonZeros);
+        else
+        {   // at the end
+            codeNumber(nonZeros);
+            copyData(nonZeros);
+            break;
+        }
     }
 
     // dump(dst_start_, dst_);

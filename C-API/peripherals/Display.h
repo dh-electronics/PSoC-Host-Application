@@ -20,6 +20,7 @@ public:
     static const int WIDTH = 128;
     static const int HEIGHT = 64;
     static const int BUFSIZE = WIDTH * HEIGHT / 8;
+    static const int COMPR_SIZE = BUFSIZE + 4;
 
     static const uint16_t DISPLAY_FRAME_WAIT_MS     = 2;
     static const uint16_t DISPLAY_DATA_WAIT_MS      = 3;
@@ -55,7 +56,7 @@ private:
     SpiProto &  proto_;
     uint8_t     buffer_[BUFSIZE];               // main buffer
     uint8_t     diff_[BUFSIZE];                 // buffer used for diff
-    uint8_t     compressed_[BUFSIZE + 3];       // compressed diff of the two buffers
+    uint8_t     compressed_[COMPR_SIZE];       // compressed diff of the two buffers
     uint16_t    compressedLength_;
     bool        displayFilled_;
     bool        fillColorWhite_;
