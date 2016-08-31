@@ -77,6 +77,25 @@ void testDrawRect()
 }
 
 
+void testFullScreenBitmap()
+{
+    uint8_t bmpData[1024];
+    for(int i = 0; i < 64; ++i)
+    {
+       const uint8_t pattern = i & 1 ? 0x55 : 0xAA;
+       memset(bmpData + i*16, pattern, 16);
+    }
+    Bitmap bmp(128, 64, bmpData);
+
+    displayFill();
+    for(int i = 0; i < 10; ++i)
+    {
+        displayBitmap(0,0,bmp);
+        displayFlush();
+    }
+}
+
+
 int main(int argc, char **argv)
 {
     RESULT res = openApi();
@@ -88,6 +107,8 @@ int main(int argc, char **argv)
     res = displayEnable(true);
     if(RESULT_OK != res)
         exit(3);
+
+    testFullScreenBitmap();
 
     testSwap();
     testFillRect();
