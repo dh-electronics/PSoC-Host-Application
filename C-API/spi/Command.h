@@ -28,7 +28,9 @@ enum CMD
     CMD_HWREV_WRITE     = 0x10, // since protocol v. 2.0
 
     CMD_PING            = 0x13, // pings the PIC with an argument and returns the same argument
-    CMD_EEPROM_WRITE    = 0x14, // programs the EEPROM
+
+    CMD_SPLASH_ERASE    = 0x20, // erases the Splash in Flash
+    CMD_SPLASH_WRITE    = 0x21, // programs the Splash in Flash
 
     CMD_DISPLAY_CMD         = 0x80, // INTERNAL: up to 14 cbytes data (display command and params) + 2 bytes PIC CMD and CRC
     CMD_DISPLAY_DATA        = 0x81, // INTERNAL: up to 14 cbytes data + 2 bytes PIC CMD and CRC
