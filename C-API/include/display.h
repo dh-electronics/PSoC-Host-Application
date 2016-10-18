@@ -11,6 +11,9 @@ struct FT_Bitmap_;
 enum RESULT displayEnable(int on);
 
 
+enum RESULT displaySetContrast(int value);
+
+
 enum RESULT displayFill(bool white = false);
 
 
@@ -31,3 +34,4 @@ enum RESULT displayFlush();
 
 
 enum RESULT displaySwap();
+enum RESULT displayWriteSplash();

@@ -28,6 +28,7 @@ public:
     Display(SpiProto &proto);
 
     virtual RESULT  enable(bool on);
+    virtual RESULT  setContrast(int value);
     virtual void    fill(bool white);
     virtual void    fillRect(int x, int y, int w, int h, bool white);
     virtual void    drawRect(int x, int y, int w, int h, bool white);
@@ -38,8 +39,11 @@ public:
 
     virtual RESULT flush();
     virtual RESULT swap();
+    virtual RESULT writeSplash();
 
 private:
+    static const int SPLASH_WRITE_WAIT_MS = 4;
+
     uint8_t *   bufferAddress(uint8_t x, uint8_t byteY);
     static bool isRectOnScreen(int x, int y, int w, int h, int &xEnd, int &yEnd);
 

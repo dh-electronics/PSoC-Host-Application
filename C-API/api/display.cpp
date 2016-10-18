@@ -1,5 +1,5 @@
 #include <display.h>
-#include <peripherals/IApiManager.h>
+#include <IApiManager.h>
 #include <peripherals/IDisplay.h>
 #include <cassert>
 
@@ -16,6 +16,24 @@ RESULT displayEnable(int on)
         IDisplay *display = man->getDisplay();
         assert(display);
         return display->enable(on);
+    }
+    else
+    {
+        return RESULT_API_NOT_OPEN;
+    }
+}
+
+
+RESULT displaySetContrast(int value)
+{
+    IApiManager *man = IApiManager::getIface();
+    if(man)
+    {
+        man->active();
+        IDisplay *display = man->getDisplay();
+        assert(display);
+        display->setContrast(value);
+        return RESULT_OK;
     }
     else
     {
@@ -168,3 +186,21 @@ RESULT displaySwap()
         return RESULT_API_NOT_OPEN;
     }
 }
+
+
+RESULT displayWriteSplash()
+{
+    IApiManager *man = IApiManager::getIface();
+    if(man)
+    {
+        man->active();
+        IDisplay *display = man->getDisplay();
+        assert(display);
+        return display->writeSplash();
+    }
+    else
+    {
+        return RESULT_API_NOT_OPEN;
+    }
+}
+

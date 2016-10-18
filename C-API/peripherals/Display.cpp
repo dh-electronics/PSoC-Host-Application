@@ -60,6 +60,16 @@ RESULT Display::enable(bool on)
 }
 
 
+RESULT  Display::setContrast(int value)
+{
+    Command <1> cmd(CMD_DISPLAY_CONTRAST);
+    Response <0> rsp;
+    set_8(cmd.data(), 0, value);
+    ScopedLock <FastMutex> lock(accessMutex_);
+    return proto_.xmit(cmd, rsp);
+}
+
+
 void Display::fill(bool white)
 {
     // remember that the display was filled with color
@@ -345,6 +355,60 @@ RESULT Display::swap()
     {
         return RESULT_OK;
     }
+}
+
+
+RESULT Display::writeSplash()
+{
+    RESULT res = displayFlush();
+    if(RESULT_OK != res)
+        return res;
+
+    cout << compressedLength_ << endl;
+
+    {   // erasing the flash
+        Command <0> cmd(CMD_SPLASH_ERASE);
+        Response <0> rsp;
+        ScopedLock <FastMutex> lock(accessMutex_);
+        const RESULT res = proto_.xmit(cmd, rsp, DISPLAY_FRAME_WAIT_MS);
+        if(RESULT_OK != res)
+            return res;
+    }
+
+    // transmitting the flash contents in the form of SPI packets with 12-byte data
+    CommandUnion cu;
+    cu.cmd.command_ = CMD_SPLASH_WRITE;
+
+    // computing the splash header
+    cu.buf[1] = uint8_t(compressedLength_);
+    cu.buf[2] = uint8_t((compressedLength_ >> 8) | 0x80 | (fillColorWhite_ ? 0x40 : 0));
+
+    uint8_t offset = 2; // because 2 bytes are already in place
+    const uint8_t *d = compressed_, * const d_end = compressed_ + compressedLength_;
+    for(; d != d_end; ++d)
+    {
+        cu.buf[offset + 1] = *d;
+
+        if(++offset == 12)
+        {   // packet is full, transmit
+            ResponseUnion ru;
+            ScopedLock <FastMutex> lock(accessMutex_);
+            const RESULT res = proto_.xmit(&cu.cmd, offset + 2, &ru.rsp, 2, SPLASH_WRITE_WAIT_MS);
+            if(RESULT_OK != res)
+                return res;
+            offset = 0;
+        }
+    }
+
+    {   // transmitting the last packet (which can be a zero-size-data packet)
+        ResponseUnion ru;
+        ScopedLock <FastMutex> lock(accessMutex_);
+        const RESULT res = proto_.xmit(&cu.cmd, offset + 2, &ru.rsp, 2, SPLASH_WRITE_WAIT_MS);
+        if(RESULT_OK != res)
+            return res;
+    }
+
+    return RESULT_OK;
 }
 
 

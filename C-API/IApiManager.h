@@ -23,7 +23,6 @@ public:
     virtual ILed *          getLed(LED led) const           =0;
     virtual IButtons *      getButtons() const              =0;
     virtual IDisplay *      getDisplay() const              =0;
-    virtual IEeprom *       getEeprom() const               =0;
 
     virtual void            resetStats()                    =0;
     virtual unsigned int    getCrcErrorCounter() const      =0;

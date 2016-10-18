@@ -1,5 +1,5 @@
 #include <eeprom.h>
-#include <peripherals/IApiManager.h>
+#include <IApiManager.h>
 #include <peripherals/IEeprom.h>
 #include <cassert>
 

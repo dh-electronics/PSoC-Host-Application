@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include <peripherals/IApiManager.h>
+#include <IApiManager.h>
 #include "resultcodes.h"
 #include "leds.h"
 #include <peripherals/Led.h>
@@ -28,7 +28,6 @@ public:
     virtual ILed *          getLed(LED led) const;
     virtual IButtons *      getButtons() const                  { return buttons_; }
     virtual IDisplay *      getDisplay() const                  { return display_; }
-    virtual IEeprom *       getEeprom() const                   { return eeprom_; }
 
     virtual void            resetStats()                        { proto_.resetStats(); }
     virtual unsigned int    getCrcErrorCounter() const          { return proto_.getCrcErrorCounter(); }
