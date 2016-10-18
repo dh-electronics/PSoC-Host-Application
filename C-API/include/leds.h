@@ -2,6 +2,7 @@
 
 
 #include "resultcodes.h"
+#include <stddef.h>
 
 
 enum LED
@@ -19,4 +20,4 @@ enum RESULT;
 enum RESULT writeLed(enum LED led, int on);
 
 
-int         getLedState(enum LED led, enum RESULT *result);
+int  getLedState(enum LED led, enum RESULT *result = NULL);

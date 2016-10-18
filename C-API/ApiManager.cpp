@@ -27,7 +27,6 @@ ApiManager * ApiManager::self_ = NULL;
 ApiManager::ApiManager()
     : buttons_(NULL)
     , display_(NULL)
-    , eeprom_(NULL)
     , picVersion_(0)
     , hwRevision_(0)
     , active_(false)
@@ -192,11 +191,6 @@ bool ApiManager::createPeripherals()
     if(!display_)
         return false;
 
-    // creating eeprom - not dependent on anything
-    eeprom_ = new(nothrow) Eeprom(proto_);
-    if(!eeprom_)
-        return false;
-
     return true;
 }
 
@@ -208,7 +202,6 @@ void ApiManager::deletePeripherals()
 
     delete buttons_;
     delete display_;
-    delete eeprom_;
 }
 
 

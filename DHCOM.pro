@@ -5,7 +5,8 @@ DHCOM_HAL.file = DHCOM_HAL/DHCOM_HAL.pro
 C-API.file = C-API/C-API.pro
 JSON-API.file = JSON-API/JSON-API.pro
 Tests.file = Tests/Tests.pro
-SUBDIRS = DHCOM_HAL C-API Tests #JSON-API
+Examples.file = Examples/Examples.pro
+SUBDIRS = DHCOM_HAL C-API Tests Examples #JSON-API
 
 C-API.depends = DHCOM_HAL
 JSON-API.depends = C-API

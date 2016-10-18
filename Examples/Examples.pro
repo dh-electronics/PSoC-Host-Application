@@ -1,4 +1,4 @@
-TARGET = tests
+TARGET = example
 TEMPLATE = app
 CONFIG -= qt
 

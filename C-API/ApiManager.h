@@ -7,7 +7,6 @@
 #include <peripherals/Led.h>
 #include <peripherals/Buttons.h>
 #include <peripherals/Display.h>
-#include <peripherals/Eeprom.h>
 #include <spi/SpiProto.h>
 #include <hal/System.h>
 #include <hal/GPIO.h>
@@ -77,7 +76,6 @@ private:
     Led *           leds_[Led::COUNT];
     Buttons *       buttons_;
     Display *       display_;
-    Eeprom *        eeprom_;
     int16_t         picVersion_;
     int16_t         hwRevision_;
     dhcom::System   system_;

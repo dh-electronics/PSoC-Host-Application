@@ -376,18 +376,19 @@ RESULT Display::writeSplash()
     }
 
     // transmitting the flash contents in the form of SPI packets with 12-byte data
-    CommandUnion cu;
+    CommandUnion cu; 
     cu.cmd.command_ = CMD_SPLASH_WRITE;
+    uint8_t *dst = cu.cmd.data_;
 
     // computing the splash header
-    cu.buf[1] = uint8_t(compressedLength_);
-    cu.buf[2] = uint8_t((compressedLength_ >> 8) | 0x80 | (fillColorWhite_ ? 0x40 : 0));
+    dst[0] = uint8_t(compressedLength_);
+    dst[1] = uint8_t((compressedLength_ >> 8) | 0x80 | (fillColorWhite_ ? 0x40 : 0));
 
     uint8_t offset = 2; // because 2 bytes are already in place
     const uint8_t *d = compressed_, * const d_end = compressed_ + compressedLength_;
     for(; d != d_end; ++d)
     {
-        cu.buf[offset + 1] = *d;
+        dst[offset] = *d;
 
         if(++offset == 12)
         {   // packet is full, transmit
