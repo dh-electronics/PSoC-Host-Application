@@ -91,8 +91,6 @@ void Display::fillRect(int x, int y, int w, int h, bool white)
     if(!isRectOnScreen(x, y, w, h, xEnd, yEnd))
         return;
 
-    --yEnd; // to inclusive
-
     // clamp to the screen
     const int xStart = x > 0 ? x : 0;
     if(xEnd > WIDTH)
@@ -233,8 +231,6 @@ void Display::invertRect(int x, int y, int w, int h)
     int xEnd, yEnd;
     if(!isRectOnScreen(x, y, w, h, xEnd, yEnd))
         return;
-
-    --yEnd; // to inclusive
 
     // clamp to the screen
     const int xStart = x > 0 ? x : 0;

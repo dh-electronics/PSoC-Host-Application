@@ -28,8 +28,8 @@ int main(int argc, char **argv)
     resetStats();
 
     testSplash();
-    testDisplay();
     testButtons();
+    testDisplay();
     testLeds();
 
     cout << "\nCrcErrorCounter:\t" << getCrcErrorCounter() <<

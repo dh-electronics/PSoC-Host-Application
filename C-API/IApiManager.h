@@ -11,7 +11,6 @@ namespace drc01
 class ILed;
 class IButtons;
 class IDisplay;
-class IEeprom;
 
 
 class IApiManager
