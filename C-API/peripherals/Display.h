@@ -42,6 +42,7 @@ public:
     virtual RESULT writeSplash();
 
 private:
+    static const int SPLASH_ERASE_WAIT_MS = 48;
     static const int SPLASH_WRITE_WAIT_MS = 4;
 
     uint8_t *   bufferAddress(uint8_t x, uint8_t byteY);

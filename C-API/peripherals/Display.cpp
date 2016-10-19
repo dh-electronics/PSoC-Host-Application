@@ -370,13 +370,13 @@ RESULT Display::writeSplash()
         Command <0> cmd(CMD_SPLASH_ERASE);
         Response <0> rsp;
         ScopedLock <FastMutex> lock(accessMutex_);
-        const RESULT res = proto_.xmit(cmd, rsp, DISPLAY_FRAME_WAIT_MS);
+        const RESULT res = proto_.xmit(cmd, rsp, SPLASH_ERASE_WAIT_MS);
         if(RESULT_OK != res)
             return res;
     }
 
     // transmitting the flash contents in the form of SPI packets with 12-byte data
-    CommandUnion cu; 
+    CommandUnion cu;
     cu.cmd.command_ = CMD_SPLASH_WRITE;
     uint8_t *dst = cu.cmd.data_;
 
