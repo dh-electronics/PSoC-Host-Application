@@ -6,15 +6,22 @@ if [ $# != 1 ]; then
 	exit 1
 fi
 
-OUT_DIR=/var/tmp/drc01-dev
+PACKAGE=drc01-dev
+OUT_DIR=/var/tmp/$PACKAGE
 rm -rf $OUT_DIR
-mkdir -p $OUT_DIR/lib $OUT_DIR/bin 
+mkdir -p $OUT_DIR/lib $OUT_DIR/bin $OUT_DIR/src 
 
 svn export C-API/include $OUT_DIR/include && \
-svn export Tests $OUT_DIR/src && \
+svn export Tests $OUT_DIR/src/Tests && \
+svn export Examples $OUT_DIR/src/Examples && \
 cp -P $1/C-API/libc-api.so* $1/DHCOM_HAL/libDHCOM_HAL.so* $OUT_DIR/lib && \
 cp -P $1/Tests/tests $OUT_DIR/bin && \
-tar cf drc_01-dev.tar.gz $OUT_DIR
+cp -P $1/Examples/example $OUT_DIR/bin 
+
+PLACE=$PWD
+cd /var/tmp
+tar cf $PLACE/$PACKAGE.tar.gz $PACKAGE 
+cd -
 
 rm -rf $OUT_DIR
 

@@ -28,9 +28,9 @@ int main(int argc, char **argv)
     resetStats();
 
     testSplash();
-    // testDisplay();
-    // testButtons();
-    // testLeds();
+    testDisplay();
+    testButtons();
+    testLeds();
 
     cout << "\nCrcErrorCounter:\t" << getCrcErrorCounter() <<
             "\nResponseErrorCounter:\t" << getResponseErrorCounter() <<
