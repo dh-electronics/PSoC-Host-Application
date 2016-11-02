@@ -39,7 +39,7 @@ void testButtons()
             cerr << "handleButtons: " << getResultCodeString(res) << endl;
             break;
         }
-        usleep(100000);
+        usleep(25000);
     }
 
     cout << "... done." << endl;
