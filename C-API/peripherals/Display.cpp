@@ -98,7 +98,7 @@ void Display::fillRect(int x, int y, int w, int h, bool white)
 
     const int yStart = y > 0 ? y : 0;
     if(yEnd > HEIGHT)
-        yEnd = HEIGHT;      // inclusive
+        yEnd = HEIGHT;      // non-inclusive
     const uint8_t rowWidth = xEnd - xStart;
 
     // prepare for drawing
