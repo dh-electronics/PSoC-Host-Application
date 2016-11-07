@@ -104,9 +104,23 @@ void Space::run()
 
         if(led)
             writeLed(LED_ERR, false);
+    }
 
-//        displayBitmap( xr, yr, rocket);
-//        displayBitmap( xa, ya, bmp);
+    displayFill(true);
+
+    for(uint8_t y = 0; y < 64; y += 24) for(uint8_t x = 0; x < 128; x += 12)
+    {
+        displayDrawRect(x, y, 8, 16, false); // displayFillRect
+        if(x < 64) displayBitmap(x, y, rocket);
+    }
+
+    displayFlush();
+
+    running_ = true;
+    while(running_)
+    {
+        usleep(50000);
+        handleButtons();
     }
 }
 

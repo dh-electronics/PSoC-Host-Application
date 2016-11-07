@@ -97,8 +97,8 @@ void Display::fillRect(int x, int y, int w, int h, bool white)
         xEnd = WIDTH;           // non-inclusive
 
     const int yStart = y > 0 ? y : 0;
-    if(yEnd >= HEIGHT)
-        yEnd = HEIGHT - 1;      // inclusive
+    if(yEnd > HEIGHT)
+        yEnd = HEIGHT;      // inclusive
     const uint8_t rowWidth = xEnd - xStart;
 
     // prepare for drawing
@@ -238,8 +238,8 @@ void Display::invertRect(int x, int y, int w, int h)
         xEnd = WIDTH;       // non-inclusive
 
     const int yStart = y > 0 ? y : 0;
-    if(yEnd >= HEIGHT)
-        yEnd = HEIGHT - 1;  // inclusive
+    if(yEnd > HEIGHT)
+        yEnd = HEIGHT;      // non-inclusive
 
     const uint8_t rowWidth = xEnd - xStart;
 

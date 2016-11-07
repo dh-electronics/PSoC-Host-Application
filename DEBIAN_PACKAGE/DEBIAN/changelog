@@ -1,5 +1,9 @@
 drc-01 package
 
+2016-11-07/PK:
+version 0v6
+ - Debugged Display (displayDrawRect/displayInvertRect)
+
 2016-8-30/PK:
 version 0v5
  - Moved Splash to Flash
