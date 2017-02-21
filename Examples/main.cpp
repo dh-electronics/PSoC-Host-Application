@@ -96,7 +96,7 @@ void testFullScreenBitmap()
 }
 
 
-int main(int argc, char **argv)
+int main(int, char **)
 {
     RESULT res = openApi();
     if(RESULT_OK != res)

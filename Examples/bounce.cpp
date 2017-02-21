@@ -84,6 +84,7 @@ void Bounce::run()
     displayDrawRect(0, 0, 128, 64, true);
     displayFlush();
 
+    uint8_t count = 0;
     while(running_)
     {
         drawSnake(true);
@@ -95,7 +96,7 @@ void Bounce::run()
 
         if(led)
         {
-            writeLed(LED_BUS, false);
+            writeLed(LED_ERR, false);
             led = false;
         }
 
@@ -135,9 +136,16 @@ void Bounce::run()
         }
 
         if(led)
-            writeLed(LED_BUS, true);
+            writeLed(LED_ERR, true);
+
+        ++count;
+        writeLed(LED_RUN, count & 2);
+        writeLed(LED_BUS, count & 4);
+        writeLed(LED_LAN, count & 8);
     }
 
+    writeLed(LED_ERR, false);
+    writeLed(LED_RUN, false);
     writeLed(LED_BUS, false);
-
+    writeLed(LED_LAN, false);
 }

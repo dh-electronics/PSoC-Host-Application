@@ -7,7 +7,8 @@ SOURCES = \
     testDisplay.cpp \
     testLeds.cpp \
     testButtons.cpp \
-    testSplash.cpp
+    testSplash.cpp \
+    infiniteDisplayButtonsTest.cpp
 
 INCLUDEPATH += \
     $$PWD/../C-API/include

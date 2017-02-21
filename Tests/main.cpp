@@ -12,6 +12,7 @@ void testDisplay();
 void testLeds();
 void testButtons();
 void testSplash();
+int infiniteDisplayButtonsTest();
 
 
 int main(int argc, char **argv)
@@ -32,11 +33,14 @@ int main(int argc, char **argv)
     testDisplay();
     testLeds();
 
+
     cout << "\nCrcErrorCounter:\t" << getCrcErrorCounter() <<
             "\nResponseErrorCounter:\t" << getResponseErrorCounter() <<
             "\nBusyCounter:\t\t" << getBusyCounter() <<
             "\nTimeoutsCounter:\t" << getTimeoutsCounter() <<
             "\nResetsCounter\t" << getResetsCounter() << endl;
+
+    infiniteDisplayButtonsTest();
 
     res = closeApi();
     if(RESULT_OK != res)
@@ -44,5 +48,6 @@ int main(int argc, char **argv)
         cout << "Error closing Api: " << getResultCodeString(res) << endl;
         exit(EXIT_FAILURE);
     }
+
     return EXIT_SUCCESS;
 }

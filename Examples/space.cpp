@@ -73,6 +73,7 @@ void Space::run()
     Bitmap alien1(11, 8, bmpAlien1);
     Bitmap alien2(11, 8, bmpAlien2);
 
+    uint8_t count = 0;
     bool led = false;
     for(uint16_t i = 0; running_; ++i)
     {
@@ -104,23 +105,17 @@ void Space::run()
 
         if(led)
             writeLed(LED_ERR, false);
+
+        ++count;
+        writeLed(LED_RUN, count & 2);
+        writeLed(LED_BUS, count & 4);
+        writeLed(LED_LAN, count & 8);
     }
 
-    displayFill(true);
+    writeLed(LED_ERR, false);
+    writeLed(LED_RUN, false);
+    writeLed(LED_BUS, false);
+    writeLed(LED_LAN, false);
 
-    for(uint8_t y = 0; y < 64; y += 24) for(uint8_t x = 0; x < 128; x += 12)
-    {
-        displayDrawRect(x, y, 8, 16, false); // displayFillRect
-        if(x < 64) displayBitmap(x, y, rocket);
-    }
-
-    displayFlush();
-
-    running_ = true;
-    while(running_)
-    {
-        usleep(50000);
-        handleButtons();
-    }
 }
 
