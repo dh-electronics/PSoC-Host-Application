@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <math.h>
+#include <stdio.h>
 
 
 using namespace std;
@@ -25,8 +26,7 @@ void Bounce::buttonsCallback(enum BUTTON button, bool pressed)
     switch(button)
     {
     case BUTTON_ESC:
-        if(pressed)
-            running_ = false;
+        running_ = false;
         break;
 
     case BUTTON_DN:
@@ -61,6 +61,8 @@ void Bounce::drawSnake(bool color)
 
 void Bounce::run()
 {
+    printf("Press ESC to finish.\n");
+
     for(uint16_t a = 0; a < CIRCLE; ++a)
         sin_[a] = 1024 * ::sin(a * 2 * M_PI / CIRCLE);
 

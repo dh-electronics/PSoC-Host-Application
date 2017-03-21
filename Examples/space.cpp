@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 
 bool Space::running_;
@@ -53,15 +54,31 @@ static uint8_t bmpAlien2[] = {
 };
 
 
+
+
 void Space::callback(enum BUTTON button, bool pressed)
 {
-    if(button == BUTTON_ESC && pressed)
+    static bool escPressed = false;
+    static bool okPressed = false;
+
+    const char *buttonNames[] = { "ESC", "DOWN", "MID", "OK", "UP" };
+    if(button == BUTTON_ESC)
+        escPressed = pressed;
+
+    if(button == BUTTON_OK)
+        okPressed = pressed;
+
+    if(escPressed && okPressed)
         running_ = false;
+
+    printf("%s : %s\n", buttonNames[button], pressed ? "pressed" : "released");
+    fflush(stdout);
 }
 
 
 void Space::run()
 {
+    printf("Press ESC + OK to finish.\n");
     running_ = true;
     handleButtons();
 
