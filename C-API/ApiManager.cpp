@@ -490,6 +490,8 @@ void ApiManager::stateRestore()
 
     for(uint8_t i = 0; i < Led::COUNT; ++i)
         leds_[i]->restore();
+
+    display_->restore();
 }
 
 

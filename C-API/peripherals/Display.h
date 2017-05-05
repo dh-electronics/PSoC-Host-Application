@@ -41,6 +41,8 @@ public:
     virtual RESULT swap();
     virtual RESULT writeSplash();
 
+    void restore();
+
 private:
     static const int SPLASH_ERASE_WAIT_MS = 48;
     static const int SPLASH_WRITE_WAIT_MS = 4;
@@ -61,12 +63,12 @@ private:
     SpiProto &  proto_;
     uint8_t     buffer_[BUFSIZE];               // main buffer
     uint8_t     diff_[BUFSIZE];                 // buffer used for diff
-    uint8_t     compressed_[COMPR_SIZE];       // compressed diff of the two buffers
+    uint8_t     compressed_[COMPR_SIZE];        // compressed diff of the two buffers
     uint16_t    compressedLength_;
     bool        displayFilled_;
     bool        fillColorWhite_;
 
-    mutable Poco::FastMutex accessMutex_;
+    mutable Poco::Mutex accessMutex_;           // is a recursive mutex
 };
 
 

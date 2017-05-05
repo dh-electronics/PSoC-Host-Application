@@ -56,22 +56,26 @@ Display::Display(SpiProto &proto)
 
 RESULT Display::enable(bool on)
 {
+    ScopedLock <Mutex> lock(accessMutex_);
     return proto_.gpioControl(RA4, on);
 }
 
 
 RESULT  Display::setContrast(int value)
 {
+    ScopedLock <Mutex> lock(accessMutex_);
+
     Command <1> cmd(CMD_DISPLAY_CONTRAST);
     Response <0> rsp;
     set_8(cmd.data(), 0, value);
-    ScopedLock <FastMutex> lock(accessMutex_);
     return proto_.xmit(cmd, rsp);
 }
 
 
 void Display::fill(bool white)
 {
+    ScopedLock <Mutex> lock(accessMutex_);
+
     // remember that the display was filled with color
     displayFilled_ = true;
     fillColorWhite_ = white;
@@ -86,6 +90,8 @@ void Display::fill(bool white)
 
 void Display::fillRect(int x, int y, int w, int h, bool white)
 {
+    ScopedLock <Mutex> lock(accessMutex_);
+
     // check if the rect is outside the screen
     int xEnd, yEnd;
     if(!isRectOnScreen(x, y, w, h, xEnd, yEnd))
@@ -154,6 +160,8 @@ void Display::fillRect(int x, int y, int w, int h, bool white)
 
 void Display::drawRect(int x, int y, int w, int h, bool white)
 {
+    ScopedLock <Mutex> lock(accessMutex_);
+
     // check if the rect is outside the screen
     int xEnd, yEnd;
     if(!isRectOnScreen(x, y, w, h, xEnd, yEnd))
@@ -227,6 +235,8 @@ void Display::drawRect(int x, int y, int w, int h, bool white)
 
 void Display::invertRect(int x, int y, int w, int h)
 {
+    ScopedLock <Mutex> lock(accessMutex_);
+
     // check if the rect is outside the screen
     int xEnd, yEnd;
     if(!isRectOnScreen(x, y, w, h, xEnd, yEnd))
@@ -293,7 +303,10 @@ void Display::bitmap(int x, int y, const FT_Bitmap_ &bmp)
 
 RESULT Display::flush()
 {
-    { // create a diff
+    ScopedLock <Mutex> lock(accessMutex_);
+
+    {
+        // create the diff
         uint8_t *b = buffer_;
         const uint8_t * const b_end = b + BUFSIZE;
         uint8_t *d = diff_;
@@ -301,12 +314,13 @@ RESULT Display::flush()
             *d ^= *b;
     }
 
-    { // compress the diff buffer
+    {
+        // compress the diff buffer
         Compressor c(compressed_, diff_);
         compressedLength_ = c.compress();
     }
 
-    // copy the buffer
+    // copy the data buffer to the diff
     memcpy(diff_, buffer_, BUFSIZE);
 
     // frame command
@@ -322,7 +336,6 @@ RESULT Display::flush()
     }
     set_16(cmd.data(), 0, params);
 
-    ScopedLock <FastMutex> lock(accessMutex_);
     const RESULT res = proto_.xmit(cmd, rsp, DISPLAY_FRAME_WAIT_MS);
     if(RESULT_OK != res)
         return res;
@@ -333,6 +346,8 @@ RESULT Display::flush()
 
 RESULT Display::swap()
 {
+    ScopedLock <Mutex> lock(accessMutex_);
+
     // re-send the last compressed buffer
     if(compressedLength_)
     {
@@ -340,7 +355,6 @@ RESULT Display::swap()
         Command <2> cmd(CMD_DISPLAY_FRAME);
         Response <0> rsp;
         set_16(cmd.data(), 0, compressedLength_);
-        ScopedLock <FastMutex> lock(accessMutex_);
         const RESULT res = proto_.xmit(cmd, rsp, DISPLAY_FRAME_WAIT_MS);
         if(RESULT_OK != res)
             return res;
@@ -355,17 +369,16 @@ RESULT Display::swap()
 
 
 RESULT Display::writeSplash()
-{
-    RESULT res = displayFlush();
+{   
+    ScopedLock <Mutex> lock(accessMutex_);
+
+    RESULT res = flush();
     if(RESULT_OK != res)
         return res;
-
-    cout << compressedLength_ << endl;
 
     {   // erasing the flash
         Command <0> cmd(CMD_SPLASH_ERASE);
         Response <0> rsp;
-        ScopedLock <FastMutex> lock(accessMutex_);
         const RESULT res = proto_.xmit(cmd, rsp, SPLASH_ERASE_WAIT_MS);
         if(RESULT_OK != res)
             return res;
@@ -389,7 +402,6 @@ RESULT Display::writeSplash()
         if(++offset == 12)
         {   // packet is full, transmit
             ResponseUnion ru;
-            ScopedLock <FastMutex> lock(accessMutex_);
             const RESULT res = proto_.xmit(&cu.cmd, offset + 2, &ru.rsp, 2, SPLASH_WRITE_WAIT_MS);
             if(RESULT_OK != res)
                 return res;
@@ -399,13 +411,27 @@ RESULT Display::writeSplash()
 
     {   // transmitting the last packet (which can be a zero-size-data packet)
         ResponseUnion ru;
-        ScopedLock <FastMutex> lock(accessMutex_);
         const RESULT res = proto_.xmit(&cu.cmd, offset + 2, &ru.rsp, 2, SPLASH_WRITE_WAIT_MS);
         if(RESULT_OK != res)
             return res;
     }
 
     return RESULT_OK;
+}
+
+
+void Display::restore()
+{
+    ScopedLock <Mutex> lock(accessMutex_);
+
+    displayFilled_ = true;      // to re-fill the display with the last defined color
+    compressedLength_ = 0;      // no compressed data makes sense anymore
+
+    // fill the diff buffer with the color
+    const uint8_t color = fillColorWhite_ ? 0xff : 0;
+    memset(diff_, color, BUFSIZE);
+
+    flush();
 }
 
 
@@ -546,6 +572,8 @@ void Display::verticalLine(uint8_t x, uint8_t yStart, uint8_t yEnd, bool white)
 
 void Display::bitmap(int x, int y, int width, int height, int pitch, const uint8_t *data)
 {
+    ScopedLock <Mutex> lock(accessMutex_);
+
     int scrXEnd, scrYEnd;
     if(!isRectOnScreen(x, y, width, height, scrXEnd, scrYEnd))
         return;
