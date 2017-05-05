@@ -1,5 +1,9 @@
 drc-01 package
 
+2017-05-05/PK:
+version 0v7
+ - restoring display contents in case of PIC reset
+
 2016-11-07/PK:
 version 0v6
  - Debugged Display (displayDrawRect/displayInvertRect)
