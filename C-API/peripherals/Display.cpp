@@ -9,8 +9,8 @@
 #include <Poco/ScopedLock.h>
 #include <string.h>
 #include <cassert>
-#include <iostream>
-//#include <stdio.h>
+#include <stdio.h>
+//#include <iostream>
 
 
 using namespace drc01;
@@ -47,6 +47,7 @@ Display::Display(SpiProto &proto)
     , compressedLength_(0)
     , displayFilled_(true)
     , fillColorWhite_(false)
+    , dumpToFile_(false)
 {
     // zeroing both buffers
     memset(buffer_, 0, BUFSIZE);
@@ -303,6 +304,14 @@ void Display::bitmap(int x, int y, const FT_Bitmap_ &bmp)
 
 RESULT Display::flush()
 {
+    if(dumpToFile_)
+    {
+        FILE * const f = fopen("dump.bdd", "wb");
+        fwrite(buffer_, BUFSIZE, 1, f);
+        fclose(f);
+        dumpToFile_ = false;
+    }
+
     ScopedLock <Mutex> lock(accessMutex_);
 
     {
@@ -669,3 +678,4 @@ RESULT Display::sendCompressed()
 
     return RESULT_OK;
 }
+

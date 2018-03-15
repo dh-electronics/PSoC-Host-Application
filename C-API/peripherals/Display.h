@@ -42,6 +42,7 @@ public:
     virtual RESULT writeSplash();
 
     void restore();
+    void dump() { dumpToFile_ = true; }
 
 private:
     static const int SPLASH_ERASE_WAIT_MS = 48;
@@ -59,6 +60,7 @@ private:
     void        bitmap(int x, int y, int width, int height, int pitch, const uint8_t *data);
 
     RESULT      sendCompressed();
+    void        dumpToFile();
 
     SpiProto &  proto_;
     uint8_t     buffer_[BUFSIZE];               // main buffer
@@ -67,6 +69,7 @@ private:
     uint16_t    compressedLength_;
     bool        displayFilled_;
     bool        fillColorWhite_;
+    bool        dumpToFile_;
 
     mutable Poco::Mutex accessMutex_;           // is a recursive mutex
 };

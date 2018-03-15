@@ -10,6 +10,7 @@
 #include <spi/SpiProto.h>
 #include <hal/System.h>
 #include <hal/GPIO.h>
+#include <signal.h>
 
 
 namespace drc01
@@ -71,6 +72,8 @@ private:
 
     int32_t     periodicActions();
     SpiProto &  proto() { return proto_; }
+
+    static void sigactionHandler(int sig);
 
     SpiProto        proto_;
     Led *           leds_[Led::COUNT];

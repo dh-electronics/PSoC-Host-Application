@@ -33,6 +33,13 @@ ApiManager::ApiManager()
 {
     for(int i = 0; i < Led::COUNT; ++i)
         leds_[i] = NULL;
+
+    { // setting up signal handling
+        struct sigaction sa;
+        memset(&sa, 0, sizeof(sa));
+        sa.sa_handler = sigactionHandler;
+        sigaction(SIGUSR1, &sa, NULL);
+    }
 }
 
 
@@ -495,7 +502,15 @@ void ApiManager::stateRestore()
 }
 
 
+void ApiManager::sigactionHandler(int)
+{
+    ApiManager::self()->display_->dump();
+}
+
+
 IApiManager *IApiManager::getIface()
 {
     return ApiManager::self();
 }
+
+
