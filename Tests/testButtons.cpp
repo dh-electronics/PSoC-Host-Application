@@ -12,7 +12,7 @@ static char bits;
 
 static void myButtonsCallback(enum BUTTON button, bool pressed)
 {
-    static const char *buttNames[] = { "ESC", "DOWN", "MID", "OK", "UP" };
+    static const char *buttNames[] = { "UP", "LEFT", "MID", "DOWN", "RIGHT" };
     bits |= 1 << button;
     cout << buttNames[button] << (pressed ? " pressed" : " released") << endl;
 }
