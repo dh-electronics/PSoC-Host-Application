@@ -46,7 +46,7 @@ public:
 
 private:
     static const int SPLASH_ERASE_WAIT_MS = 48;
-    static const int SPLASH_WRITE_WAIT_MS = 4;
+    static const int SPLASH_WRITE_WAIT_MS = 13;
 
     uint8_t *   bufferAddress(uint8_t x, uint8_t byteY);
     static bool isRectOnScreen(int x, int y, int w, int h, int &xEnd, int &yEnd);
