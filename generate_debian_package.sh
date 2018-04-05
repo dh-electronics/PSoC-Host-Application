@@ -14,7 +14,8 @@ svn export --force $1/DEBIAN_PACKAGE $TMP
 mkdir -p $TMP/usr/lib
 
 cd $2
-cp C-API/libc-api.so.1 DHCOM_HAL/libDHCOM_HAL.so.1 $TMP/usr/lib
+cp C-API/libc-api.so.1 $TMP/usr/lib
+# DHCOM_HAL/libDHCOM_HAL.so.1 
 cd -
 
 cd $TMP/DEBIAN
