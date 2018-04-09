@@ -18,7 +18,7 @@ namespace drc01
 class SpiProto
 {
 public:
-    static const uint32_t           SPI_FREQ        = 1000000;   // 100 kHz - well supported by the PIC SW (no checksum errors)
+    static const uint32_t           SPI_FREQ        = 1000000;  // 1MHz
     static const uint32_t           CMD_REPEATS     = 5;        // Times
     static const uint32_t           RSP_REPEATS     = 5;        // Times
     static const int32_t            HEARTBEAT_MS    = 1000;     // MS

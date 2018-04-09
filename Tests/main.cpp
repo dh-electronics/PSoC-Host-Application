@@ -15,7 +15,7 @@ void testSplash();
 int infiniteDisplayButtonsTest();
 
 
-int main(int argc, char **argv)
+int main(int, char **)
 {
     RESULT res = openApi();
     if(RESULT_OK != res)
@@ -25,7 +25,7 @@ int main(int argc, char **argv)
     }
 
 
-    cout << "HW Rev: " << getHwRevision() << hex << ", API: " << getApiVersion() << ", PIC: " << getPicVersion() << dec << endl;
+    cout << "HW Rev: " << getHwRevision() << hex << ", API: " << getApiVersion() << ", FW: " << getPicVersion() << dec << endl;
     resetStats();
 
     testSplash();

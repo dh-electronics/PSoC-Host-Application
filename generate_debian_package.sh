@@ -11,11 +11,11 @@ fi
 
 TMP=/tmp/drc-01
 svn export --force $1/DEBIAN_PACKAGE $TMP
-mkdir -p $TMP/usr/lib
+mkdir -p $TMP/usr/lib $TMP/usr/bin
 
 cd $2
 cp C-API/libc-api.so.1 $TMP/usr/lib
-# DHCOM_HAL/libDHCOM_HAL.so.1 
+cp Tool/ui-tool $TMP/usr/bin
 cd -
 
 cd $TMP/DEBIAN

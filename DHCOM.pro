@@ -4,9 +4,11 @@ CONFIG -= QT
 DHCOM_HAL.file = DHCOM_HAL/DHCOM_HAL.pro
 C-API.file = C-API/C-API.pro
 JSON-API.file = JSON-API/JSON-API.pro
+Tool.file = Tool/Tool.pro
 Tests.file = Tests/Tests.pro
 Examples.file = Examples/Examples.pro
-SUBDIRS = DHCOM_HAL C-API Tests Examples #JSON-API
+
+SUBDIRS = DHCOM_HAL C-API Tool Tests Examples #JSON-API
 
 C-API.depends = DHCOM_HAL
 JSON-API.depends = C-API

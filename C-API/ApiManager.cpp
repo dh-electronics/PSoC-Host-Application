@@ -99,23 +99,23 @@ bool ApiManager::start()
 
     if(readPicVersion() != RESULT_OK)
     {
-        syslog(LOG_ERR, "Cannot read PIC sw version. Stopping.");
+        syslog(LOG_ERR, "Cannot read UI MCU sw version. Stopping.");
         return false;
     }
 
     const uint16_t picVersion = getPicVersion();
-    syslog(LOG_INFO, "PIC SW version %hhx.%hhx", uint8_t(picVersion >> 8), uint8_t(picVersion));
+    syslog(LOG_INFO, "UI SW version %hhx.%hhx", uint8_t(picVersion >> 8), uint8_t(picVersion));
 
     if(!writePicHwRevision())
     {
-        syslog(LOG_ERR, "Cannot write HW revision to PIC. Stopping.");
+        syslog(LOG_ERR, "Cannot write HW revision to UI MCU. Stopping.");
         return false;
     }
 
-    // pic must be in the active mode before peripherals are created
+    // ui must be in the active mode before peripherals are created
     if(!writePicMode(true))
     {
-        syslog(LOG_ERR, "Cannot put PIC into active mode. Stopping.");
+        syslog(LOG_ERR, "Cannot put UI MCU into active mode. Stopping.");
         return false;
     }
 
@@ -293,7 +293,7 @@ int32_t ApiManager::periodicActions()
 void ApiManager::resetPic()
 {
     // Important! When done, persistence is no longer guaranteed
-    syslog(LOG_WARNING, "Have to reset the PIC");
+    syslog(LOG_WARNING, "Have to reset the UI MCU");
 
     dhcom::GPIO gpio_E(system_, dhcom::GPIO::PORT_GPIO_E);
     if(gpio_E.open() == STATUS_SUCCESS
@@ -306,7 +306,7 @@ void ApiManager::resetPic()
     }
     else
     {
-        syslog(LOG_ERR, "Cannot setup the PIC reset GPIO");
+        syslog(LOG_ERR, "Cannot setup the UI MCU reset GPIO");
     }
     gpio_E.close();
 }

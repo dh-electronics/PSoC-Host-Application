@@ -252,7 +252,7 @@ RESULT SpiProto::xmit(GenericCommand *command, uint8_t cmdSize, GenericResponse 
                 switch(rspErrorCode(response))
                 {
                 case ERR_MODE:
-                    syslog(LOG_ERR, "SPI wrong PIC mode reported...");
+                    syslog(LOG_ERR, "SPI wrong UI mode reported...");
                     incResets();
                     stateRestorePending_ = true;
                     waitCondition_.signal();
