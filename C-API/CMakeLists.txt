@@ -2,11 +2,6 @@ project(c-api)
 cmake_minimum_required(VERSION 2.8)
 
 
-include(CPack)
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Peter Kishalov <pkishalov@dh-electronics.de>" CACHE STRING "Maintainer of the Debian Package")
-set(CPACK_DEBIAN_PACKAGE_VERSION "0.1" CACHE STRING "Version of the Debian Package")
-
-
 set(C_API ${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.so PARENT_SCOPE)
 
 
@@ -65,6 +60,8 @@ list(APPEND SOURCES
 
 
 find_library(POCO_FOUNDATION PocoFoundation)
+find_library(DHCOM_HAL DHCOM_HAL)
+
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 target_link_libraries(${PROJECT_NAME}

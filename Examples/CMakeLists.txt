@@ -18,6 +18,7 @@ list(APPEND SOURCES
 
 
 find_library(POCO_FOUNDATION PocoFoundation)
+find_library(DHCOM_HAL DHCOM_HAL)
 
 
 add_executable(${PROJECT_NAME} ${SOURCES})
