@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
-CONFIG -= QT
+CONFIG -= qt
 
 DHCOM_HAL.file = DHCOM_HAL/DHCOM_HAL.pro
 C-API.file = C-API/C-API.pro

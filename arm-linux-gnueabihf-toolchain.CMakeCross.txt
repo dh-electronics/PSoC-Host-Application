@@ -1,0 +1,21 @@
+set(CMAKE_SYSTEM_NAME Linux)
+
+set(CMAKE_C_COMPILER /usr/bin/arm-linux-gnueabihf-gcc)
+set(CMAKE_CXX_COMPILER /usr/bin/arm-linux-gnueabihf-g++)
+set(CMAKE_MAKE_PROGRAM /usr/bin/make)
+set(CMAKE_LINKER /usr/bin/arm-linux-gnueabihf-ld CACHE FILEPATH "Toolchain linker")
+set(CMAKE_AR /usr/bin/arm-linux-gnueabihf-ar CACHE FILEPATH "Toolchain archiver")
+set(CMAKE_NM /usr/bin/arm-linux-gnueabihf-nm CACHE FILEPATH "Toolchain name tool")
+set(CMAKE_STRIP /usr/bin/arm-linux-gnueabihf-strip)
+
+set(CMAKE_CXX_FLAGS_DEBUG -g)
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG")
+
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+
+
+set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "armhf" CACHE STRING "Target machine architecture")

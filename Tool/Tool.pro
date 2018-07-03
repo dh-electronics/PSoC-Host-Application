@@ -22,7 +22,7 @@ SOURCES = \
 
 INCLUDEPATH += \
     $$PWD/../C-API/include \
-    $$POCO/include
+    /usr/include
 
 
 LIBS += \

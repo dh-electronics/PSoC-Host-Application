@@ -63,7 +63,7 @@ CONFIG(DHCOM_AM33) || CONFIG(DHCOM_iMX6_rev300) {
     error("Must be compiled for DHCOM_AM35 or DHCOM_iMX6_rev300 architecture!")
 }
 
-INCLUDEPATH += include /usr/include/Poco ../DHCOM_HAL/include
+INCLUDEPATH += include /usr/include ../DHCOM_HAL/include
 
 CONFIG(debug, debug | release) {
     message("Configuring DEBUG build")
