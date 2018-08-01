@@ -33,7 +33,7 @@ RESULT Buttons::handleEvents()
 
     ScopedLock <FastMutex> lock(accessMutex_);
     const RESULT res = proto_.xmit(cmd, rsp);
-    if(RESULT_OK == res && callback_)
+    if(RESULT_OK == res)
     {
         uint8_t evt = get_8(rsp.data(), 0);
         for(uint8_t i = 0; i < 2; ++i) // 2 events packed (an event in each tetrade)
@@ -45,7 +45,8 @@ RESULT Buttons::handleEvents()
             const bool state = evt & 0x08;
             states_[idx] = state;
 
-            callback_(BUTTON(idx), state);
+            if(callback_)
+                callback_(BUTTON(idx), state);
 
             evt >>= 4;
         }
