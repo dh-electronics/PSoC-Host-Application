@@ -22,12 +22,12 @@ SOURCES = \
 
 INCLUDEPATH += \
     $$PWD/../C-API/include \
-    /usr/include
+    $$POCO/include
 
 
 LIBS += \
     -L../C-API -lc-api \
-    -L../DHCOM_HAL -lDHCOM_HAL \
+    $$DHCOM_HAL \
     -L$$POCO/lib
 
 

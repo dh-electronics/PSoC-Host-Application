@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 2.8)
 
 include_directories(
     ../C-API/include
+    ${POCO}/include
 )
 
 
@@ -30,8 +31,13 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME}
     ${DHCOM_HAL}
     ${POCO_FOUNDATION}
-    ${C_API}
+    c-api
 )
 
-install_targets(/bin ${PROJECT_NAME})
+target_compile_options(${PROJECT_NAME} PRIVATE -std=c++11)
+
+install(
+    TARGETS ${PROJECT_NAME}
+    DESTINATION bin
+)
 

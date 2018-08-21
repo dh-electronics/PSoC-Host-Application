@@ -15,8 +15,10 @@ static const char *strHelp = "ui-tool usage:"
                              "\n\t\tdisable\t- disable display"
                              "\n\t\tfill ?(1|0)\t- fill display"
                              "\n\t\tfillrect ?X ?Y ?W ?H ?(1|0)\t- fill rect"
+                             "\n\t\tbmp filename ?X ?Y\t- put uncompressed BW bmp"
                              "\n\t\tshow\t- show display"
-                             "\n\n\tbuttons\t- poll buttons"
+                             "\n\t\tflash\t- write splash to FLASH from display contents"
+                             "\n\n\tbuttons\t- poll buttons once"
                              "\n\n\tleds {(RUN|LAN|BUS|ERR) ?(1|0)} - control leds"
                              "\n\n\tidle\t- idle API"
                              "\n\n\tloop\t- remain in the app, continue polling buttons"
@@ -62,7 +64,7 @@ int main(int argc, char **argv)
              Leds::parseArgs(argc, argv, idx) ||
              Api::parseArgs(argc, argv, idx)))
         {
-            printf("Unknown argument %hd: \"%s\". Quitting.", idx, argv[idx]);
+            printf("Unknown argument %hd: \"%s\". Quitting.\n", idx, argv[idx]);
             break;
         }
     }

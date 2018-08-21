@@ -8,15 +8,11 @@
 using namespace Poco;
 
 
-static bool callbackCalled;
-
-
 void Buttons::callback(BUTTON button, bool pressed)
 {
     static const char *strButt[] = {"UP", "LEFT", "MID", "DOWN", "RIGHT"};
     printf("%s:%s\n", strButt[button], pressed ? "pressed" : "released");
     fflush(stdout);
-    callbackCalled = true;
 }
 
 
@@ -27,12 +23,7 @@ bool Buttons::parseArgs(int, char **argv, uint16_t &idx)
 
     ++idx;
     setButtonsCallback(callback);
-    do
-    {
-        callbackCalled = false;
-        handleButtons();
-    }
-    while(callbackCalled);
+    handleButtons();
 
     return true;
 }

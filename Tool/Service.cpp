@@ -18,3 +18,9 @@ int Service::getInt(int argc, char **argv, uint16_t &idx, int defaultVal)
         return  defaultVal;
     }
 }
+
+
+const char *Service::getString(int argc, char **argv, uint16_t &idx)
+{
+    return  idx < argc ? argv[idx++] : NULL;
+}
