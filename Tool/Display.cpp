@@ -97,7 +97,7 @@ static void displayBmp(const char *filename, int x, int y)
     for(int y = 0; y < height; ++y)
     {
         const uint32_t src_offset = y * width;
-        const uint32_t dst_offset = y * bmp.pitch * 8;
+        const uint32_t dst_offset = (height - y - 1) * bmp.pitch * 8;
         for(int x = 0; x < width; ++x)
         {
             bool bitval;
