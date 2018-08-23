@@ -25,15 +25,15 @@ void Bounce::buttonsCallback(enum BUTTON button, bool pressed)
     // cout << "Button " << uint16_t(button) << ' ' << pressed << endl;
     switch(button)
     {
-    case BUTTON_ESC:
+    case BUTTON_DN_RIGHT:
         running_ = false;
         break;
 
-    case BUTTON_DN:
+    case BUTTON_UP_RIGHT:
         down_ = pressed;
         break;
 
-    case BUTTON_UP:
+    case BUTTON_UP_LEFT:
         up_ = pressed;
         break;
 

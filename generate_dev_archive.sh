@@ -6,7 +6,7 @@ if [ $# < 2 ]; then
 	exit 1
 fi
 
-PACKAGE=drc01-dev
+PACKAGE=drc02-dev
 OUT_DIR=/var/tmp/$PACKAGE
 rm -rf $OUT_DIR
 mkdir -p $OUT_DIR/lib $OUT_DIR/bin $OUT_DIR/src 

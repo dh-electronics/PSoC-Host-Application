@@ -64,10 +64,11 @@ find_library(DHCOM_HAL DHCOM_HAL)
 
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
+set_target_properties(${PROJECT_NAME} PROPERTIES VERSION 1)
 target_link_libraries(${PROJECT_NAME}
     ${DHCOM_HAL}
     ${POCO_FOUNDATION}
 )
 
-install_targets(/lib ${PROJECT_NAME})
+install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION /lib)
 

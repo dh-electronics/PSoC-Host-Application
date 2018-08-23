@@ -43,6 +43,8 @@ private:
     static const int64_t LOG_STATS_PERIOD_uS = 1000000ULL * 3600 * 24; // every 24 hours
     static const int32_t READY_LED_BLINK_PERIOD_mS = 150;   // 150 mS
     static const uint16_t PASSIVE_MODE_WAITTIME = 10;       // 10 mS
+    static const int32_t RESET_PULSE_PERIOD_mS = 2;         // 2 mS
+    static const int32_t BOOTLOADER_WAIT_PERIOD_mS = 1250;  // 1250 mS
 
     enum PIC_SW
     {

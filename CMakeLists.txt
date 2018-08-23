@@ -3,7 +3,7 @@ project(drc)
 
 include(CPack)
 set(CPACK_PACKAGE_NAME "drc-02" CACHE STRING "Package name")
-set(CPACK_DEBIAN_PACKAGE_VERSION "0.3" CACHE STRING "Version of the debian package")
+set(CPACK_DEBIAN_PACKAGE_VERSION "0.4" CACHE STRING "Version of the debian package")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "libpocofoundation9, dhcom-hal" CACHE STRING "Debian package dependencies")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Peter Kishalov <pkishalov@dh-electronics.de>" CACHE STRING "Maintainer of the debian package")
 

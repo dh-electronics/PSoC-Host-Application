@@ -7,11 +7,11 @@
 
 enum BUTTON
 {
-    BUTTON_ESC = 0,
-    BUTTON_DN = 1,
-    BUTTON_MID = 2,
-    BUTTON_OK = 3,
-    BUTTON_UP = 4
+    BUTTON_DN_LEFT  = 0,      // was BUTTON_UP
+    BUTTON_DN_RIGHT = 1,      // was BUTTON_DN
+    BUTTON_MID      = 2,
+    BUTTON_UP_LEFT  = 3,      // was BUTTON_ESC
+    BUTTON_UP_RIGHT = 4       // was BUTTON_OK
 };
 
 

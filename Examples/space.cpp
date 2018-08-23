@@ -61,11 +61,11 @@ void Space::callback(enum BUTTON button, bool pressed)
     static bool escPressed = false;
     static bool okPressed = false;
 
-    const char *buttonNames[] = { "ESC", "DOWN", "MID", "OK", "UP" };
-    if(button == BUTTON_ESC)
+    const char *buttonNames[] = { "DN_LEFT", "DN_RIGHT", "MID", "UP_LEFT", "UP_RIGHT" };
+    if(button == BUTTON_DN_RIGHT)
         escPressed = pressed;
 
-    if(button == BUTTON_OK)
+    if(button == BUTTON_DN_LEFT)
         okPressed = pressed;
 
     if(escPressed && okPressed)

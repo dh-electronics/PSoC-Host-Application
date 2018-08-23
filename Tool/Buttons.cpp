@@ -10,7 +10,7 @@ using namespace Poco;
 
 void Buttons::callback(BUTTON button, bool pressed)
 {
-    static const char *strButt[] = {"UP", "LEFT", "MID", "DOWN", "RIGHT"};
+    static const char *strButt[] = {"DN_LEFT", "DN_RIGHT", "MID", "UP_LEFT", "UP_RIGHT"};
     printf("%s:%s\n", strButt[button], pressed ? "pressed" : "released");
     fflush(stdout);
 }

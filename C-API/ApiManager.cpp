@@ -300,9 +300,9 @@ void ApiManager::resetPic()
             && gpio_E.setDirection(dhcom::GPIO::DIRECTION_OUTPUT) == STATUS_SUCCESS)
     {
         gpio_E.set(false);
-        usleep(1000);   // 1ms
+        usleep(RESET_PULSE_PERIOD_mS * 1000);
         gpio_E.set(true);
-        usleep(100000); // 100ms
+        usleep(BOOTLOADER_WAIT_PERIOD_mS * 1000);
     }
     else
     {
