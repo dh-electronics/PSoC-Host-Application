@@ -1,0 +1,5 @@
+{
+"func" : "writeLed",
+"object" : "LED_LAN",
+"on" : false
+}
