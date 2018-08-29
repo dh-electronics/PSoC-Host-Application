@@ -1,5 +1,0 @@
-{
-"func" : "writeLed",
-"object" : "LED_BUS",
-"on" : false
-}
