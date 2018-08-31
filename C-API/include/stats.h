@@ -5,7 +5,8 @@
 #include <stddef.h>
 
 
-#define API_VERSION 0x0007
+#define API_VERSION     0x0007
+#define API_REVISION    167
 
 
 unsigned int getCrcErrorCounter(enum RESULT *result = NULL);

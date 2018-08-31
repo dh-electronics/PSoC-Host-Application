@@ -177,7 +177,7 @@ unsigned int getApiVersion(enum RESULT *result)
     if(result)
         *result = res;
 
-    return API_VERSION;
+    return (API_VERSION << 16) | API_REVISION;;
 }
 
 
