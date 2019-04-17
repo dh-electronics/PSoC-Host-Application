@@ -411,6 +411,7 @@ bool ApiManager::detectCpu()
 
 bool ApiManager::readHwRevision()
 {
+    // hw coding of DRC02 baseboard
     const uint8_t GPIOS = 3;
     dhcom::GPIO gpio_L(system_, dhcom::GPIO::PORT_GPIO_L);
     dhcom::GPIO gpio_K(system_, dhcom::GPIO::PORT_GPIO_K);
@@ -448,6 +449,12 @@ bool ApiManager::readHwRevision()
         break;
     case 2:
         hwRevision_ = HW_REV_300;
+        break;
+    case 3:
+        hwRevision_ = HW_REV_400;
+        break;
+    case 4:
+        hwRevision_ = HW_REV_500;
         break;
     default: // unknown HW
         return false;

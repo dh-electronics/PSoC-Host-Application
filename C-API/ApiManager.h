@@ -55,7 +55,9 @@ private:
     {
         HW_REV_100 = 100,
         HW_REV_200 = 200,
-        HW_REV_300 = 300
+        HW_REV_300 = 300,
+        HW_REV_400 = 400,
+        HW_REV_500 = 500
     };
 
     ApiManager();
