@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 
 
 include_directories(
-    ../C-API/include
+    ${c-api_INCLUDE_DIRS}
     ${POCO}/include
 )
 
@@ -24,12 +24,10 @@ list(APPEND SOURCES
 
 
 find_library(POCO_FOUNDATION PocoFoundation)
-find_library(DHCOM_HAL DHCOM_HAL)
-
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME}
-    ${DHCOM_HAL}
+    DHCOM_HAL
     ${POCO_FOUNDATION}
     c-api
 )

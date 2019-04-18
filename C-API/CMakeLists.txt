@@ -9,7 +9,7 @@ include_directories(
     ./
     include
     /usr/include
-    ../DHCOM_HAL/include
+    ${DHCOM_HAL_INCLUDE_DIRS}
 )
 
 
@@ -60,15 +60,20 @@ list(APPEND SOURCES
 
 
 find_library(POCO_FOUNDATION PocoFoundation)
-find_library(DHCOM_HAL DHCOM_HAL)
-
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION 1)
 target_link_libraries(${PROJECT_NAME}
-    ${DHCOM_HAL}
+    DHCOM_HAL
     ${POCO_FOUNDATION}
 )
+
+# Expose DHCOM_HAL's public includes to other subprojects through cache variable
+set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
+                                  ${PROJECT_SOURCE_DIR}/include
+                                  ${PROJECT_SOURCE_DIR}/usr/include
+                                  ${DHCOM_HAL_INCLUDE_DIRS}
+    CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION /lib)
 
