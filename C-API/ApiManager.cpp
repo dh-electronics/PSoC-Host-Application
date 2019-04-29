@@ -76,7 +76,11 @@ bool ApiManager::start()
         break;
 
     case System::HARDWARE_DHCOM_IMX6_REV300:
-        syslog(LOG_INFO, "Running on IMX6 CPU...");
+        syslog(LOG_INFO, "Running on i.MX6 CPU...");
+        break;
+
+    case System::HARDWARE_DHCOM_IMX6ULL:
+        syslog(LOG_INFO, "Running on i.MX6ULL CPU...");
         break;
 
     default:
@@ -365,14 +369,37 @@ Hardware	: Freescale i.MX6 Quad/DualLite (Device Tree)
 Revision	: 0000
 Serial		: 0000000000000000
 
+===== Cpuinfo for iMX6ULL =====
+processor       : 0
+model name      : ARMv7 Processor rev 5 (v7l)
+BogoMIPS        : 96.00
+Features        : half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae
+CPU implementer : 0x41
+CPU architecture: 7
+CPU variant     : 0x0
+CPU part        : 0xc07
+CPU revision    : 5
+
+Hardware        : Freescale i.MX6 Ultralite (Device Tree)
+Revision        : 0000
+Serial          : 0000000000000000
 */
 bool ApiManager::detectCpu()
 {
+	enum CORTEX_A
+	{
+		CORTEX_A7 = 0,
+		CORTEX_A8,
+		CORTEX_A9,
+		CPU_INVALID
+	};
+
     FILE *file = fopen("/proc/cpuinfo", "r");
     if(!file)
         return false;
 
     System::HARDWARE hw = System::HARDWARE_INVALID;
+    enum CORTEX_A cpu = CPU_INVALID;
     char *line = NULL;
     size_t size;
 
@@ -392,8 +419,25 @@ bool ApiManager::detectCpu()
                 hw = System::HARDWARE_DHCOM_AM35;
             else if(strstr(line, "0x2"))
                 hw = System::HARDWARE_DHCOM_IMX6_REV300;
+            else if(strstr(line, "0x0"))
+                hw = System::HARDWARE_DHCOM_IMX6ULL;
             else
+            {
                 hw = System::HARDWARE_INVALID;
+                break;
+            }
+        }
+
+        if(strstr(line, "CPU part"))
+        {
+            if(strstr(line, "0xc07"))
+                cpu = CORTEX_A7;
+            else if(strstr(line, "0xc08"))
+                cpu = CORTEX_A8;
+            else if(strstr(line, "0xc09"))
+                cpu = CORTEX_A9;
+            else
+                cpu = CPU_INVALID;
             break;
         }
     }
@@ -401,8 +445,30 @@ bool ApiManager::detectCpu()
     delete line;
     fclose(file);
 
-    if(hw == System::HARDWARE_INVALID)
+    if(hw == System::HARDWARE_INVALID || cpu == CPU_INVALID)
         return false;
+
+    switch(hw)
+    {
+    case System::HARDWARE_DHCOM_AM33:
+        if (cpu != CORTEX_A8)
+        	return false;
+        break;
+    case System::HARDWARE_DHCOM_AM35:
+        if (cpu != CORTEX_A8)
+        	return false;
+        break;
+    case System::HARDWARE_DHCOM_IMX6_REV300:
+        if (cpu != CORTEX_A9)
+        	return false;
+        break;
+    case System::HARDWARE_DHCOM_IMX6ULL:
+        if (cpu != CORTEX_A7)
+        	return false;
+        break;
+    default: // unknown HW / CPU match
+        return false;
+    }
 
     system_.setHardware(hw);
     return true;

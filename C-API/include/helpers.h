@@ -1,5 +1,10 @@
 #pragma once
 
+/** \file
+ *  \brief Helpers
+ *
+ */
+
 
 #include "resultcodes.h"
 

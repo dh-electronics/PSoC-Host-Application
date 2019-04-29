@@ -68,6 +68,8 @@ target_link_libraries(${PROJECT_NAME}
     ${POCO_FOUNDATION}
 )
 
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
+
 # Expose DHCOM_HAL's public includes to other subprojects through cache variable
 set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
                                   ${PROJECT_SOURCE_DIR}/include
