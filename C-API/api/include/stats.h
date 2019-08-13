@@ -22,7 +22,7 @@
 /**
  * \brief Get count of checksum errors of SPI command detected by MCU
  *
- * If the MCU detects a chucksum erro in the incoming command this counter is
+ * If the MCU detects a checksum error in the incoming command this counter is
  * incremented. Not critical, but must not rise too fast.
  *
  * \param result pointer to pass RESULT of operation

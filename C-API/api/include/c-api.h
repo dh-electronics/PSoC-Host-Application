@@ -1,14 +1,14 @@
 #pragma once
 
-/** \file
- *  \brief Header for the full C-API include
+/**
+ * \file c-api.h
+ * \brief Header for the full C-API include
  *
  * Applications which link against the C-API library only have to include this
  * header file.
  *
  */
 
-#include <resultcodes.h>
 #include <init.h>
 #include <stats.h>
 #include <leds.h>
@@ -19,28 +19,46 @@
 
 /** \mainpage C-API - a library to abstract the SPI communication to the MCU for peripheral expansion.
 
- * The DRC02 is based on the DHCOM module with an I/O extension by a
- * Cypress MCU. The MCU is controlled by the DHCOM module via a SPI interface
- * (DHCOM is SPI Master, MCU is SPI slave).
-Connected to Cypress MCU:
- * \li 5 capacitive buttons
- * \li 4 LEDs
- * \li OLED Display (via SPI)
+ * The DRC02 and BigFish is driven by a DHCOM module and an I/O extension by a
+ * MCU. The DRC02 has a Cypress PSoC MCU and the BigFish periphals are handled
+ * by a Microchip PIC. The MCU is controlled by the DHCOM module through a SPI
+ * interface (DHCOM is SPI Master, MCU is SPI slave) in both cases.
  *
- * To simplify the communication to these devices for software developers a
- * software library have been developed to offer a simple API that abstracts the
- * SPI protocol between DHCOM and the Cypress MCU. The customer application is
- * compiled against C-API and uses direct calls to API functions.
+ * Connected to MCU (PSoC/PIC):
+ * \li 5 capacitive buttons
+ * \li OLED Display (via SPI)
+ * \li 4 LEDs
+ *
+ * The PSoC/PIC takes care of the control of the display, the PCAP keys query and
+ * the LED control. To simplify the communication to these devices for software
+ * developers a software library have been developed to offer a simple API that
+ * abstracts the SPI protocol between DHCOM and the Cypress MCU. The customer
+ * application is compiled against C-API and uses direct calls to API functions.
  *
  *  \image html software-structure.png
  *  \image latex software-structure.png "Software structure concerning customers application" width=10cm
  *
- * This documentation describes only the public API of this library.
+ * This documentation describes only the public API of this library. No
+ * information regarding internal implementation is given.
  *
  * \section usage_sec Usage
  *
  * To get full access to the public API of this library only the header file
  * c-api.h has to be included.
+ *
+ * \section Abbreviations
+ *
+ * <table>
+ * <caption id="multi_row">abbrevations used in this document</caption>
+ * <tr><th>abb. <th>explanation
+ * <tr><td>LAN<td>Local Area Network
+ * <tr><td>API<td>Application Programming Interface
+ * <tr><td>PCAP<td>Projected Capacitance
+ * <tr><td>LED<td>Light Emitting Diode
+ * <tr><td>SW<td>Software
+ * <tr><td>HW<td>Hardware
+ * <tr><td>HAL<td>Hardware Abstraction Layer
+ * </table>
  *
  * \section reference_sec C-API Reference
  *
@@ -54,6 +72,31 @@ Connected to Cypress MCU:
  *     until the SPI comcommunication is terminated.
  * \li All methods are reentrant, which means that they can also be called
  *     by multiple threads.
+ *
+ *
+ * \section Other C++ API's and Dependencies
+ *
+ * \subsection Poco
+ *
+ * C-API uses the runtime library Poco. See https://pocoproject.org/
+ *
+ * \subsection DHCOM_HAL
+ *
+ * A HAL abstraction library for DHCOM modules DHCOM_HAL is used and included.
+ * If you have any questions, please contact us.
+ *
+ * \subsection FreeType Text API
+ *
+ * To draw the TTF texts we use an existing API 'FreeType' from
+ * https://www.freetype.org/ in the form of the dynamic library (due to GPL
+ * license). The API has all needed functions, like:
+ * \li Selection of the font
+ * \li Selection color of the font
+ * \li Estimate the size of the border rectangle for certain text
+ * \li Drawing of the glyph in the FT_Bitmaps
+ *
+ * To draw prepared glyphs on the bitmap the Bitmap::blit method is used.
+ * Then the bitmap can be sent to the screen using C-API.
  *
  * \section compile_sec Compiling
  * It is intended to compile the C-API with CMAKE build system.

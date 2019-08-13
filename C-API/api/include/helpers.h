@@ -1,12 +1,13 @@
 #pragma once
 
-/** \file
- *  \brief Helpers
+/**
+ * \file helpers.h
+ * \brief Helpers
  *
  */
 
-
 #include "resultcodes.h"
+
 
 /**
  *  \brief Translate enum RESULT in a printable char string

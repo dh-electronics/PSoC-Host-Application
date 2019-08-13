@@ -1,7 +1,8 @@
 #pragma once
 
-/** \file
- *  \brief Header for accessing the PCAP buttons
+/**
+ * \file buttons.h
+ * \brief Header for accessing the PCAP buttons
  *
  */
 
@@ -9,7 +10,7 @@
 #include <stddef.h>
 
 
-/** cap. touch buttons of DRC02 front panel */
+/** cap. touch buttons of DRC02/Bigfish front panel */
 enum BUTTON
 {
     BUTTON_DN_LEFT  = 0, ///< DN_LEFT (left) button
