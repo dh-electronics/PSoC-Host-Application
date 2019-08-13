@@ -38,6 +38,8 @@ enum RESULT closeApi();
  * \brief idle API
  *
  * brings Green LED will start flashing with 300mS interval again.
+ * The pcap touch button scan is disabled during idle mode.
+ * (just don't use it if pcap touch buttons should always be active)
  */
 
 enum RESULT idleApi();

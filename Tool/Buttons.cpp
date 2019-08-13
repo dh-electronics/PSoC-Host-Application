@@ -1,11 +1,6 @@
 #include "Buttons.h"
 #include <string.h>
 #include <stdio.h>
-#include <Poco/Timestamp.h>
-#include <Poco/Thread.h>
-
-
-using namespace Poco;
 
 
 void Buttons::callback(BUTTON button, bool pressed)

@@ -1,27 +1,11 @@
-
-\usepackage{geometry}
-\usepackage[table]{xcolor}
-\usepackage{scrextend}
-
-% PureImpressions a style by Thorian for DoxyGen PDF
-% URL: https://github.com/Thorian/Doxygen-PDF-Stylesheets
-
-% Define your CI:
-\definecolor{colora}{rgb}{0.122, 0.435, 0.698}
-\definecolor{colorb}{rgb}{1, 1, 1}
-\newcommand{\companyname}{DH electronics GmbH}
-\newcommand{\authorname}{Ludwig Zenz}
-\newcommand{\contactdetails}{
-DH electronics GmbH | Am Anger 8 | 83346 Bergen | Germany | Fon: +49 8662 4882 0 \\
-HRB Traunstein 9602 | Ust Id Nr.: DE174205805 \\
-Board of Management | Dipl.-Ing.(FH) Stefan Daxenberger | Dipl.-Ing.(FH) Helmut Henschke \\
-}
-
+% Latex header for doxygen 1.8.13
+\documentclass[oneside]{book}
 
 % Packages required by doxygen
 \usepackage{fixltx2e}
 \usepackage{calc}
 \usepackage{doxygen}
+\usepackage[export]{adjustbox} % also loads graphicx
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc}
 \usepackage{makeidx}
@@ -30,12 +14,12 @@ Board of Management | Dipl.-Ing.(FH) Stefan Daxenberger | Dipl.-Ing.(FH) Helmut 
 \PassOptionsToPackage{warn}{textcomp}
 \usepackage{textcomp}
 \usepackage[nointegrals]{wasysym}
+\usepackage[table]{xcolor}
 
 % Font selection
 \usepackage[T1]{fontenc}
-\usepackage{mathptmx}
 \usepackage[scaled=.90]{helvet}
-\usepackage{courier}
+\usepackage{lmodern}
 \usepackage{amssymb}
 \usepackage{sectsty}
 \renewcommand{\familydefault}{\sfdefault}
@@ -59,11 +43,11 @@ Board of Management | Dipl.-Ing.(FH) Stefan Daxenberger | Dipl.-Ing.(FH) Helmut 
   right=2.5cm%
 }
 \tolerance=750
-\hfuzz=15pt
+\hfuzz=10pt
 \hbadness=750
 \setlength{\emergencystretch}{15pt}
 \setlength{\parindent}{0cm}
-\setlength{\parskip}{0.2cm}
+\setlength{\parskip}{2ex plus 2ex minus 2ex}
 \makeatletter
 \renewcommand{\paragraph}{%
   \@startsection{paragraph}{4}{0ex}{-1.0ex}{1.0ex}{%
@@ -77,21 +61,18 @@ Board of Management | Dipl.-Ing.(FH) Stefan Daxenberger | Dipl.-Ing.(FH) Helmut 
 }
 \makeatother
 
+\usepackage{lastpage}
+
 % Headers & footers
 \usepackage{fancyhdr}
 \pagestyle{fancyplain}
-\fancyhead[LE]{\fancyplain{}{\bfseries\thepage}}
-\fancyhead[CE]{\fancyplain{}{}}
-\fancyhead[RE]{\fancyplain{}{\bfseries\leftmark}}
-\fancyhead[LO]{\fancyplain{}{\bfseries\rightmark}}
-\fancyhead[CO]{\fancyplain{}{}}
-\fancyhead[RO]{\fancyplain{}{\bfseries\thepage}}
-\fancyfoot[LE]{\fancyplain{}{}}
-\fancyfoot[CE]{\fancyplain{}{}}
-\fancyfoot[RE]{\fancyplain{}{\bfseries\scriptsize  }}
-\fancyfoot[LO]{\fancyplain{}{\bfseries\scriptsize  }}
-\fancyfoot[CO]{\fancyplain{}{}}
-\fancyfoot[RO]{\fancyplain{}{}}
+\fancyhead[L]{\fancyplain{}{\bfseries\thepage}}
+\fancyhead[C]{\fancyplain{}{}}
+\fancyhead[R]{\fancyplain{}{\bfseries\leftmark}}
+\fancyfoot[L]{\fancyplain{}{}}
+\fancyfoot[C]{\fancyplain{}\thepage\ of \pageref*{LastPage}}
+\fancyfoot[R]{\fancyplain{}{DH electronics GmbH }}
+
 \renewcommand{\footrulewidth}{0.4pt}
 \renewcommand{\chaptermark}[1]{%
   \markboth{#1}{}%
@@ -100,11 +81,20 @@ Board of Management | Dipl.-Ing.(FH) Stefan Daxenberger | Dipl.-Ing.(FH) Helmut 
   \markright{\thesection\ #1}%
 }
 
+% Redefine the plain page style
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\thepage\ of \pageref*{LastPage}}%
+  \fancyfoot[R]{\fancyplain{}{DH electronics GmbH }}%
+  \renewcommand{\headrulewidth}{0pt}% Line at the header invisible
+  \renewcommand{\footrulewidth}{0.4pt}% Line at the footer visible
+}
+
 % Indices & bibliography
 \usepackage{natbib}
 \usepackage[titles]{tocloft}
-\setcounter{tocdepth}{3}
-\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
 \makeindex
 
 % Hyperlinks (required, but should be loaded last)
@@ -115,7 +105,7 @@ Board of Management | Dipl.-Ing.(FH) Stefan Daxenberger | Dipl.-Ing.(FH) Helmut 
   \usepackage[ps2pdf,pagebackref=true]{hyperref}
 \fi
 \hypersetup{%
-  colorlinks=false,%
+  colorlinks=true,%
   linkcolor=blue,%
   citecolor=blue,%
   unicode%
@@ -126,4 +116,39 @@ Board of Management | Dipl.-Ing.(FH) Stefan Daxenberger | Dipl.-Ing.(FH) Helmut 
   \newpage{\pagestyle{empty}\cleardoublepage}%
 }
 
+\usepackage{caption}
+\captionsetup{labelsep=space,justification=centering,font={bf},singlelinecheck=off,skip=4pt,position=top}
 
+%===== C O N T E N T S =====
+
+\begin{document}
+
+% Titlepage & ToC
+\hypersetup{pageanchor=false,
+             bookmarksnumbered=true,
+             pdfencoding=unicode
+            }
+\pagenumbering{alph}
+\begin{titlepage}
+\begin{flushright}%
+\includegraphics[width=6cm]{$projectlogo}\\
+\end{flushright}
+\vspace*{7cm}
+\begin{center}%
+{\huge C-API to access Cypress MCU periphals}\\
+\vspace*{1cm}
+{\large Windhager: InfoWin+ NG}\\
+\vspace*{2cm}
+{\normalsize DH electronics GmbH - Am Anger 8 - 83346 Bergen - Germany}\\
+\vfill 
+{\large YOUR DIGITAL HEROES.}\\
+\end{center}
+\end{titlepage}
+\clearemptydoublepage
+\pagenumbering{roman}
+\tableofcontents
+\clearemptydoublepage
+\pagenumbering{arabic}
+\hypersetup{pageanchor=true}
+
+%--- Begin generated contents ---
