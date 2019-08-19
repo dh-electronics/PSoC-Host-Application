@@ -7,22 +7,21 @@ set(C_API ${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.so PARENT_SCOPE)
 
 include_directories(
     ./
-    include
-    /usr/include
+    api/include
     ${DHCOM_HAL_INCLUDE_DIRS}
 )
 
 
 list(APPEND SOURCES
-    include/resultcodes.h
-    include/c-api.h
-    include/init.h
-    include/stats.h
-    include/display.h
-    include/buttons.h
-    include/leds.h
-    include/helpers.h
-    include/bitmap.h
+    api/include/resultcodes.h
+    api/include/c-api.h
+    api/include/init.h
+    api/include/stats.h
+    api/include/display.h
+    api/include/buttons.h
+    api/include/leds.h
+    api/include/helpers.h
+    api/include/bitmap.h
     IApiManager.h
     ApiManager.h
     Compressor.h
@@ -68,12 +67,9 @@ target_link_libraries(${PROJECT_NAME}
     ${POCO_FOUNDATION}
 )
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
-
-# Expose DHCOM_HAL's public includes to other subprojects through cache variable
+# Expose C-API's public includes to other subprojects through cache variable
 set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
-                                  ${PROJECT_SOURCE_DIR}/include
-                                  ${PROJECT_SOURCE_DIR}/usr/include
+                                  ${PROJECT_SOURCE_DIR}/api/include
                                   ${DHCOM_HAL_INCLUDE_DIRS}
     CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 
