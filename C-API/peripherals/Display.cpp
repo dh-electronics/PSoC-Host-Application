@@ -73,6 +73,28 @@ RESULT  Display::setContrast(int value)
 }
 
 
+RESULT  Display::setDimTimeout(short value)
+{
+    ScopedLock <Mutex> lock(accessMutex_);
+
+    Command <2> cmd(CMD_DISPLAY_DIM_TIMEOUT);
+    Response <0> rsp;
+    set_16(cmd.data(), 0, value);
+    return proto_.xmit(cmd, rsp);
+}
+
+
+RESULT  Display::setOffTimeout(short value)
+{
+    ScopedLock <Mutex> lock(accessMutex_);
+
+    Command <2> cmd(CMD_DISPLAY_OFF_TIMEOUT);
+    Response <0> rsp;
+    set_16(cmd.data(), 0, value);
+    return proto_.xmit(cmd, rsp);
+}
+
+
 void Display::fill(bool white)
 {
     ScopedLock <Mutex> lock(accessMutex_);

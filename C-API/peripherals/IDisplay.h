@@ -4,8 +4,6 @@
 #include "display.h"
 
 
-enum RESULT;
-
 
 namespace drc01
 {
@@ -18,6 +16,8 @@ public:
 
     virtual RESULT  enable(bool on)                                                  =0;
     virtual RESULT  setContrast(int value)                                           =0;
+    virtual RESULT  setDimTimeout(short value)                                       =0;
+    virtual RESULT  setOffTimeout(short value)                                       =0;
     virtual void    fill(bool white)                                                 =0;
     virtual void    fillRect(int x, int y, int w, int h, bool white)                 =0;
     virtual void    drawRect(int x, int y, int w, int h, bool white)                 =0;

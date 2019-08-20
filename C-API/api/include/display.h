@@ -53,7 +53,7 @@ enum RESULT displaySetContrast(int value);
  *
  * \return result code of requested operation
  */
-enum RESULT displaySetDimTimeout(int value);
+enum RESULT displaySetDimTimeout(short value);
 
 /**
  * \brief set display switch off timeout
@@ -67,7 +67,7 @@ enum RESULT displaySetDimTimeout(int value);
  *
  * \return result code of requested operation
  */
-enum RESULT displaySetOffTimeout(int value);
+enum RESULT displaySetOffTimeout(short value);
 
 /**
  * \brief fill display with single color

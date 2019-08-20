@@ -42,6 +42,40 @@ RESULT displaySetContrast(int value)
 }
 
 
+RESULT displaySetDimTimeout(short value)
+{
+    IApiManager *man = IApiManager::getIface();
+    if(man)
+    {
+        man->active();
+        IDisplay *display = man->getDisplay();
+        assert(display);
+        return display->setDimTimeout(value);
+    }
+    else
+    {
+        return RESULT_API_NOT_OPEN;
+    }
+}
+
+
+RESULT displaySetOffTimeout(short value)
+{
+    IApiManager *man = IApiManager::getIface();
+    if(man)
+    {
+        man->active();
+        IDisplay *display = man->getDisplay();
+        assert(display);
+        return display->setOffTimeout(value);
+    }
+    else
+    {
+        return RESULT_API_NOT_OPEN;
+    }
+}
+
+
 RESULT displayFill(bool white)
 {
     IApiManager *man = IApiManager::getIface();

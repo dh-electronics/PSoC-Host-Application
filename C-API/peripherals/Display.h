@@ -29,6 +29,8 @@ public:
 
     virtual RESULT  enable(bool on);
     virtual RESULT  setContrast(int value);
+    virtual RESULT  setDimTimeout(short value);
+    virtual RESULT  setOffTimeout(short value);
     virtual void    fill(bool white);
     virtual void    fillRect(int x, int y, int w, int h, bool white);
     virtual void    drawRect(int x, int y, int w, int h, bool white);

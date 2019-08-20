@@ -37,6 +37,8 @@ enum CMD
     CMD_DISPLAY_CONTRAST    = 0x82, // INTERNAL: - controls display contrast
     CMD_DISPLAY_INVERSION   = 0x83, // INTERNAL: - controls display inversion
     CMD_DISPLAY_CHECK       = 0x84, // INTERNAL: Display test pattern
+    CMD_DISPLAY_DIM_TIMEOUT = 0x85, // INTERNAL: Display dimming timeout
+    CMD_DISPLAY_OFF_TIMEOUT = 0x86, // INTERNAL: Display switch off timeout
 };
 
 
