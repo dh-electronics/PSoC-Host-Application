@@ -1,5 +1,9 @@
 drc-01 package
 
+2019-08-21/LZ:
+version 0v8
+ - introduce display dimming and switch off timeouts
+ 
 2017-05-05/PK:
 version 0v7
  - restoring display contents in case of PIC reset
