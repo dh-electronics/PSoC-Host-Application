@@ -32,8 +32,7 @@ RESULT displaySetContrast(int value)
         man->active();
         IDisplay *display = man->getDisplay();
         assert(display);
-        display->setContrast(value);
-        return RESULT_OK;
+        return display->setContrast(value);
     }
     else
     {

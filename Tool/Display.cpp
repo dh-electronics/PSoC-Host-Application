@@ -134,7 +134,6 @@ bool Display::parseArgs(int argc, char **argv, uint16_t &idx)
         {
             ++idx;
             displayEnable(true);
-            displaySetContrast(0xff);
         }
         else if(0 == strcmp(argv[idx], "disable"))
         {

@@ -43,10 +43,10 @@ void testDisplay()
         }
     }
 
-    cout << "\nTesting contrast ..." << endl;
+    cout << "\nTesting contrast ... skipped (blocked in latest Firmware)" << endl;
     displayFill(true);
     displayFlush();
-
+/*
     for(int i = 0; i < 2048; ++i)
     {
         res = displaySetContrast(i & 0xff);
@@ -60,6 +60,46 @@ void testDisplay()
 
     displayFill();
     displayFlush();
+*/
+
+    // should pass
+    res = displaySetDimTimeout(300);
+    if(RESULT_OK != res)
+    {
+        cerr << "displaySetDimTimeout: " << getResultCodeString(res) << endl;
+    }
+    res = displaySetOffTimeout(600);
+    if(RESULT_OK != res)
+    {
+        cerr << "displaySetOffTimeout: " << getResultCodeString(res) << endl;
+    }
+
+/*
+    // should fail
+    res = displaySetDimTimeout(301);
+    if(RESULT_OK != res)
+    {
+        cerr << "displaySetDimTimeout: " << getResultCodeString(res) << endl;
+    }
+    res = displaySetOffTimeout(601);
+    if(RESULT_OK != res)
+    {
+        cerr << "displaySetOffTimeout: " << getResultCodeString(res) << endl;
+    }
+*/
+
+    res = displaySetDimTimeout(5);
+    if(RESULT_OK != res)
+    {
+        cerr << "displaySetDimTimeout: " << getResultCodeString(res) << endl;
+    }
+    res = displaySetOffTimeout(10);
+    if(RESULT_OK != res)
+    {
+        cerr << "displaySetOffTimeout: " << getResultCodeString(res) << endl;
+    }
+
+    sleep(20);
 
     res = displayEnable(false);
     if(RESULT_OK != res)
