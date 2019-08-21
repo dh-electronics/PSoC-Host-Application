@@ -17,7 +17,7 @@
 #define API_VERSION     0x0007
 
 /** software revision of C-API library */
-#define API_REVISION    167
+#define API_REVISION    168
 
 /**
  * \brief Get count of checksum errors of SPI command detected by MCU
