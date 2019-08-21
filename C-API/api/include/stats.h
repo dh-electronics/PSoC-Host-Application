@@ -14,7 +14,7 @@
 #define API_NAME        "C-API"
 
 /** software version of C-API library */
-#define API_VERSION     0x0007
+#define API_VERSION     0x0008
 
 /** software revision of C-API library */
 #define API_REVISION    168

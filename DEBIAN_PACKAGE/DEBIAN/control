@@ -1,7 +1,7 @@
 Package: drc-01
-Version: 0.7
+Version: 0.8
 Architecture: armhf
-Maintainer: Peter Kishalov <pkishalov@dh-electronics.de>
+Maintainer: Peter Kishalov <pkishalov@dh-electronics.com>, Ludwig Zenz <lzenz@dh-electronics.com>
 Installed-Size: 25M
 Depends: libpocofoundation9, dhcom-hal
 Section: misc
