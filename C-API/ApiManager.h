@@ -72,6 +72,7 @@ private:
     bool        readHwRevision();
     bool        writePicHwRevision();
     bool        writePicMode(bool active);
+    bool	    readPicMode();
     void        stateRestore();
 
     int32_t     periodicActions();

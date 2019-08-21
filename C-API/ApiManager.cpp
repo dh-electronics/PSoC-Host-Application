@@ -123,6 +123,12 @@ bool ApiManager::start()
         return false;
     }
 
+    if(!readPicMode())
+    {
+        syslog(LOG_ERR, "UI MCU not in active mode. Stopping.");
+        return false;
+    }
+
     if(!createPeripherals())
     {
         syslog(LOG_ERR, "Cannot create peripherals. Stopping.");
@@ -560,6 +566,15 @@ bool ApiManager::writePicMode(bool active)
 
     // dump(&rsp, sizeof(rsp));
     return RESULT_OK == res;
+}
+
+
+bool ApiManager::readPicMode()
+{
+	RESULT res;
+	PIC_MODE mode = proto_.readMode(&res);
+
+	return (RESULT_OK == res && mode == PIC_MODE_ACTIVE);
 }
 
 
