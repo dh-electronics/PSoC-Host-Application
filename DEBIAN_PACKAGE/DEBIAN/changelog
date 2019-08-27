@@ -1,4 +1,9 @@
-drc-01 package
+drc02 package
+
+2019-08-27/LZ:
+version 0v9
+ - change package name to drc02
+ - changed handling of package version.revision
 
 2019-08-21/LZ:
 version 0v8

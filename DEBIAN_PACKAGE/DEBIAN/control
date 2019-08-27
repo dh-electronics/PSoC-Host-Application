@@ -1,4 +1,4 @@
-Package: drc-01
+Package: psoc-capi-drc02
 Version: 0.8
 Architecture: armhf
 Maintainer: Peter Kishalov <pkishalov@dh-electronics.com>, Ludwig Zenz <lzenz@dh-electronics.com>
@@ -7,4 +7,4 @@ Depends: libpocofoundation9, dhcom-hal
 Section: misc
 Priority: optional
 Homepage: http://www.dh-electronics.com
-Description: app package for drc-01
+Description: app package for drc02 PSoC MCU C-API

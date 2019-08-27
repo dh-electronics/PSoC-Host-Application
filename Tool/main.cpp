@@ -23,7 +23,7 @@ static const char *strHelp = "ui-tool usage:"
                              "\n\n\tidle\t- idle API"
                              "\n\n\tloop\t- remain in the app, continue polling buttons 'buttons loop'"
                              "\n\n\tkeep\t- when closing the app do not close the API"
-                             "\n\nLegend: ?OPTIONAL_PARAM, (either this|or this), {number of times}";
+                             "\n\nLegend: ?OPTIONAL_PARAM, (either this|or this), {number of times}\n\n";
 
 
 bool running = true;

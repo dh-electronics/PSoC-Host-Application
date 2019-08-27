@@ -9,7 +9,7 @@ if [[ $3 != "armel" && $3 != "armhf" ]] ; then
 	exit -1
 fi
 
-TMP=/tmp/drc-01
+TMP=/tmp/psoc-capi-drc02
 mkdir -p $TMP/
 
 #svn export --force $1/DEBIAN_PACKAGE $TMP
@@ -22,9 +22,9 @@ VERSION=$(grep -r "^#define API_VERSION" . | sed "s/[^0-9]*//g")
 REVISION=$(grep -r "^#define API_REVISION" . | sed "s/[^0-9]*//g")
 
 cd $2
-cp C-API/libc-api.so.1 $TMP/usr/lib
-cp Tool/ui-tool $TMP/usr/bin
-cp Bootloader-Host/bootloader-tool $TMP/usr/bin
+cp -av C-API/libc-api.so* $TMP/usr/lib
+cp -av Tool/ui-tool $TMP/usr/bin
+cp -av Bootloader-Host/bootloader-tool $TMP/usr/bin
 cd -
 
 cd $TMP/DEBIAN
@@ -32,5 +32,5 @@ sed -i "s/Architecture:.*/Architecture:$3/" control
 sed -i "s/Version:.*/Version:$VERSION\.$REVISION/" control
 cd -
 
-dpkg -b $TMP $2/drc-01_"$VERSION"."$REVISION"_"$3".deb
+dpkg -b $TMP $2/psoc-capi-drc02_"$VERSION"."$REVISION"_"$3".deb
 rm -rf $TMP
