@@ -35,7 +35,7 @@ public:
     virtual unsigned int    getBusyCounter() const              { return proto_.getBusyCounter(); }
     virtual unsigned int    getTimeoutsCounter() const          { return proto_.getTimeoutsCounter(); }
     virtual unsigned int    getResetsCounter() const            { return proto_.getResetsCounter(); }
-    virtual unsigned int    getPicVersion() const               { return uint32_t(picVersion_) << 16; }
+    virtual unsigned int    getPicVersion() const               { return uint32_t(picVersion_); }
     virtual RESULT          readPicVersion();
     virtual unsigned int    getHwRevision() const               { return hwRevision_; }
 

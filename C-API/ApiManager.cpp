@@ -108,7 +108,7 @@ bool ApiManager::start()
     }
 
     const uint16_t picVersion = getPicVersion();
-    syslog(LOG_INFO, "UI SW version %hhx.%hhx", uint8_t(picVersion >> 8), uint8_t(picVersion));
+    syslog(LOG_INFO, "MCU firmware version %hhx.%hhx", uint8_t(picVersion >> 8), uint8_t(picVersion));
 
     if(!writePicHwRevision())
     {
