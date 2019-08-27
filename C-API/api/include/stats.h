@@ -14,10 +14,10 @@
 #define API_NAME        "C-API"
 
 /** software version of C-API library */
-#define API_VERSION     0x0008
+#define API_VERSION     8
 
 /** software revision of C-API library */
-#define API_REVISION    168
+#define API_REVISION    169
 
 /**
  * \brief Get count of checksum errors of SPI command detected by MCU

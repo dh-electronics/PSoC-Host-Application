@@ -57,7 +57,8 @@ ApiManager::~ApiManager()
 bool ApiManager::start()
 {
     openlog("drc-01", LOG_PERROR, LOG_USER);
-    syslog(LOG_INFO, "SW version %hhx.%hhx, Starting...", uint8_t(API_VERSION >> 8), uint8_t(API_VERSION));
+    syslog(LOG_INFO, "%s SW version %d.%d, Starting...",
+    		API_NAME, API_VERSION, API_REVISION);
 
     if(!detectCpu())
     {
