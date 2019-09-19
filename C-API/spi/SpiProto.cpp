@@ -1,7 +1,6 @@
 #include "spi/SpiProto.h"
 #include "ApiManager.h"
 #include <Poco/ScopedLock.h>
-#include <Poco/Timestamp.h>
 #include <string.h>
 #include <cassert>
 #include <syslog.h>
@@ -114,7 +113,7 @@ bool SpiProto::init(const dhcom::System &sys)
 bool SpiProto::start()
 {
     // start heartbeats
-    lastCommTimestamp_.update();
+    lastCommTimePoint_ = chrono::steady_clock::now();
     return 0 == pthread_create(&pthread_, NULL, pthread_start_routine, this);
 }
 
@@ -244,7 +243,7 @@ RESULT SpiProto::xmit(GenericCommand *command, uint8_t cmdSize, GenericResponse 
                 continue;
             }
 
-            lastCommTimestamp_.update();
+            lastCommTimePoint_ = chrono::steady_clock::now();
 
             if(rspIsError(response))
             {
@@ -346,7 +345,9 @@ void SpiProto::run()
             }
             else
             {
-                int32_t msToHeartbeat = HEARTBEAT_MS - lastCommTimestamp_.elapsed() / 1000;
+                auto elapsedTimeSinceLastComm = chrono::duration_cast<chrono::milliseconds>((chrono::steady_clock::now() - lastCommTimePoint_)).count();
+                int32_t msToHeartbeat = HEARTBEAT_MS - elapsedTimeSinceLastComm;
+
                 if(msToHeartbeat > 0)
                 {
                     try

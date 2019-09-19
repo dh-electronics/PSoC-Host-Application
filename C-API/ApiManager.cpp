@@ -137,8 +137,7 @@ bool ApiManager::start()
     }
 
     // start the periodic tasks
-    readyLedBlinkTimestamp_.update();
-    logStatsTimestamp_.update();
+    logStatsTimePoint_ = readyLedBlinkTimePoint_ = chrono::steady_clock::now();
     if(!proto_.start())
     {
         syslog(LOG_ERR, "Cannot start a thread for periodic tasks for SPI protocol. Stopping.");
@@ -227,7 +226,7 @@ void ApiManager::active(bool active)
 {
     active_ = active;
     if(!active)
-        readyLedBlinkTimestamp_.update();
+    	readyLedBlinkTimePoint_ = chrono::steady_clock::now();
 }
 
 
@@ -255,9 +254,10 @@ RESULT ApiManager::readPicVersion()
 
 int32_t ApiManager::periodicActions()
 {
-    if(logStatsTimestamp_.elapsed() >= LOG_STATS_PERIOD_uS)
+    auto elapsedTimeSinceLastLog = chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now() - logStatsTimePoint_).count();
+    if(elapsedTimeSinceLastLog >= LOG_STATS_PERIOD_uS)
     {
-        logStatsTimestamp_.update();
+        logStatsTimePoint_ = chrono::steady_clock::now();
         if(proto_.getCrcErrorCounter() ||
                 proto_.getResponseErrorCounter() ||
                 proto_.getBusyCounter() ||
@@ -286,10 +286,11 @@ int32_t ApiManager::periodicActions()
     if(active_)
         return 1000;
 
-    int32_t timeLeft = READY_LED_BLINK_PERIOD_mS - readyLedBlinkTimestamp_.elapsed() / 1000;
+    auto elapsedTimeSinceLastReadyLedBlink = chrono::duration_cast<chrono::milliseconds>((chrono::steady_clock::now() - readyLedBlinkTimePoint_)).count();
+    int32_t timeLeft = READY_LED_BLINK_PERIOD_mS - elapsedTimeSinceLastReadyLedBlink;
     if(timeLeft <= 0)
     {
-        readyLedBlinkTimestamp_.update();
+    	readyLedBlinkTimePoint_ = chrono::steady_clock::now();
         ILed *led = getLed(LED_RUN);
         led->write(!led->get());
         return READY_LED_BLINK_PERIOD_mS;

@@ -7,7 +7,7 @@
 #include <hal/SPI.h>
 #include <Poco/Mutex.h>
 #include <Poco/Condition.h>
-#include <Poco/Timestamp.h>
+#include <chrono>
 #include <pthread.h>
 #include <stdint.h>
 
@@ -68,23 +68,23 @@ private:
 
 
 #ifndef DUMMY_PERIPHERALS
-    dhcom::SPI *                spi_;
+    dhcom::SPI *                                spi_;
 
-    pthread_t                   pthread_;
-    mutable Poco::FastMutex     statsMutex_;
-    mutable Poco::FastMutex     spiMutex_;
-    Poco::Condition             waitCondition_;
+    pthread_t                                   pthread_;
+    mutable Poco::FastMutex                     statsMutex_;
+    mutable Poco::FastMutex                     spiMutex_;
+    Poco::Condition                             waitCondition_;
 
-    uint32_t                    crcErrorCounter_;
-    uint32_t                    responseErrorCounter_;
-    uint32_t                    busyCounter_;
-    uint32_t                    timeoutsCounter_;
-    uint32_t                    resetsCounter_;
-    Poco::Timestamp             lastCommTimestamp_;
-    uint16_t                    shiftRegisterData_;
-    bool                        stateRestorePending_;
-    uint8_t                     pingCounter_;
-    volatile bool               running_;
+    uint32_t                                    crcErrorCounter_;
+    uint32_t                                    responseErrorCounter_;
+    uint32_t                                    busyCounter_;
+    uint32_t                                    timeoutsCounter_;
+    uint32_t                                    resetsCounter_;
+    std::chrono::steady_clock::time_point       lastCommTimePoint_;
+    uint16_t                                    shiftRegisterData_;
+    bool                                        stateRestorePending_;
+    uint8_t                                     pingCounter_;
+    volatile bool                               running_;
 #endif
 };
 

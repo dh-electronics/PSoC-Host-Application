@@ -80,15 +80,15 @@ private:
 
     static void sigactionHandler(int sig);
 
-    SpiProto        proto_;
-    Led *           leds_[Led::COUNT];
-    Buttons *       buttons_;
-    Display *       display_;
-    int16_t         picVersion_;
-    int16_t         hwRevision_;
-    dhcom::System   system_;
-    Poco::Timestamp readyLedBlinkTimestamp_;
-    Poco::Timestamp logStatsTimestamp_;
+    SpiProto                                 proto_;
+    Led *                                    leds_[Led::COUNT];
+    Buttons *                                buttons_;
+    Display *                                display_;
+    int16_t                                  picVersion_;
+    int16_t                                  hwRevision_;
+    dhcom::System                            system_;
+    std::chrono::steady_clock::time_point    readyLedBlinkTimePoint_;
+    std::chrono::steady_clock::time_point    logStatsTimePoint_;
     bool            active_;
 
     static ApiManager * self_;
