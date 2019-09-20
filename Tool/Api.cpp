@@ -3,10 +3,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <buttons.h>
-#include <Poco/Thread.h>
-
-
-using namespace Poco;
+#include <thread>
+#include <chrono>
 
 
 extern bool running;
@@ -27,7 +25,8 @@ bool Api::parseArgs(int, char **argv, uint16_t &idx)
         while(running)
         {
             handleButtons();
-            Thread::sleep(50);
+            std::this_thread::sleep_for(std::chrono::milliseconds{50});
+
         }
         setButtonsCallback(NULL);
         return true;
