@@ -6,7 +6,6 @@
 #include "spi/SpiProto.h"
 #include "spi/MasterHelpers.h"
 #include "bitmap.h"
-#include <Poco/ScopedLock.h>
 #include <string.h>
 #include <cassert>
 #include <stdio.h>
@@ -15,7 +14,6 @@
 
 using namespace drc01;
 using namespace std;
-using namespace Poco;
 
 
 static void bitwiseOr(uint8_t *res, uint8_t arg)
@@ -57,14 +55,14 @@ Display::Display(SpiProto &proto)
 
 RESULT Display::enable(bool on)
 {
-    ScopedLock <Mutex> lock(accessMutex_);
+    std::lock_guard<std::recursive_mutex> lock(accessMutex_);
     return proto_.gpioControl(RA4, on);
 }
 
 
 RESULT  Display::setContrast(int value)
 {
-    ScopedLock <Mutex> lock(accessMutex_);
+    std::lock_guard<std::recursive_mutex> lock(accessMutex_);
 
     Command <1> cmd(CMD_DISPLAY_CONTRAST);
     Response <0> rsp;
@@ -75,7 +73,7 @@ RESULT  Display::setContrast(int value)
 
 RESULT  Display::setDimTimeout(short value)
 {
-    ScopedLock <Mutex> lock(accessMutex_);
+    std::lock_guard<std::recursive_mutex> lock(accessMutex_);
 
     Command <2> cmd(CMD_DISPLAY_DIM_TIMEOUT);
     Response <0> rsp;
@@ -86,7 +84,7 @@ RESULT  Display::setDimTimeout(short value)
 
 RESULT  Display::setOffTimeout(short value)
 {
-    ScopedLock <Mutex> lock(accessMutex_);
+    std::lock_guard<std::recursive_mutex> lock(accessMutex_);
 
     Command <2> cmd(CMD_DISPLAY_OFF_TIMEOUT);
     Response <0> rsp;
@@ -97,7 +95,7 @@ RESULT  Display::setOffTimeout(short value)
 
 void Display::fill(bool white)
 {
-    ScopedLock <Mutex> lock(accessMutex_);
+    std::lock_guard<std::recursive_mutex> lock(accessMutex_);
 
     // remember that the display was filled with color
     displayFilled_ = true;
@@ -113,7 +111,7 @@ void Display::fill(bool white)
 
 void Display::fillRect(int x, int y, int w, int h, bool white)
 {
-    ScopedLock <Mutex> lock(accessMutex_);
+    std::lock_guard<std::recursive_mutex> lock(accessMutex_);
 
     // check if the rect is outside the screen
     int xEnd, yEnd;
@@ -183,7 +181,7 @@ void Display::fillRect(int x, int y, int w, int h, bool white)
 
 void Display::drawRect(int x, int y, int w, int h, bool white)
 {
-    ScopedLock <Mutex> lock(accessMutex_);
+    std::lock_guard<std::recursive_mutex> lock(accessMutex_);
 
     // check if the rect is outside the screen
     int xEnd, yEnd;
@@ -258,7 +256,7 @@ void Display::drawRect(int x, int y, int w, int h, bool white)
 
 void Display::invertRect(int x, int y, int w, int h)
 {
-    ScopedLock <Mutex> lock(accessMutex_);
+    std::lock_guard<std::recursive_mutex> lock(accessMutex_);
 
     // check if the rect is outside the screen
     int xEnd, yEnd;
@@ -334,7 +332,7 @@ RESULT Display::flush()
         dumpToFile_ = false;
     }
 
-    ScopedLock <Mutex> lock(accessMutex_);
+    std::lock_guard<std::recursive_mutex> lock(accessMutex_);
 
     {
         // create the diff
@@ -377,7 +375,7 @@ RESULT Display::flush()
 
 RESULT Display::swap()
 {
-    ScopedLock <Mutex> lock(accessMutex_);
+    std::lock_guard<std::recursive_mutex> lock(accessMutex_);
 
     // re-send the last compressed buffer
     if(compressedLength_)
@@ -401,7 +399,7 @@ RESULT Display::swap()
 
 RESULT Display::writeSplash()
 {   
-    ScopedLock <Mutex> lock(accessMutex_);
+    std::lock_guard<std::recursive_mutex> lock(accessMutex_);
 
     RESULT res = flush();
     if(RESULT_OK != res)
@@ -453,7 +451,7 @@ RESULT Display::writeSplash()
 
 void Display::restore()
 {
-    ScopedLock <Mutex> lock(accessMutex_);
+    std::lock_guard<std::recursive_mutex> lock(accessMutex_);
 
     displayFilled_ = true;      // to re-fill the display with the last defined color
     compressedLength_ = 0;      // no compressed data makes sense anymore
@@ -603,7 +601,7 @@ void Display::verticalLine(uint8_t x, uint8_t yStart, uint8_t yEnd, bool white)
 
 void Display::bitmap(int x, int y, int width, int height, int pitch, const uint8_t *data)
 {
-    ScopedLock <Mutex> lock(accessMutex_);
+    std::lock_guard<std::recursive_mutex> lock(accessMutex_);
 
     int scrXEnd, scrYEnd;
     if(!isRectOnScreen(x, y, width, height, scrXEnd, scrYEnd))

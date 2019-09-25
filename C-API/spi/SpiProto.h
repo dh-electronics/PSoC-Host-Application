@@ -5,8 +5,8 @@
 #include "resultcodes.h"
 #include <spi/MasterHelpers.h>
 #include <hal/SPI.h>
-#include <Poco/Mutex.h>
-#include <Poco/Condition.h>
+#include <mutex>
+#include <condition_variable>
 #include <chrono>
 #include <pthread.h>
 #include <stdint.h>
@@ -71,9 +71,9 @@ private:
     dhcom::SPI *                                spi_;
 
     pthread_t                                   pthread_;
-    mutable Poco::FastMutex                     statsMutex_;
-    mutable Poco::FastMutex                     spiMutex_;
-    Poco::Condition                             waitCondition_;
+    mutable std::mutex                          statsMutex_;
+    mutable std::mutex                          spiMutex_;
+    std::condition_variable                     waitCondition_;
 
     uint32_t                                    crcErrorCounter_;
     uint32_t                                    responseErrorCounter_;

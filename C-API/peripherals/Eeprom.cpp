@@ -3,12 +3,10 @@
 #include <spi/Response.h>
 #include <spi/SpiProto.h>
 #include <spi/MasterHelpers.h>
-#include <Poco/ScopedLock.h>
 #include <string.h>
 
 
 using namespace drc01;
-using namespace Poco;
 
 
 Eeprom::Eeprom(SpiProto &proto)

@@ -3,7 +3,7 @@
 
 #include "display.h"
 #include <peripherals/IDisplay.h>
-#include <Poco/Mutex.h>
+#include <mutex>
 #include <stdint.h>
 
 
@@ -73,7 +73,7 @@ private:
     bool        fillColorWhite_;
     bool        dumpToFile_;
 
-    mutable Poco::Mutex accessMutex_;           // is a recursive mutex
+    mutable std::recursive_mutex accessMutex_;
 };
 
 

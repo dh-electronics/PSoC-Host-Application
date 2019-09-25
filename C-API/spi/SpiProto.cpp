@@ -1,6 +1,5 @@
 #include "spi/SpiProto.h"
 #include "ApiManager.h"
-#include <Poco/ScopedLock.h>
 #include <string.h>
 #include <cassert>
 #include <syslog.h>
@@ -8,7 +7,6 @@
 
 
 using namespace drc01;
-using namespace Poco;
 using namespace dhcom;
 using namespace std;
 
@@ -32,42 +30,42 @@ SpiProto::~SpiProto()
 
 void SpiProto::resetStats()
 {
-    ScopedLock <FastMutex> lock(statsMutex_);
+    std::lock_guard<std::mutex> lock(statsMutex_);
     crcErrorCounter_ = responseErrorCounter_ = busyCounter_ = timeoutsCounter_ = resetsCounter_ = 0;
 }
 
 
 uint32_t SpiProto::getCrcErrorCounter() const
 {
-    ScopedLock <FastMutex> lock(statsMutex_);
+    std::lock_guard<std::mutex> lock(statsMutex_);
     return crcErrorCounter_;
 }
 
 
 uint32_t SpiProto::getResponseErrorCounter() const
 {
-    ScopedLock <FastMutex> lock(statsMutex_);
+    std::lock_guard<std::mutex> lock(statsMutex_);
     return responseErrorCounter_;
 }
 
 
 uint32_t SpiProto::getBusyCounter() const
 {
-    ScopedLock <FastMutex> lock(statsMutex_);
+    std::lock_guard<std::mutex> lock(statsMutex_);
     return busyCounter_;
 }
 
 
 uint32_t SpiProto::getTimeoutsCounter() const
 {
-    ScopedLock <FastMutex> lock(statsMutex_);
+    std::lock_guard<std::mutex> lock(statsMutex_);
     return timeoutsCounter_;
 }
 
 
 uint32_t SpiProto::getResetsCounter() const
 {
-    ScopedLock <FastMutex> lock(statsMutex_);
+    std::lock_guard<std::mutex> lock(statsMutex_);
     return resetsCounter_;
 }
 
@@ -191,7 +189,7 @@ RESULT SpiProto::xmit(GenericCommand *command, uint8_t cmdSize, GenericResponse 
     // setting the command's message counter and crc
     cmdCalcCrc(command, cmdSize);
 
-    ScopedLock <FastMutex> lock(spiMutex_); // lock until the whole transaction completes or fails
+    std::lock_guard<std::mutex> lock(spiMutex_); // lock until the whole transaction completes or fails
 
     // sending the command
     for(uint8_t cmd_attempt = 0; cmd_attempt < CMD_REPEATS; ++cmd_attempt)
@@ -254,7 +252,7 @@ RESULT SpiProto::xmit(GenericCommand *command, uint8_t cmdSize, GenericResponse 
                     syslog(LOG_ERR, "SPI wrong UI mode reported...");
                     incResets();
                     stateRestorePending_ = true;
-                    waitCondition_.signal();
+                    waitCondition_.notify_one();
                     return RESULT_COMM_TIMEOUT;
 
                 case ERR_CRC:
@@ -337,7 +335,7 @@ void SpiProto::run()
 
         bool heartBeat = false;
         {
-            ScopedLock <FastMutex> lock(spiMutex_);
+            std::unique_lock<std::mutex> spiLock(spiMutex_);
             if(stateRestorePending_)
             {
                 stateRestorePending_ = false;
@@ -352,9 +350,10 @@ void SpiProto::run()
                 {
                     try
                     {
-                        waitCondition_.wait(spiMutex_, (msToHeartbeat < msToNextPeriodic) ? msToHeartbeat : msToNextPeriodic);
+                        auto waitMilliseconds = std::chrono::milliseconds((msToHeartbeat < msToNextPeriodic) ? msToHeartbeat : msToNextPeriodic);
+                        waitCondition_.wait_for(spiLock,  std::chrono::duration_cast<std::chrono::milliseconds> (waitMilliseconds), [this]() -> const bool { return stateRestorePending_; });
                     }
-                    catch(TimeoutException &)
+                    catch(std::system_error &)
                     {
                     }
                     continue;
@@ -398,35 +397,35 @@ void SpiProto::run()
 
 void SpiProto::incCrcErrors()
 {
-    ScopedLock <FastMutex> lock(statsMutex_);
+    std::lock_guard<std::mutex> lock(statsMutex_);
     ++crcErrorCounter_;
 }
 
 
 void SpiProto::incResponseErrors()
 {
-    ScopedLock <FastMutex> lock(statsMutex_);
+    std::lock_guard<std::mutex> lock(statsMutex_);
     ++responseErrorCounter_;
 }
 
 
 void SpiProto::incBusy()
 {
-    ScopedLock <FastMutex> lock(statsMutex_);
+    std::lock_guard<std::mutex> lock(statsMutex_);
     ++busyCounter_;
 }
 
 
 void SpiProto::incTimeouts()
 {
-    ScopedLock <FastMutex> lock(statsMutex_);
+    std::lock_guard<std::mutex> lock(statsMutex_);
     ++timeoutsCounter_;
 }
 
 
 void SpiProto::incResets()
 {
-    ScopedLock <FastMutex> lock(statsMutex_);
+    std::lock_guard<std::mutex> lock(statsMutex_);
     ++resetsCounter_;
 }
 

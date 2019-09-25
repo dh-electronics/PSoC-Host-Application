@@ -3,7 +3,7 @@
 
 #include <peripherals/ILed.h>
 #include "resultcodes.h"
-#include <Poco/Mutex.h>
+#include <mutex>
 
 
 namespace drc01
@@ -22,7 +22,7 @@ protected:
     Led();
 
     bool                    state_;
-    mutable Poco::FastMutex accessMutex_;
+    mutable std::mutex      accessMutex_;
 };
 
 

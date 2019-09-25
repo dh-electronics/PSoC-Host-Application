@@ -3,12 +3,10 @@
 #include "spi/Response.h"
 #include "spi/SpiProto.h"
 #include "spi/MasterHelpers.h"
-#include <Poco/ScopedLock.h>
 #include <stdint.h>
 
 
 using namespace drc01;
-using namespace Poco;
 
 
 Buttons::Buttons(SpiProto &proto)
@@ -31,7 +29,7 @@ RESULT Buttons::handleEvents()
     Command <0> cmd(CMD_BUTTONS_READ);
     Response <1> rsp;
 
-    ScopedLock <FastMutex> lock(accessMutex_);
+    std::lock_guard<std::mutex> lock(accessMutex_);
     const RESULT res = proto_.xmit(cmd, rsp);
     if(RESULT_OK == res)
     {

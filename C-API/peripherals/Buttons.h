@@ -2,7 +2,7 @@
 
 
 #include "IButtons.h"
-#include <Poco/Mutex.h>
+#include <mutex>
 
 
 enum RESULT;
@@ -26,12 +26,12 @@ public:
     virtual bool   getState(enum BUTTON button) const;
 
 private:
-    static const int NUM_BUTTONS = 5;
-    SpiProto &      proto_;
-    buttonsCallback *callback_;
-    bool            states_[NUM_BUTTONS];
+    static const int        NUM_BUTTONS = 5;
+    SpiProto &              proto_;
+    buttonsCallback         *callback_;
+    bool                    states_[NUM_BUTTONS];
 
-    mutable Poco::FastMutex accessMutex_;
+    mutable std::mutex      accessMutex_;
 };
 
 
