@@ -2,6 +2,8 @@ set(CMAKE_SYSTEM_NAME Linux)
 
 set(CMAKE_C_COMPILER /opt/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc)
 set(CMAKE_Cxx_COMPILER /opt/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_LINKER /opt/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-ld CACHE FILEPATH "Toolchain linker")
 set(CMAKE_AR /opt/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-ar CACHE FILEPATH "Toolchain archiver")
 set(CMAKE_NM /opt/gcc-linaro-4.9-2014.11-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-nm CACHE FILEPATH "Toolchain name tool")
