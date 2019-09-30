@@ -2,7 +2,6 @@ set(CMAKE_SYSTEM_NAME Linux)
 
 set(CMAKE_C_COMPILER /usr/bin/arm-linux-gnueabi-gcc)
 set(CMAKE_CXX_COMPILER /usr/bin/arm-linux-gnueabi-g++)
-set(CMAKE_MAKE_PROGRAM /usr/bin/make)
 set(CMAKE_LINKER /usr/bin/arm-linux-gnueabi-ld CACHE FILEPATH "Toolchain linker")
 set(CMAKE_AR /usr/bin/arm-linux-gnueabi-ar CACHE FILEPATH "Toolchain archiver")
 set(CMAKE_NM /usr/bin/arm-linux-gnueabi-nm CACHE FILEPATH "Toolchain name tool")
