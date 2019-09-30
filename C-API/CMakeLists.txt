@@ -58,13 +58,10 @@ list(APPEND SOURCES
 )
 
 
-find_library(POCO_FOUNDATION PocoFoundation)
-
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION 1)
 target_link_libraries(${PROJECT_NAME}
     DHCOM_HAL
-    ${POCO_FOUNDATION}
 )
 
 # Expose C-API's public includes to other subprojects through cache variable

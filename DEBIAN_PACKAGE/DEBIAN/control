@@ -3,8 +3,8 @@ Version: 0.8
 Architecture: armhf
 Maintainer: Peter Kishalov <pkishalov@dh-electronics.com>, Ludwig Zenz <lzenz@dh-electronics.com>
 Installed-Size: 25M
-Depends: libpocofoundation9, dhcom-hal
+Depends: dhcom-hal
 Section: misc
 Priority: optional
-Homepage: http://www.dh-electronics.com
+Homepage: https://www.dh-electronics.com
 Description: app package for drc02 PSoC MCU C-API
