@@ -76,10 +76,6 @@
  *
  * \section Other C++ API's and Dependencies
  *
- * \subsection Poco
- *
- * C-API uses the runtime library Poco. See https://pocoproject.org/
- *
  * \subsection DHCOM_HAL
  *
  * A HAL abstraction library for DHCOM modules DHCOM_HAL is used and included.
