@@ -56,12 +56,13 @@ list(APPEND SOURCES
     peripherals/Buttons.cpp
     peripherals/Display.cpp
 )
-
+find_package(Threads REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION 1)
 target_link_libraries(${PROJECT_NAME}
     DHCOM_HAL
+    "${CMAKE_THREAD_LIBS_INIT}"
 )
 
 # Expose C-API's public includes to other subprojects through cache variable
