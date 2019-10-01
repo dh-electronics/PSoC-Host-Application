@@ -20,10 +20,10 @@ extern "C" {
 #define API_NAME        "C-API"
 
 /** software version of C-API library */
-#define API_VERSION     8
+#define API_VERSION     9
 
 /** software revision of C-API library */
-#define API_REVISION    169
+#define API_REVISION    1
 
 /**
  * \brief Get count of checksum errors of SPI command detected by MCU

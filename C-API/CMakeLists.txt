@@ -1,75 +1,85 @@
-project(c-api)
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
+project(c-api VERSION 9.1 LANGUAGES CXX)
 
 
 set(C_API ${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.so PARENT_SCOPE)
 
-
-include_directories(
-    ./
-    api/include
-    ${DHCOM_HAL_INCLUDE_DIRS}
-)
-
-
-list(APPEND SOURCES
-    api/include/c-api/resultcodes.h
-    api/include/c-api/c-api.h
-    api/include/c-api/init.h
-    api/include/c-api/stats.h
-    api/include/c-api/display.h
-    api/include/c-api/buttons.h
-    api/include/c-api/leds.h
-    api/include/c-api/helpers.h
+list(APPEND INCLUDES
     api/include/c-api/bitmap.h
+    api/include/c-api/buttons.h
+    api/include/c-api/c-api.h
+    api/include/c-api/display.h
+    api/include/c-api/helpers.h
+    api/include/c-api/init.h
+    api/include/c-api/leds.h
+    api/include/c-api/resultcodes.h
+    api/include/c-api/stats.h
     IApiManager.h
     ApiManager.h
     Compressor.h
     spi/Command.h
-    spi/Response.h
     spi/GenericHelpers.h
     spi/MasterHelpers.h
+    spi/Response.h
+    spi/SlaveHelpers.h
     spi/SpiProto.h
-    peripherals/ILed.h
     peripherals/IButtons.h
     peripherals/IDisplay.h
-    peripherals/Led.h
-    peripherals/LedOnGpio.h
+    peripherals/ILed.h
     peripherals/Buttons.h
     peripherals/Display.h
     peripherals/Gpios.h
-    peripherals/Eeprom.h
+    peripherals/Led.h
+    peripherals/LedOnGpio.h
 )
+
 
 list(APPEND SOURCES
     ApiManager.cpp
     helpers.cpp
     Compressor.cpp
+    api/bitmap.cpp
     api/buttons.cpp
     api/display.cpp
+    api/init.cpp
     api/leds.cpp
     api/stats.cpp
-    api/init.cpp
-    api/bitmap.cpp
     spi/SpiProto.cpp
     spi/GenericHelpers.c
     spi/MasterHelpers.cpp
-    peripherals/Led.cpp
-    peripherals/LedOnGpio.cpp
     peripherals/Buttons.cpp
     peripherals/Display.cpp
+    peripherals/Led.cpp
+    peripherals/LedOnGpio.cpp
 )
-find_package(Threads REQUIRED)
+
 
 file(GLOB public_headers "api/include/*.h")
 
-add_library(${PROJECT_NAME} SHARED ${SOURCES} ${INCLUDES} )
-set_target_properties(${PROJECT_NAME} PROPERTIES VERSION 1)
-set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${public_headers}")
-target_link_libraries(${PROJECT_NAME}
-    DHCOM_HAL
-    "${CMAKE_THREAD_LIBS_INIT}"
+add_library(${PROJECT_NAME} SHARED ${INCLUDES} ${SOURCES})
+
+target_include_directories(${PROJECT_NAME}
+    PUBLIC 
+        $<INSTALL_INTERFACE:include>    
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/api/include>
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${DHCOM_HAL_INCLUDE_DIRS}
 )
+
+target_compile_options(${PROJECT_NAME} PRIVATE -Werror)
+
+find_package(Threads REQUIRED)
+
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+        DHCOM_HAL
+        "${CMAKE_THREAD_LIBS_INIT}"
+)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES VERSION 1)
+# set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${public_headers}")
+
 
 # Expose C-API's public includes to other subprojects through cache variable
 set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
@@ -79,7 +89,10 @@ set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
 
 install(TARGETS ${PROJECT_NAME} 
     LIBRARY DESTINATION lib
-    PUBLIC_HEADER DESTINATION include/c-api
+    # PUBLIC_HEADER DESTINATION include/c-api
 )
+
+# use this to install header files and keep directory structure
+install(DIRECTORY api/include/ DESTINATION include COMPONENT devel PATTERN "*.h" )
 
 

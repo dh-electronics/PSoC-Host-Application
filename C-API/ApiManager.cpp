@@ -2,7 +2,6 @@
 #include "peripherals/LedOnGpio.h"
 #include "peripherals/Buttons.h"
 #include "peripherals/Display.h"
-#include "peripherals/Eeprom.h"
 #include "spi/Command.h"
 #include "spi/Response.h"
 #include "spi/MasterHelpers.h"
