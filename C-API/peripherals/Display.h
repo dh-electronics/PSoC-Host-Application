@@ -42,6 +42,7 @@ public:
     virtual RESULT flush();
     virtual RESULT swap();
     virtual RESULT writeSplash();
+    virtual RESULT screenshot();
 
     void restore();
     void dump() { dumpToFile_ = true; }
@@ -63,6 +64,7 @@ private:
 
     RESULT      sendCompressed();
     void        dumpToFile();
+    void        writeBitmap();
 
     SpiProto &  proto_;
     uint8_t     buffer_[BUFSIZE];               // main buffer
@@ -72,6 +74,7 @@ private:
     bool        displayFilled_;
     bool        fillColorWhite_;
     bool        dumpToFile_;
+    bool        screenshot_;
 
     mutable std::recursive_mutex accessMutex_;
 };

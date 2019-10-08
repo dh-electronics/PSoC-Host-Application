@@ -29,6 +29,7 @@ public:
     virtual RESULT flush()          =0;
     virtual RESULT swap()           =0;
     virtual RESULT writeSplash()    =0;
+    virtual RESULT screenshot()     =0;
 };
 
 

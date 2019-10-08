@@ -162,3 +162,13 @@ enum RESULT displaySwap();
  * \return result code of requested operation
  */
 enum RESULT displayWriteSplash();
+
+/**
+ * \brief take BMP screenshot
+ *
+ * Take screenshot of OLED and write to BMP file
+ *
+ * \return result code of requested operation
+ */
+enum RESULT displayTakeScreenshot();
+

@@ -237,3 +237,20 @@ RESULT displayWriteSplash()
     }
 }
 
+RESULT displayTakeScreenshot()
+{
+    IApiManager *man = IApiManager::getIface();
+    if(man)
+    {
+        man->active();
+        IDisplay *display = man->getDisplay();
+        assert(display);
+        return display->screenshot();
+    }
+    else
+    {
+        return RESULT_API_NOT_OPEN;
+    }
+}
+
+

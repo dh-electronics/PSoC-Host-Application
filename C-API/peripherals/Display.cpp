@@ -9,7 +9,9 @@
 #include <string.h>
 #include <cassert>
 #include <stdio.h>
-//#include <iostream>
+#include <unistd.h>
+#include <signal.h>
+#include <new>
 
 
 using namespace drc01;
@@ -40,16 +42,31 @@ static void bitwiseSet(uint8_t *res, uint8_t arg)
 }
 
 
+static void sigUserHandler(int)
+{
+    displayTakeScreenshot();
+}
+
+
 Display::Display(SpiProto &proto)
     : proto_(proto)
     , compressedLength_(0)
     , displayFilled_(true)
     , fillColorWhite_(false)
     , dumpToFile_(false)
+    , screenshot_(false)
 {
     // zeroing both buffers
     memset(buffer_, 0, BUFSIZE);
     memset(diff_, 0, BUFSIZE);
+
+    // registering screenshot signal
+    struct sigaction sa;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_handler = sigUserHandler;
+    sa.sa_flags = 0;
+    if(-1 == sigaction(SIGUSR1, &sa, NULL))
+        fprintf(stderr, "Setting SIGUSR1 handler failed, %s", strerror(errno));
 }
 
 
@@ -332,6 +349,12 @@ RESULT Display::flush()
         dumpToFile_ = false;
     }
 
+    if(screenshot_)
+    {
+        screenshot_ = false;
+        writeBitmap();
+    }
+
     std::lock_guard<std::recursive_mutex> lock(accessMutex_);
 
     {
@@ -445,6 +468,13 @@ RESULT Display::writeSplash()
             return res;
     }
 
+    return RESULT_OK;
+}
+
+
+RESULT Display::screenshot()
+{
+    screenshot_ = true;
     return RESULT_OK;
 }
 
@@ -697,5 +727,111 @@ RESULT Display::sendCompressed()
     }
 
     return RESULT_OK;
+}
+
+
+void Display::writeBitmap()
+{
+
+#pragma pack(push, 1)
+    struct BMPFILEHEADER
+    {
+        uint16_t    type;       //specifies the file type
+        uint32_t    size;       //specifies the size in bytes of the bitmap file
+        uint16_t    reserved1;  //reserved; must be 0
+        uint16_t    reserved2;  //reserved; must be 0
+        uint32_t    offBits;    //species the offset in bytes from the bitmapfileheader to the bitmap bits
+    };
+
+    struct BMPINFOHEADER
+    {
+        uint32_t    size;       //specifies the number of bytes required by the struct
+        int32_t     width;      //specifies width in pixels
+        int32_t     height;     //species height in pixels
+        uint16_t    planes;     //specifies the number of color planes, must be 1
+        uint16_t    bitCount;   //specifies the number of bit per pixel
+        uint32_t    compression;//spcifies the type of compression
+        uint32_t    sizeImage;  //size of image in bytes
+        int32_t     XPelsPerMeter;  //number of pixels per meter in x axis
+        int32_t     YPelsPerMeter;  //number of pixels per meter in y axis
+        uint32_t    clrUsed;        //number of colors used by the palette
+        uint32_t    clrImportant;   //number of colors that are important
+    };
+#pragma pack(pop)
+
+    // find a free file name
+    FILE *f;
+    {
+        char filename[32];
+        for(int8_t i = 1; i <= 16; ++i)
+        {
+            sprintf(filename, "screenshot_%hhd.bmp", i);
+            if(access(filename, F_OK) == -1)
+                break;
+        }
+
+        // open a new file
+        f = fopen(filename, "wb");
+        if(f == NULL)
+        {
+            fprintf(stderr, "Could not cretae screenshot file.");
+            return;
+        }
+    }
+
+
+    {
+        // write the header
+        uint8_t colortable[] = {0, 0, 0, 0, 0xff, 0xff, 0xff, 0};
+
+        const uint32_t offset = sizeof(BMPFILEHEADER) + sizeof(BMPINFOHEADER) + sizeof(colortable);
+        const BMPFILEHEADER bmpHeader = {
+            0x4d42, // header 'BM'
+            offset + BUFSIZE,    // file size
+            0, 0,   // reserved
+            offset
+        };
+        fwrite(&bmpHeader, sizeof(bmpHeader), 1, f);
+
+        // write the info
+        const BMPINFOHEADER infoHeader = {
+            sizeof(BMPINFOHEADER),
+            128, 64,            // width, height
+            1,                  // 1 color plane
+            1,                  // 1 bit per pixel
+            0,                  // no compression
+            BUFSIZE,            // image size in bytes
+            128*1000/28, 64*1000/14, // pixels per meter for x, y
+            2, 2                // number of colors palette/important
+
+        };
+        fwrite(&infoHeader, sizeof(infoHeader), 1, f);
+
+        // write the color table
+        fwrite(colortable, sizeof(colortable), 1, f);
+    }
+
+    { // recode
+        uint8_t dst_buffer[BUFSIZE];
+        memset(dst_buffer, 0, sizeof(dst_buffer));
+
+        const uint16_t width_mask = WIDTH - 1;
+        const uint16_t row_bytes = WIDTH >> 3;
+        for(uint16_t i = 0; i < BUFSIZE; ++i)
+        {
+            const uint16_t offset =  BUFSIZE - row_bytes - (i & ~width_mask) + ((i & width_mask) >> 3);
+            uint8_t *dst = dst_buffer + offset;
+            const uint8_t dst_mask = 0x80 >> (i & 7);
+            uint8_t val = buffer_[i];
+            for(int8_t b = 0; b < 8; ++b, dst -= row_bytes, val >>= 1)
+            {
+                if(val & 1)
+                    *dst |= dst_mask;
+            }
+        }
+        fwrite(dst_buffer, sizeof(dst_buffer), 1, f);
+    }
+
+    fclose(f);
 }
 
