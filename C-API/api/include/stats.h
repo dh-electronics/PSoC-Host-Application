@@ -10,6 +10,12 @@
 #include "resultcodes.h"
 #include <stddef.h>
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /** project name of 'C-API' library */
 #define API_NAME        "C-API"
 
@@ -113,4 +119,9 @@ unsigned int getPicVersion(enum RESULT *result = NULL);
  * \return integer with hardware version of the base board.
  */
 unsigned int getHwRevision(enum RESULT *result = NULL);
+
+
+#ifdef __cplusplus
+}
+#endif
 

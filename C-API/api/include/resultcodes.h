@@ -5,6 +5,11 @@
  */
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /**
  * \brief Enumeration for common return codes from <b>C-API</b> methods.
  *
@@ -22,4 +27,10 @@ enum RESULT
     RESULT_COMM_TIMEOUT,        ///< Host to PSoC MCU timeout of spi communication
     RESULT_SEE_ERRNO            ///< Inspect errno for further failure information
 };
+
+
+#ifdef __cplusplus
+}
+#endif
+
 

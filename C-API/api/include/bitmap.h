@@ -8,6 +8,10 @@
 
 #include <stddef.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * \struct Bitmap
  * \brief Structure for handling image information.
@@ -59,3 +63,7 @@ struct  FT_Bitmap_
   unsigned char   palette_mode;  ///< This field is intended for paletted pixel modes; it indicates how the palette is stored. Not used currently.
   void*           palette;       ///< A typeless pointer to the bitmap palette; this field is intended for paletted pixel modes. Not used currently.
 };
+
+#ifdef __cplusplus
+}
+#endif

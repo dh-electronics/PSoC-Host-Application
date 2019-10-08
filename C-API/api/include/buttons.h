@@ -10,6 +10,11 @@
 #include <stddef.h>
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /** cap. touch buttons of DRC02/Bigfish front panel */
 enum BUTTON
 {
@@ -58,5 +63,10 @@ enum RESULT handleButtons();
  *
  * \return state of button (true==pressed/false==not pressed)
  */
-bool    getButtonState(enum BUTTON button, enum RESULT *res = NULL);
+bool getButtonState(enum BUTTON button, enum RESULT *res = NULL);
+
+
+#ifdef __cplusplus
+}
+#endif
 

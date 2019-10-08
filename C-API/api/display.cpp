@@ -169,7 +169,7 @@ RESULT displayBitmap(int x, int y, const Bitmap &bmp)
 
 
 
-RESULT displayBitmap(int x, int y, const FT_Bitmap_ &bmp)
+RESULT displayBitmap2(int x, int y, const FT_Bitmap_ &bmp)
 {
     IApiManager *man = IApiManager::getIface();
     if(man)

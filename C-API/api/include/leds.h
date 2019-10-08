@@ -7,6 +7,12 @@
 #include "resultcodes.h"
 #include <stddef.h>
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /** LEDs in DRC02 front panel */
 enum LED
 {
@@ -42,3 +48,9 @@ enum RESULT writeLed(enum LED led, int on);
  * \return current state of LED (on=!0 / off==0)
  */
 int  getLedState(enum LED led, enum RESULT *result = NULL);
+
+
+#ifdef __cplusplus
+}
+#endif
+

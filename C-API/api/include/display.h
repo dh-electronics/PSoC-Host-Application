@@ -10,6 +10,11 @@
 #include "resultcodes.h"
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 struct Bitmap;
 struct FT_Bitmap_;
 
@@ -136,7 +141,7 @@ enum RESULT displayBitmap(int x, int y, const Bitmap &bmp);
  *
  * \return result code of requested operation
  */
-enum RESULT displayBitmap(int x, int y, const struct FT_Bitmap_ &bmp);
+enum RESULT displayBitmap2(int x, int y, const struct FT_Bitmap_ &bmp);
 
 /**
  * \brief write display frame to OLED display via MCU
@@ -171,4 +176,9 @@ enum RESULT displayWriteSplash();
  * \return result code of requested operation
  */
 enum RESULT displayTakeScreenshot();
+
+
+#ifdef __cplusplus
+}
+#endif
 

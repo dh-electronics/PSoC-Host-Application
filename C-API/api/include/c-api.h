@@ -9,12 +9,12 @@
  *
  */
 
-#include <init.h>
-#include <stats.h>
-#include <leds.h>
-#include <display.h>
-#include <buttons.h>
-#include <leds.h>
+#include "init.h"
+#include "stats.h"
+#include "leds.h"
+#include "display.h"
+#include "buttons.h"
+#include "leds.h"
 
 
 /** \mainpage C-API - a library to abstract the SPI communication to the MCU for peripheral expansion.

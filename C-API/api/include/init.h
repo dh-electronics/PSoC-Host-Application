@@ -15,7 +15,13 @@
  */
 
 
-#include <resultcodes.h>
+#include "resultcodes.h"
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 /**
  * \brief open API
@@ -45,3 +51,9 @@ enum RESULT closeApi();
  * \return result code of requested operation
  */
 enum RESULT idleApi();
+
+
+#ifdef __cplusplus
+}
+#endif
+

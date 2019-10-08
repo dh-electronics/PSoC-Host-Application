@@ -9,6 +9,11 @@
 #include "resultcodes.h"
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /**
  *  \brief Translate enum RESULT in a printable char string
  *
@@ -17,4 +22,9 @@
  */
 
 const char * getResultCodeString(RESULT result);
+
+
+#ifdef __cplusplus
+}
+#endif
 

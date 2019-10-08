@@ -10,6 +10,11 @@
 #include "resultcodes.h"
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /**
  * \brief write data to permanent memory
  *
@@ -26,3 +31,9 @@
  * \return result code of requested operation
  */
 enum RESULT writeEeprom(unsigned short *data, unsigned short offset, unsigned char wordCount);
+
+
+#ifdef __cplusplus
+}
+#endif
+
