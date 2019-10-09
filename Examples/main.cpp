@@ -1,7 +1,7 @@
-#include "init.h"
-#include "buttons.h"
-#include "display.h"
-#include "leds.h"
+#include <c-api/init.h>
+#include <c-api/buttons.h>
+#include <c-api/display.h>
+#include <c-api/leds.h>
 #include "bounce.h"
 #include "space.h"
 #include <stdint.h>

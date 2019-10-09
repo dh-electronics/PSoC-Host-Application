@@ -1,6 +1,6 @@
 #include "Display.h"
-#include <display.h>
-#include <bitmap.h>
+#include <c-api/display.h>
+#include <c-api/bitmap.h>
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>

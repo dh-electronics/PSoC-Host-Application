@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "buttons.h"
+#include <c-api/buttons.h>
 #include <stdint.h>
 
 

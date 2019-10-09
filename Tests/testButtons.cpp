@@ -1,5 +1,5 @@
-#include <buttons.h>
-#include <helpers.h>
+#include <c-api/buttons.h>
+#include <c-api/helpers.h>
 #include <unistd.h>
 #include <iostream>
 

@@ -13,15 +13,15 @@ include_directories(
 
 
 list(APPEND SOURCES
-    api/include/resultcodes.h
-    api/include/c-api.h
-    api/include/init.h
-    api/include/stats.h
-    api/include/display.h
-    api/include/buttons.h
-    api/include/leds.h
-    api/include/helpers.h
-    api/include/bitmap.h
+    api/include/c-api/resultcodes.h
+    api/include/c-api/c-api.h
+    api/include/c-api/init.h
+    api/include/c-api/stats.h
+    api/include/c-api/display.h
+    api/include/c-api/buttons.h
+    api/include/c-api/leds.h
+    api/include/c-api/helpers.h
+    api/include/c-api/bitmap.h
     IApiManager.h
     ApiManager.h
     Compressor.h
@@ -39,6 +39,9 @@ list(APPEND SOURCES
     peripherals/Display.h
     peripherals/Gpios.h
     peripherals/Eeprom.h
+)
+
+list(APPEND SOURCES
     ApiManager.cpp
     helpers.cpp
     Compressor.cpp
@@ -58,8 +61,11 @@ list(APPEND SOURCES
 )
 find_package(Threads REQUIRED)
 
-add_library(${PROJECT_NAME} SHARED ${SOURCES})
+file(GLOB public_headers "api/include/*.h")
+
+add_library(${PROJECT_NAME} SHARED ${SOURCES} ${INCLUDES} )
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION 1)
+set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${public_headers}")
 target_link_libraries(${PROJECT_NAME}
     DHCOM_HAL
     "${CMAKE_THREAD_LIBS_INIT}"
@@ -71,5 +77,9 @@ set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
                                   ${DHCOM_HAL_INCLUDE_DIRS}
     CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 
-install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION /lib)
+install(TARGETS ${PROJECT_NAME} 
+    LIBRARY DESTINATION lib
+    PUBLIC_HEADER DESTINATION include/c-api
+)
+
 

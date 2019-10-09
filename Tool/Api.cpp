@@ -1,8 +1,8 @@
 #include "Api.h"
-#include <init.h>
+#include <c-api/init.h>
 #include <string.h>
 #include <stdio.h>
-#include <buttons.h>
+#include <c-api/buttons.h>
 #include <thread>
 #include <chrono>
 

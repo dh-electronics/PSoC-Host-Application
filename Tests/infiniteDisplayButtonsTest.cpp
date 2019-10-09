@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <buttons.h>
-#include <display.h>
+#include <c-api/buttons.h>
+#include <c-api/display.h>
 
 
 #define NUMBER_OF_BITMAPS 2

@@ -1,8 +1,8 @@
-#include <peripherals/Eeprom.h>
-#include <spi/Command.h>
-#include <spi/Response.h>
-#include <spi/SpiProto.h>
-#include <spi/MasterHelpers.h>
+#include "peripherals/Eeprom.h"
+#include "spi/Command.h"
+#include "spi/Response.h"
+#include "spi/SpiProto.h"
+#include "spi/MasterHelpers.h"
 #include <string.h>
 
 

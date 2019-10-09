@@ -1,4 +1,4 @@
-#include "bitmap.h"
+#include <c-api/bitmap.h>
 #include <string.h>
 
 

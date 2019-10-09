@@ -1,5 +1,5 @@
-#include <display.h>
-#include <helpers.h>
+#include <c-api/display.h>
+#include <c-api/helpers.h>
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>

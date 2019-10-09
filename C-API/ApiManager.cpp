@@ -1,5 +1,4 @@
 #include "ApiManager.h"
-#include "resultcodes.h"
 #include "peripherals/LedOnGpio.h"
 #include "peripherals/Buttons.h"
 #include "peripherals/Display.h"
@@ -8,7 +7,7 @@
 #include "spi/Response.h"
 #include "spi/MasterHelpers.h"
 #include <hal/System.h>
-#include <stats.h>
+#include <c-api/stats.h>
 #include <string.h>
 #include <new>
 #include <syslog.h>

@@ -1,7 +1,7 @@
 #include "space.h"
-#include "display.h"
-#include "buttons.h"
-#include "leds.h"
+#include <c-api/display.h>
+#include <c-api/buttons.h>
+#include <c-api/leds.h>
 #include <stdint.h>
 #include <unistd.h>
 #include <stdlib.h>

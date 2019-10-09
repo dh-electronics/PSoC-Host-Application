@@ -4,7 +4,7 @@
 
 #include <stdint.h>
 #include <assert.h>
-#include <spi/Response.h>
+#include "spi/Response.h"
 
 
 #ifdef __cplusplus

@@ -1,6 +1,7 @@
-#include <init.h>
-#include <helpers.h>
-#include <stats.h>
+
+#include <c-api/helpers.h>
+#include <c-api/stats.h>
+#include <c-api/init.h>
 #include <stdlib.h>
 #include <iostream>
 

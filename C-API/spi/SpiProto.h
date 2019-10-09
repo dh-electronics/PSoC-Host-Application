@@ -1,9 +1,9 @@
 #pragma once
 
 
+#include <c-api/resultcodes.h>
 #include "peripherals/Gpios.h"
-#include "resultcodes.h"
-#include <spi/MasterHelpers.h>
+#include "spi/MasterHelpers.h"
 #include <hal/SPI.h>
 #include <mutex>
 #include <condition_variable>

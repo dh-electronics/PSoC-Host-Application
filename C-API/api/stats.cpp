@@ -1,5 +1,5 @@
-#include <stats.h>
-#include <resultcodes.h>
+#include <c-api/stats.h>
+#include <c-api/resultcodes.h>
 #include <IApiManager.h>
 
 

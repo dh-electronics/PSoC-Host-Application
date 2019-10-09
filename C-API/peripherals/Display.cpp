@@ -5,7 +5,7 @@
 #include "spi/Response.h"
 #include "spi/SpiProto.h"
 #include "spi/MasterHelpers.h"
-#include "bitmap.h"
+#include <c-api/bitmap.h>
 #include <string.h>
 #include <cassert>
 #include <stdio.h>

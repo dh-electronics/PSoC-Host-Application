@@ -2,7 +2,7 @@
 #define GENERICHELPERS_H
 
 
-#include <spi/Response.h>
+#include "spi/Response.h"
 
 
 #ifdef __cplusplus

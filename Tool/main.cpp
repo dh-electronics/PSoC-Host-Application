@@ -3,7 +3,7 @@
 #include "Leds.h"
 #include "Api.h"
 #include <stdint.h>
-#include <init.h>
+#include <c-api/init.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <signal.h>

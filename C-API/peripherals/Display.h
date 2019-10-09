@@ -1,8 +1,8 @@
 #pragma once
 
 
-#include "display.h"
-#include <peripherals/IDisplay.h>
+#include <c-api/display.h>
+#include "peripherals/IDisplay.h"
 #include <mutex>
 #include <stdint.h>
 

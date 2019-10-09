@@ -9,9 +9,9 @@
 #define	MASTERHELPERS_H
 
 
-#include <spi/Command.h>
-#include <spi/Response.h>
-#include <spi/GenericHelpers.h>
+#include "spi/Command.h"
+#include "spi/Response.h"
+#include "spi/GenericHelpers.h"
 
 
 namespace drc01 {

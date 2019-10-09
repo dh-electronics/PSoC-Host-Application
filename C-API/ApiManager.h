@@ -1,13 +1,12 @@
 #pragma once
 
 
-#include <IApiManager.h>
-#include "resultcodes.h"
-#include "leds.h"
-#include <peripherals/Led.h>
-#include <peripherals/Buttons.h>
-#include <peripherals/Display.h>
-#include <spi/SpiProto.h>
+#include "IApiManager.h"
+#include <c-api/leds.h>
+#include "peripherals/Led.h"
+#include "peripherals/Buttons.h"
+#include "peripherals/Display.h"
+#include "spi/SpiProto.h"
 #include <hal/System.h>
 #include <hal/GPIO.h>
 #include <signal.h>

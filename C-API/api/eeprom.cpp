@@ -1,4 +1,4 @@
-#include <eeprom.h>
+#include <c-api/eeprom.h>
 #include <IApiManager.h>
 #include <peripherals/IEeprom.h>
 #include <cassert>

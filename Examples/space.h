@@ -2,8 +2,8 @@
 #define SPACE_H
 
 
-#include "bitmap.h"
-#include "buttons.h"
+#include <c-api/bitmap.h>
+#include <c-api/buttons.h>
 
 
 class Space

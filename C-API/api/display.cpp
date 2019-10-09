@@ -1,4 +1,4 @@
-#include <display.h>
+#include <c-api/display.h>
 #include <IApiManager.h>
 #include <peripherals/IDisplay.h>
 #include <cassert>

@@ -1,5 +1,5 @@
-#include "buttons.h"
-#include "resultcodes.h"
+#include <c-api/buttons.h>
+#include <c-api/resultcodes.h>
 #include "IApiManager.h"
 #include "peripherals/Buttons.h"
 

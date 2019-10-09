@@ -1,5 +1,5 @@
-#include <leds.h>
-#include <helpers.h>
+#include <c-api/leds.h>
+#include <c-api/helpers.h>
 #include <unistd.h>
 #include <iostream>
 

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "resultcodes.h"
-#include "leds.h"
+#include <c-api/leds.h>
 
 
 namespace drc01

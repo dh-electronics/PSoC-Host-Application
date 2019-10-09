@@ -1,6 +1,6 @@
 #include "bounce.h"
-#include "display.h"
-#include "leds.h"
+#include <c-api/display.h>
+#include <c-api/leds.h>
 #include <unistd.h>
 #include <iostream>
 #include <math.h>
