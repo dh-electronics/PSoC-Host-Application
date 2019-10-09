@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
 project(c-api VERSION 9.1 LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_compile_options(-std=c++11)
 
 set(C_API ${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.so PARENT_SCOPE)
 
@@ -66,8 +70,6 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${DHCOM_HAL_INCLUDE_DIRS}
 )
-
-target_compile_options(${PROJECT_NAME} PRIVATE -Werror)
 
 find_package(Threads REQUIRED)
 
