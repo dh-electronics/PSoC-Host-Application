@@ -6,8 +6,9 @@
  *
  */
 
-#include "resultcodes.h"
 #include <stddef.h>
+#include <stdbool.h>
+#include "resultcodes.h"
 
 
 #ifdef __cplusplus

@@ -44,7 +44,9 @@
  * \section usage_sec Usage
  *
  * To get full access to the public API of this library only the header file
- * c-api.h has to be included.
+ * c-api.h has to be included:
+ *
+ * #include <c-api/c-api.h>
  *
  * \section Abbreviations
  *

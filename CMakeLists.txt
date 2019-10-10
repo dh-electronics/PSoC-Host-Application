@@ -1,10 +1,13 @@
 cmake_minimum_required (VERSION 3.0)
-project(drc02)
+project(psoc-capi-drc02)
 
 include(GNUInstallDirs)
 include(CPackComponent)
 
-#add_subdirectory(DHCOM_HAL)       # shared library
+#add_subdirectory(DHCOM_HAL)      # shared library
+                                  # (uncomment if your sysroot does NOT
+                                  # contain a DHCOM_HAL)
+
 add_subdirectory(Bootloader-Host) # executeable
 add_subdirectory(C-API)           # shared library
 add_subdirectory(Tool)            # executeable

@@ -90,7 +90,7 @@ void testFullScreenBitmap()
     displayFill();
     for(int i = 0; i < 10; ++i)
     {
-        displayBitmap(0,0,bmp);
+        displayBitmap(0,0,&bmp);
         displayFlush();
     }
 }

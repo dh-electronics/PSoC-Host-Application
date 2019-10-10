@@ -5,9 +5,16 @@
  * \brief Header for API to control the OLED Display
  *
  * The OLED display is connected to the MCU with SPI.
+ *
+ * To avoid wearing of the OLED display, it is dimmed after a first timeout and
+ * the output is deactivated after another timeout. The OLED display can only be
+ * reactivated by touching a PCAP button on the front of the device. Touching a
+ * PCAP button also resets the timeouts.
+ * See displaySetDimTimeout() and displaySetOffTimeout().
  */
 
 #include "resultcodes.h"
+#include <stdbool.h>
 
 
 #ifdef __cplusplus
@@ -130,7 +137,7 @@ enum RESULT displayInvertRect(int x, int y, int w, int h);
  *
  * \return result code of requested operation
  */
-enum RESULT displayBitmap(int x, int y, const Bitmap &bmp);
+enum RESULT displayBitmap(int x, int y, const Bitmap *bmp);
 
 /**
  * \brief write bitmap
@@ -141,7 +148,7 @@ enum RESULT displayBitmap(int x, int y, const Bitmap &bmp);
  *
  * \return result code of requested operation
  */
-enum RESULT displayBitmap2(int x, int y, const struct FT_Bitmap_ &bmp);
+enum RESULT displayBitmap2(int x, int y, const struct FT_Bitmap_ *bmp);
 
 /**
  * \brief write display frame to OLED display via MCU

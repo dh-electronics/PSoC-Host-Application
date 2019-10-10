@@ -59,7 +59,7 @@ int infiniteDisplayButtonsTest()
         handleButtons();
 
         displayFill(0);
-        displayBitmap2(0, 0, bitmaps[bitmapIndex]);
+        displayBitmap2(0, 0, &bitmaps[bitmapIndex]);
         displayFlush();
         ++bitmapIndex;
 

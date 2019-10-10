@@ -117,7 +117,7 @@ static void displayBmp(const char *filename, int x, int y)
     }
 
     // write the bitmap to display
-    displayBitmap(x, y, bmp);
+    displayBitmap(x, y, &bmp);
 }
 
 

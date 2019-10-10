@@ -150,7 +150,7 @@ RESULT displayInvertRect(int x, int y, int w, int h)
 
 
 
-RESULT displayBitmap(int x, int y, const Bitmap &bmp)
+RESULT displayBitmap(int x, int y, const Bitmap *bmp)
 {
     IApiManager *man = IApiManager::getIface();
     if(man)
@@ -158,7 +158,7 @@ RESULT displayBitmap(int x, int y, const Bitmap &bmp)
         man->active();
         IDisplay *display = man->getDisplay();
         assert(display);
-        display->bitmap(x, y, bmp);
+        display->bitmap(x, y, *bmp);
         return RESULT_OK;
     }
     else
@@ -169,7 +169,7 @@ RESULT displayBitmap(int x, int y, const Bitmap &bmp)
 
 
 
-RESULT displayBitmap2(int x, int y, const FT_Bitmap_ &bmp)
+RESULT displayBitmap2(int x, int y, const FT_Bitmap_ *bmp)
 {
     IApiManager *man = IApiManager::getIface();
     if(man)
@@ -177,7 +177,7 @@ RESULT displayBitmap2(int x, int y, const FT_Bitmap_ &bmp)
         man->active();
         IDisplay *display = man->getDisplay();
         assert(display);
-        display->bitmap(x, y, bmp);
+        display->bitmap(x, y, *bmp);
         return RESULT_OK;
     }
     else
