@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 3.0)
-project(c-api VERSION 9.1 LANGUAGES CXX)
+project(c-api VERSION 9.3 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_options(-std=c++11)
 add_compile_options(-fPIC)
+add_compile_options(-fvisibility=hidden)
 
 set(C_API ${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.so PARENT_SCOPE)
 

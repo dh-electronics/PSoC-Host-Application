@@ -1,4 +1,5 @@
 #pragma once
+#pragma GCC visibility push(default)
 
 /** \file
  *  \brief Header for result code handling
@@ -32,5 +33,5 @@ enum RESULT
 #ifdef __cplusplus
 }
 #endif
-
+#pragma GCC visibility pop
 

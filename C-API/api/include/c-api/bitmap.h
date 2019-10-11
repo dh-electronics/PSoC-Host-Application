@@ -1,4 +1,5 @@
 #pragma once
+#pragma GCC visibility push(default)
 
 /**
  * \file bitmap.h
@@ -67,3 +68,5 @@ struct  FT_Bitmap_
 #ifdef __cplusplus
 }
 #endif
+#pragma GCC visibility pop
+

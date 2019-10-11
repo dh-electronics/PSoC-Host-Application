@@ -1,4 +1,5 @@
 #pragma once
+#pragma GCC visibility push(default)
 
 /**
  * \file display.h
@@ -188,4 +189,5 @@ enum RESULT displayTakeScreenshot();
 #ifdef __cplusplus
 }
 #endif
+#pragma GCC visibility pop
 

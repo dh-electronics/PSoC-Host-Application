@@ -1,4 +1,5 @@
 #pragma once
+#pragma GCC visibility push(default)
 
 /** \file
  *  \brief Header for LED control
@@ -53,4 +54,5 @@ int  getLedState(enum LED led, enum RESULT *result = NULL);
 #ifdef __cplusplus
 }
 #endif
+#pragma GCC visibility pop
 

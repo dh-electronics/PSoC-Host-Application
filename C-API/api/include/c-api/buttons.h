@@ -1,4 +1,5 @@
 #pragma once
+#pragma GCC visibility push(default)
 
 /**
  * \file buttons.h
@@ -70,4 +71,5 @@ bool getButtonState(enum BUTTON button, enum RESULT *res = NULL);
 #ifdef __cplusplus
 }
 #endif
+#pragma GCC visibility pop
 

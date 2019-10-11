@@ -1,4 +1,5 @@
 #pragma once
+#pragma GCC visibility push(default)
 
 /**
  * \file helpers.h
@@ -27,4 +28,5 @@ const char * getResultCodeString(RESULT result);
 #ifdef __cplusplus
 }
 #endif
+#pragma GCC visibility pop
 

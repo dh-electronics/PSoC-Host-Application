@@ -1,4 +1,5 @@
 #pragma once
+#pragma GCC visibility push(default)
 
 /** \file
  *  \brief API initialization and termination
@@ -56,4 +57,5 @@ enum RESULT idleApi();
 #ifdef __cplusplus
 }
 #endif
+#pragma GCC visibility pop
 

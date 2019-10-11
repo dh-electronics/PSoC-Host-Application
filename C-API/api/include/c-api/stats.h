@@ -1,4 +1,5 @@
 #pragma once
+#pragma GCC visibility push(default)
 
 /** \file
  *  \brief Handle SPI communication statistics
@@ -120,8 +121,8 @@ unsigned int getPicVersion(enum RESULT *result = NULL);
  */
 unsigned int getHwRevision(enum RESULT *result = NULL);
 
-
 #ifdef __cplusplus
 }
 #endif
+#pragma GCC visibility pop
 
