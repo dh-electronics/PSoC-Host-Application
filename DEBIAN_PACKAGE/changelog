@@ -1,5 +1,12 @@
 psoc-capi-drc02 package
 
+
+2019-10-11/LZ:
+version 9.3
+ - hide all symbols by default with -fvisibility=hidden
+ - use #pragma visibility push(default) to make symbols visible
+ - use #pragma visibility pop to return to previous visibility mode
+
 2019-10-10/LZ:
 version 9.2
  - change API to be ANSI C compatible
