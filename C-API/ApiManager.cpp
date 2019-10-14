@@ -556,7 +556,7 @@ bool ApiManager::writePicMode(bool active)
     if(active)
     {
         set_8(cmd.data(), 0, PIC_MODE_ACTIVE);
-        res = proto_.xmit(cmd, rsp);
+        res = proto_.xmit(cmd, rsp, ACTIVE_MODE_WAITTIME);
     }
     else
     {
