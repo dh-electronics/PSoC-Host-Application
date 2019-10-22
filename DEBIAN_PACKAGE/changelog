@@ -1,5 +1,9 @@
 psoc-capi-drc02 package
 
+2019-10-22/LZ:
+version 9.4
+ - add displayScreen() method to api
+ - add ACTIVE_MODE wait time
 
 2019-10-11/LZ:
 version 9.3
