@@ -1,4 +1,4 @@
-project(ui-tool)
+project(psoc-ui-tool)
 cmake_minimum_required(VERSION 2.8)
 
 

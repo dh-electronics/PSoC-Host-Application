@@ -1,4 +1,4 @@
-project(tests)
+project(psoc-tests)
 cmake_minimum_required(VERSION 2.8)
 
 
