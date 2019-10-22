@@ -23,6 +23,20 @@ extern "C" {
 #endif
 
 
+/** \def DISPLAY_DEFAULT_WIDTH
+    \brief display resolution in x-direction
+
+    Resolution of the OLED SSD1306 in x-direction. Used in displayScreen().
+*/
+#define DISPLAY_DEFAULT_WIDTH 128
+
+/** \def DISPLAY_DEFAULT_HEIGHT
+    \brief display resolution in y-direction
+
+    Resolution of the OLED SSD1306 in y-direction. Used in displayScreen().
+*/
+#define DISPLAY_DEFAULT_HEIGHT 64
+
 struct Bitmap;
 struct FT_Bitmap_;
 
@@ -150,6 +164,20 @@ enum RESULT displayBitmap(int x, int y, const Bitmap *bmp);
  * \return result code of requested operation
  */
 enum RESULT displayBitmap2(int x, int y, const struct FT_Bitmap_ *bmp);
+
+/**
+ * \brief write buffer content to (full) screen
+ *
+ * \param screen_buffer pointer to buffer with content to display
+ *
+ * For the resolution of the OLED SSD1306, the transferred
+ * buffer must contain data for a full screen. See DISPLAY_DEFAULT_WIDTH and
+ * DISPLAY_DEFAULT_HEIGHT. For each pixel there must be at least one bit in the
+ * buffer.
+ *
+ * \return result code of requested operation
+ */
+enum RESULT displayScreen(const unsigned char *screen_buffer);
 
 /**
  * \brief write display frame to OLED display via MCU

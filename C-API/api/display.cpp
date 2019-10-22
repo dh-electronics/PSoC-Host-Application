@@ -1,3 +1,4 @@
+#include <c-api/bitmap.h>
 #include <c-api/display.h>
 #include <IApiManager.h>
 #include <peripherals/IDisplay.h>
@@ -167,8 +168,6 @@ RESULT displayBitmap(int x, int y, const Bitmap *bmp)
     }
 }
 
-
-
 RESULT displayBitmap2(int x, int y, const FT_Bitmap_ *bmp)
 {
     IApiManager *man = IApiManager::getIface();
@@ -178,6 +177,25 @@ RESULT displayBitmap2(int x, int y, const FT_Bitmap_ *bmp)
         IDisplay *display = man->getDisplay();
         assert(display);
         display->bitmap(x, y, *bmp);
+        return RESULT_OK;
+    }
+    else
+    {
+        return RESULT_API_NOT_OPEN;
+    }
+}
+
+RESULT displayScreen(const unsigned char *screen_buffer)
+{
+    Bitmap bmp(DISPLAY_DEFAULT_WIDTH, DISPLAY_DEFAULT_HEIGHT, screen_buffer);
+
+    IApiManager *man = IApiManager::getIface();
+    if(man)
+    {
+        man->active();
+        IDisplay *display = man->getDisplay();
+        assert(display);
+        display->bitmap(0, 0, bmp);
         return RESULT_OK;
     }
     else
@@ -237,6 +255,7 @@ RESULT displayWriteSplash()
     }
 }
 
+
 RESULT displayTakeScreenshot()
 {
     IApiManager *man = IApiManager::getIface();
@@ -252,5 +271,3 @@ RESULT displayTakeScreenshot()
         return RESULT_API_NOT_OPEN;
     }
 }
-
-

@@ -5,7 +5,7 @@
 Bitmap::Bitmap(int w, int h, const unsigned char *bytes)
     : width(w)
     , height(h)
-    , pitch((width >> 3) + (w & 0x07 ? 1 : 0))
+    , pitch((width >> 3) + (w & 0x07 ? 1 : 0)) // padding to meet byte boundary
     , size(pitch * height)
 {
     data = new unsigned char[size];
