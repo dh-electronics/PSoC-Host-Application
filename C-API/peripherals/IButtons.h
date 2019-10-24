@@ -4,9 +4,6 @@
 #include <c-api/buttons.h>
 
 
-enum RESULT;
-
-
 namespace drc01
 {
 
