@@ -316,6 +316,9 @@ uint8_t SpiProto::codeDlcPacket(uint8_t *dest, const uint8_t* src, uint8_t srcSi
         case SYM_ESC:
         case SYM_DEL:
             *dst++ = SYM_ESC;
+            break;
+        default:
+            break;
         }
         *dst++ = sym;
     }
