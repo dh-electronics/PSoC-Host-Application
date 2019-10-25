@@ -17,6 +17,8 @@ class IApiManager
 public:
     static IApiManager *getIface();
 
+    virtual ~IApiManager(){}
+
     virtual void            active(bool active = true)      =0;
     virtual ILed *          getLed(LED led) const           =0;
     virtual IButtons *      getButtons() const              =0;

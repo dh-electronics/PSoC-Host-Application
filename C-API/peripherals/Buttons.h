@@ -5,9 +5,6 @@
 #include <mutex>
 
 
-enum RESULT;
-
-
 namespace drc01
 {
 
