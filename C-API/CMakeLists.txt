@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.0)
-project(c-api VERSION 9.5 LANGUAGES CXX)
+project(c-api VERSION 9.6 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_options(-std=c++11)
 add_compile_options(-fPIC)
+
+# hide  symbols of libc-api.so; visible symbols are set to default in includes
 add_compile_options(-fvisibility=hidden)
 
 set(C_API ${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.so PARENT_SCOPE)
