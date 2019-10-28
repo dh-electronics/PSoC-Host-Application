@@ -8,7 +8,9 @@ include(CPackComponent)
                                   # (uncomment if your sysroot does NOT
                                   # contain a DHCOM_HAL)
 
-add_subdirectory(Bootloader-Host) # executeable
+#add_subdirectory(Bootloader-Host) # executeable
+                                  # (uncomment to build for debian)
+
 add_subdirectory(C-API)           # shared library
 add_subdirectory(Tool)            # executeable
 add_subdirectory(Tests)           # executeable
