@@ -22,12 +22,12 @@ cpack_add_component(Headers GROUP Development DEPENDS Libraries)
 
 cpack_add_component_group(Development)
 
-set(CPACK_PACKAGE_VERSION 9.6)
+set(CPACK_PACKAGE_VERSION 9.7)
 
 set(CPACK_GENERATOR "DEB")
 
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Peter Kishalov <pkishalov@dh-electronics.com>, Ludwig Zenz <lzenz@dh-electronics.com>" CACHE STRING "Maintainer of the debian package")
-set(CPACK_DEBIAN_PACKAGE_VERSION 9.6)
+set(CPACK_DEBIAN_PACKAGE_VERSION 9.7)
 set(CPACK_DEBIAN_PACKAGE_ARCHITECURE armhf)
 set(CPACK_PACKAGE_NAME "psoc-capi-drc02" CACHE STRING "Package name")
 set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)

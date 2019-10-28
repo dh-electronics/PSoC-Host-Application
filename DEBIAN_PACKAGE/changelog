@@ -1,5 +1,13 @@
 psoc-capi-drc02 package
 
+2019-10-28/LZ:
+version 9.7
+ - remove psoc-bootloader-tool from CMakeList.txt to be built by Yocto
+
+2019-10-28/LZ:
+version 9.6
+ - fixes by Dominik Kierner
+
 2019-10-22/LZ:
 version 9.5
  - rename ui-tool to psoc-ui-tool
