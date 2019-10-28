@@ -1,9 +1,16 @@
+cmake_minimum_required(VERSION 3.0)
 set(CMAKE_SYSTEM_NAME Linux)
 
 set(CMAKE_C_COMPILER /usr/bin/arm-linux-gnueabihf-gcc)
 set(CMAKE_CXX_COMPILER /usr/bin/arm-linux-gnueabihf-g++)
+
+# for future: supported since CMAKE 3.1
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_compile_options(-std=c++11)
+add_compile_options(-fPIC)
+
 set(CMAKE_LINKER /usr/bin/arm-linux-gnueabihf-ld CACHE FILEPATH "Toolchain linker")
 set(CMAKE_AR /usr/bin/arm-linux-gnueabihf-ar CACHE FILEPATH "Toolchain archiver")
 set(CMAKE_NM /usr/bin/arm-linux-gnueabihf-nm CACHE FILEPATH "Toolchain name tool")
