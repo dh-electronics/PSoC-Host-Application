@@ -3,21 +3,21 @@ PSoC Host Application
 
 This project includes the following subprojects
 
-| Subproject      | Type           | Hosted                                                         |
-| --------------- |:--------------:| --------------------------------------------------------------:|
-| DHCOM_HAL       | shared library | SVN at file:///X:/prj/dhelectronics/DHCOM/sw/Repos             |
-| Bootloader-Host | executeable    | SVN at file:///X:/prj/dhelectronics/DRCXX/sw/Repos             |
-| C-API           | shared library | SVN at file:///X:/prj/dhelectronics/DRCXX/sw/Repos             |
-| UI-Tool         | executeable    | SVN at file:///X:/prj/dhelectronics/DRCXX/sw/Repos             |
-| Tests           | executeable    | SVN at file:///X:/prj/dhelectronics/DRCXX/sw/Repos             |
-| Examples        | executeable    | SVN at file:///X:/prj/dhelectronics/DRCXX/sw/Repos             |
+| Subproject      | Type           | Hosted                                                                   |
+| --------------- |:--------------:| ------------------------------------------------------------------------:|
+| DHCOM_HAL       | shared library | git@gitlab.dh-electronics.com:drc02/dhcom_hal.git                        |
+| Bootloader-Host | executeable    | git@gitlab.dh-electronics.com:drc02/psoc-bootloader-host-application.git |
+| C-API           | shared library | git@gitlab.dh-electronics.com:drc02/psoc-host-application.git            |
+| UI-Tool         | executeable    | git@gitlab.dh-electronics.com:drc02/psoc-host-application.git            |
+| Tests           | executeable    | git@gitlab.dh-electronics.com:drc02/psoc-host-application.git            |
+| Examples        | executeable    | git@gitlab.dh-electronics.com:drc02/psoc-host-application.git            |
 
 Build
 -----
 
 **Project structure**
 ```bash
-Root of the PSoC Host Application project
+Root of the PSoC Host Application project (check 'root' CMakeLists.txt)
 ├──"Bootloader-Tool"
 │   ├───include
 │   ├───src
