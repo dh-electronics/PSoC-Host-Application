@@ -27,5 +27,5 @@ Bitmap::Bitmap(const Bitmap &other)
 
 Bitmap::~Bitmap()
 {
-    delete data;
+    delete[] data;
 }
