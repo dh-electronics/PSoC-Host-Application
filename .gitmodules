@@ -1,6 +1,6 @@
 [submodule "Bootloader-Host"]
 	path = Bootloader-Host
-	url = git@gitlab.dh-electronics.com:drc02/psoc-bootloader-host-application.git
+	url = ../psoc-bootloader-host-application.git
 [submodule "DHCOM_HAL"]
 	path = DHCOM_HAL
-	url = git@gitlab.dh-electronics.com:drc02/dhcom_hal.git
+	url = ../dhcom_hal.git
