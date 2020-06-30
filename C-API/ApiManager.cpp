@@ -82,6 +82,10 @@ bool ApiManager::start()
         syslog(LOG_INFO, "Running on i.MX6ULL CPU...");
         break;
 
+    case System::HARDWARE_DHCOM_STM32MP1:
+        syslog(LOG_INFO, "Running on STM32MP1 CPU...");
+        break;
+
     default:
         syslog(LOG_ERR, "Unsupported Cpu type. Stopping.");
         return false;
@@ -389,16 +393,49 @@ CPU revision    : 5
 Hardware        : Freescale i.MX6 Ultralite (Device Tree)
 Revision        : 0000
 Serial          : 0000000000000000
+
+===== Cpuinfo for STM32MP1 =====
+root@dhcom:~# cat /proc/cpuinfo
+processor       : 0
+model name      : ARMv7 Processor rev 5 (v7l)
+BogoMIPS        : 48.00
+Features        : half thumb fastmult vfp edsp thumbee neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm
+CPU implementer : 0x41
+CPU architecture: 7
+CPU variant     : 0x0
+CPU part        : 0xc07
+CPU revision    : 5
+
+processor       : 1
+model name      : ARMv7 Processor rev 5 (v7l)
+BogoMIPS        : 48.00
+Features        : half thumb fastmult vfp edsp thumbee neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm
+CPU implementer : 0x41
+CPU architecture: 7
+CPU variant     : 0x0
+CPU part        : 0xc07
+CPU revision    : 5
+
+Hardware        : STM32 (Device Tree Support)
+Revision        : 0000
+Serial          : 001F003C3438510838333630
 */
 bool ApiManager::detectCpu()
 {
-	enum CORTEX_A
-	{
-		CORTEX_A7 = 0,
-		CORTEX_A8,
-		CORTEX_A9,
-		CPU_INVALID
-	};
+    enum CORTEX_A
+    {
+        CORTEX_A7 = 0,
+        CORTEX_A8,
+        CORTEX_A9,
+        CPU_INVALID
+    };
+
+    enum HARDWARE_INFO
+    {
+        HW_IMX6 = 0,
+        HW_STM32,
+        HW_OTHER
+    };
 
     FILE *file = fopen("/proc/cpuinfo", "r");
     if(!file)
@@ -406,6 +443,8 @@ bool ApiManager::detectCpu()
 
     System::HARDWARE hw = System::HARDWARE_INVALID;
     enum CORTEX_A cpu = CPU_INVALID;
+    enum HARDWARE_INFO hardware = HW_OTHER;
+    int cpu_variant = -1;
     char *line = NULL;
     size_t size;
 
@@ -420,20 +459,26 @@ bool ApiManager::detectCpu()
         if(strstr(line, "CPU variant"))
         {
             if(strstr(line, "0x3"))
-                hw = System::HARDWARE_DHCOM_AM33;
+		// could be AM33
+		cpu_variant = 3;
             else if(strstr(line, "0x1"))
-                hw = System::HARDWARE_DHCOM_AM35;
+		// could be AM3505 or AM3517
+		cpu_variant = 1;
             else if(strstr(line, "0x2"))
-                hw = System::HARDWARE_DHCOM_IMX6_REV300;
+		// could be i.MX6qdls
+		cpu_variant = 2;
             else if(strstr(line, "0x0"))
-                hw = System::HARDWARE_DHCOM_IMX6ULL;
+		// could be i.MX6ULL or STM32MP1
+		cpu_variant = 0;
             else
             {
-                hw = System::HARDWARE_INVALID;
+		// invalid
+		cpu_variant = -1;
                 break;
             }
         }
 
+	// parse Cortex-A
         if(strstr(line, "CPU part"))
         {
             if(strstr(line, "0xc07"))
@@ -446,14 +491,60 @@ bool ApiManager::detectCpu()
                 cpu = CPU_INVALID;
             break;
         }
+
+	// parse Hardware info
+        if(strstr(line, "Hardware"))
+        {
+            if(strstr(line, "i.MX6"))
+                hardware = HW_IMX6;
+            else if(strstr(line, "STM32"))
+                hardware = HW_STM32;
+            else
+                hardware = HW_OTHER;
+            break;
+        }
     }
 
     delete line;
     fclose(file);
 
-    if(hw == System::HARDWARE_INVALID || cpu == CPU_INVALID)
+    if(cpu == CPU_INVALID)
         return false;
 
+    switch(hardware)
+    {
+    case HW_IMX6:
+        if (cpu_variant == 2) // i.MX6qdls
+        {
+            hw = System::HARDWARE_DHCOM_IMX6_REV300;
+        }
+        else if(cpu_variant == 0) // i.MX6ull
+        {
+            hw = System::HARDWARE_DHCOM_IMX6ULL;
+        }
+        break;
+    case HW_STM32:
+        if(cpu_variant == 0) // STM32MP1
+        {
+            hw = System::HARDWARE_DHCOM_STM32MP1;
+        }
+        break;
+    default: // i.MX25 is not handled (not supported)
+        if (cpu_variant == 3) // AM33
+        {
+            hw = System::HARDWARE_DHCOM_AM33;
+        }
+        else if(cpu_variant == 1) // AM3505 or AM3517
+        {
+            hw = System::HARDWARE_DHCOM_AM35;
+        }
+    }
+
+    if(hw == System::HARDWARE_INVALID)
+        return false;
+
+
+    // check selection for cpu part Cortex-A
     switch(hw)
     {
     case System::HARDWARE_DHCOM_AM33:
@@ -469,6 +560,10 @@ bool ApiManager::detectCpu()
         	return false;
         break;
     case System::HARDWARE_DHCOM_IMX6ULL:
+        if (cpu != CORTEX_A7)
+        	return false;
+        break;
+    case System::HARDWARE_DHCOM_STM32MP1:
         if (cpu != CORTEX_A7)
         	return false;
         break;
