@@ -58,11 +58,8 @@ bool ApiManager::start()
     syslog(LOG_INFO, "%s SW version %d.%d, Starting...",
     		API_NAME, API_VERSION, API_REVISION);
 
-    if(!detectCpu())
-    {
-        syslog(LOG_ERR, "Cannot detect Cpu type. Stopping.");
-        return false;
-    }
+    System::HARDWARE hw = System::detectSoC();
+    system_.setHardware(hw);
 
     switch(system_.getHardware())
     {
@@ -80,6 +77,10 @@ bool ApiManager::start()
 
     case System::HARDWARE_DHCOM_IMX6ULL:
         syslog(LOG_INFO, "Running on i.MX6ULL CPU...");
+        break;
+
+    case System::HARDWARE_DHCOM_STM32MP1:
+        syslog(LOG_INFO, "Running on STM32MP1 CPU...");
         break;
 
     default:
@@ -319,165 +320,6 @@ void ApiManager::resetPic()
         syslog(LOG_ERR, "Cannot setup the UI MCU reset GPIO");
     }
     gpio_E.close();
-}
-
-/*
-
-===== Cpuinfo for AM33 =====
-processor	: 0
-model name	: ARMv7 Processor rev 2 (v7l)
-BogoMIPS	: 495.61
-Features	: half thumb fastmult vfp edsp thumbee neon vfpv3 tls vfpd32
-CPU implementer	: 0x41
-CPU architecture: 7
-CPU variant	: 0x3
-CPU part	: 0xc08
-CPU revision	: 2
-
-Hardware	: Generic AM33XX (Flattened Device Tree)
-Revision	: 0000
-Serial		: 0000000000000000
-
-===== Cpuinfo for AM35 =====
-Processor	: ARMv7 Processor rev 7 (v7l)
-BogoMIPS	: 597.64
-Features	: swp half thumb fastmult vfp edsp thumbee neon vfpv3 tls
-CPU implementer	: 0x41
-CPU architecture: 7
-CPU variant	: 0x1
-CPU part	: 0xc08
-CPU revision	: 7
-
-Hardware	: DHCM3517
-Revision	: 0020
-Serial		: 0000000000000000
-
-===== Cpuinfo for iMX6DL =====
-processor	: 0
-model name	: ARMv7 Processor rev 10 (v7l)
-Features	: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpd32
-CPU implementer	: 0x41
-CPU architecture: 7
-CPU variant	: 0x2
-CPU part	: 0xc09
-CPU revision	: 10
-
-processor	: 1
-model name	: ARMv7 Processor rev 10 (v7l)
-Features	: swp half thumb fastmult vfp edsp neon vfpv3 tls vfpd32
-CPU implementer	: 0x41
-CPU architecture: 7
-CPU variant	: 0x2
-CPU part	: 0xc09
-CPU revision	: 10
-
-Hardware	: Freescale i.MX6 Quad/DualLite (Device Tree)
-Revision	: 0000
-Serial		: 0000000000000000
-
-===== Cpuinfo for iMX6ULL =====
-processor       : 0
-model name      : ARMv7 Processor rev 5 (v7l)
-BogoMIPS        : 96.00
-Features        : half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae
-CPU implementer : 0x41
-CPU architecture: 7
-CPU variant     : 0x0
-CPU part        : 0xc07
-CPU revision    : 5
-
-Hardware        : Freescale i.MX6 Ultralite (Device Tree)
-Revision        : 0000
-Serial          : 0000000000000000
-*/
-bool ApiManager::detectCpu()
-{
-	enum CORTEX_A
-	{
-		CORTEX_A7 = 0,
-		CORTEX_A8,
-		CORTEX_A9,
-		CPU_INVALID
-	};
-
-    FILE *file = fopen("/proc/cpuinfo", "r");
-    if(!file)
-        return false;
-
-    System::HARDWARE hw = System::HARDWARE_INVALID;
-    enum CORTEX_A cpu = CPU_INVALID;
-    char *line = NULL;
-    size_t size;
-
-    while(getline(&line, &size, file) != -1)
-    {
-        if(strstr(line, "CPU implementer") && !strstr(line, "0x41"))
-            break;                              // Not An ARM!
-
-        if(strstr(line, "CPU architecture") && !strstr(line, "7"))
-            break;                              // Unknown ARCH
-
-        if(strstr(line, "CPU variant"))
-        {
-            if(strstr(line, "0x3"))
-                hw = System::HARDWARE_DHCOM_AM33;
-            else if(strstr(line, "0x1"))
-                hw = System::HARDWARE_DHCOM_AM35;
-            else if(strstr(line, "0x2"))
-                hw = System::HARDWARE_DHCOM_IMX6_REV300;
-            else if(strstr(line, "0x0"))
-                hw = System::HARDWARE_DHCOM_IMX6ULL;
-            else
-            {
-                hw = System::HARDWARE_INVALID;
-                break;
-            }
-        }
-
-        if(strstr(line, "CPU part"))
-        {
-            if(strstr(line, "0xc07"))
-                cpu = CORTEX_A7;
-            else if(strstr(line, "0xc08"))
-                cpu = CORTEX_A8;
-            else if(strstr(line, "0xc09"))
-                cpu = CORTEX_A9;
-            else
-                cpu = CPU_INVALID;
-            break;
-        }
-    }
-
-    delete line;
-    fclose(file);
-
-    if(hw == System::HARDWARE_INVALID || cpu == CPU_INVALID)
-        return false;
-
-    switch(hw)
-    {
-    case System::HARDWARE_DHCOM_AM33:
-        if (cpu != CORTEX_A8)
-        	return false;
-        break;
-    case System::HARDWARE_DHCOM_AM35:
-        if (cpu != CORTEX_A8)
-        	return false;
-        break;
-    case System::HARDWARE_DHCOM_IMX6_REV300:
-        if (cpu != CORTEX_A9)
-        	return false;
-        break;
-    case System::HARDWARE_DHCOM_IMX6ULL:
-        if (cpu != CORTEX_A7)
-        	return false;
-        break;
-    default: // unknown HW / CPU match
-        return false;
-    }
-
-    system_.setHardware(hw);
-    return true;
 }
 
 
