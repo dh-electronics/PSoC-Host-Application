@@ -1,14 +1,34 @@
-cmake_minimum_required (VERSION 3.0)
-project(psoc-capi-drc02)
-
+cmake_minimum_required (VERSION 3.13)
+project(psoc-drc02)
+message("CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
+message("CMAKE_SYSTEM_PROCESSOR: ${CMAKE_SYSTEM_PROCESSOR}")
 include(GNUInstallDirs)
+
+set(RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/copyright")
+set(RESOURCE_FILE_CHANGELOG "${CMAKE_SOURCE_DIR}/changelog")
+
+install(FILES ${RESOURCE_FILE_LICENSE} ${RESOURCE_FILE_CHANGELOG}
+    DESTINATION /usr/share/doc/libpsoc-drc02/
+    COMPONENT lib
+)
+
+install(FILES ${RESOURCE_FILE_LICENSE} ${RESOURCE_FILE_CHANGELOG}
+    DESTINATION /usr/share/doc/psoc-drc02-utils/
+    COMPONENT bin
+)
+
+install(FILES ${RESOURCE_FILE_LICENSE} ${RESOURCE_FILE_CHANGELOG}
+    DESTINATION /usr/share/doc/libpsoc-drc02-dev/
+    COMPONENT dev
+)
+
 include(CPackComponent)
 
 #add_subdirectory(DHCOM_HAL)      # shared library
                                   # (uncomment if your sysroot does NOT
                                   # contain a DHCOM_HAL)
 
-#add_subdirectory(Bootloader-Host) # executeable
+add_subdirectory(Bootloader-Host) # executeable
                                   # (uncomment to build for debian)
 
 add_subdirectory(C-API)           # shared library
@@ -16,23 +36,24 @@ add_subdirectory(Tool)            # executeable
 add_subdirectory(Tests)           # executeable
 add_subdirectory(Examples)        # executeable
 
-cpack_add_component(Libraries)
-cpack_add_component(Namelinks GROUP Development DEPENDS Libraries)
-cpack_add_component(Headers GROUP Development DEPENDS Libraries)
+include(PSOC_HOST_Utils.cmake)
 
-cpack_add_component_group(Development)
+# ----------------------------------------------------------------------------
+#  Autodetect if we are in a GIT repository
+# ----------------------------------------------------------------------------
+find_host_package(Git QUIET)
 
-set(CPACK_PACKAGE_VERSION 9.8)
+if(NOT DEFINED PSOC_HOST_VCSVERSION AND GIT_FOUND)
+  git_describe(PSOC_HOST_VCSVERSION "${PSOC_HOST_SOURCE_DIR}")
+elseif(NOT DEFINED PSOC_HOST_VCSVERSION)
+  # We don't have git:
+  set(PSOC_HOST_VCSVERSION "unknown")
+endif()
+if(PSOC_HOST_VCSVERSION)
+  message("")
+  message(${PROJECT_NAME} " vcs version: " ${PSOC_HOST_VCSVERSION})
+endif()
 
 set(CPACK_GENERATOR "DEB")
-
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Peter Kishalov <pkishalov@dh-electronics.com>, Ludwig Zenz <lzenz@dh-electronics.com>" CACHE STRING "Maintainer of the debian package")
-set(CPACK_DEBIAN_PACKAGE_VERSION 9.8)
-set(CPACK_DEBIAN_PACKAGE_ARCHITECURE armhf)
-set(CPACK_PACKAGE_NAME "psoc-capi-drc02" CACHE STRING "Package name")
-set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
-set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "PSoC Host Application, C-API: Library for psoc access")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>=2.19-18), dhcom-hal(>=1.4)" CACHE STRING "Debian package dependencies")
-set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_CURRENT_SOURCE_DIR}/DEBIAN_PACKAGE/changelog;${CMAKE_CURRENT_SOURCE_DIR}/DEBIAN_PACKAGE/preinst;${CMAKE_CURRENT_SOURCE_DIR}/DEBIAN_PACKAGE/postinst")
-set(CPACK_PACKAGE_HOMEPAGE_URL "https://www.dh-electronics.com")
-include(CPack)
+set(PSOC_HOST_PACKAGE_NAME "psoc-drc02")
+include(PSOC_HOST_Packaging.cmake)

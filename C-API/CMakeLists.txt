@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.0)
-project(c-api VERSION 9.7 LANGUAGES CXX)
+cmake_minimum_required (VERSION 3.13)
+project(psoc-drc02 VERSION 9.7 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -79,13 +79,11 @@ find_package(Threads REQUIRED)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-        DHCOM_HAL
+        dhcom-hal
         "${CMAKE_THREAD_LIBS_INIT}"
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION 1)
-# set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${public_headers}")
-
 
 # Expose C-API's public includes to other subprojects through cache variable
 set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
@@ -93,12 +91,19 @@ set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
                                   ${DHCOM_HAL_INCLUDE_DIRS}
     CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 
+include(GNUInstallDirs)
+
 install(TARGETS ${PROJECT_NAME} 
-    LIBRARY DESTINATION lib
-    # PUBLIC_HEADER DESTINATION include/c-api
+    LIBRARY
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/${CMAKE_LIBRARY_ARCHITECTURE}
+    COMPONENT lib
 )
 
 # use this to install header files and keep directory structure
-install(DIRECTORY api/include/ DESTINATION include COMPONENT devel PATTERN "*.h" )
+install(DIRECTORY api/include/ 
+	DESTINATION include
+	COMPONENT dev
+	PATTERN "*.h"
+)
 
 
