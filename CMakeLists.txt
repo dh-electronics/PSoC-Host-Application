@@ -44,7 +44,7 @@ include(PSOC_HOST_Utils.cmake)
 find_host_package(Git QUIET)
 
 if(NOT DEFINED PSOC_HOST_VCSVERSION AND GIT_FOUND)
-  git_describe(PSOC_HOST_VCSVERSION "${PSOC_HOST_SOURCE_DIR}")
+  git_describe(PSOC_HOST_VCSVERSION "${psoc-drc02_SOURCE_DIR}")
 elseif(NOT DEFINED PSOC_HOST_VCSVERSION)
   # We don't have git:
   set(PSOC_HOST_VCSVERSION "unknown")
