@@ -24,7 +24,7 @@ list(APPEND SOURCES
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME}
-    DHCOM_HAL
+    dhcom-hal
     psoc-drc02
 )
 
