@@ -56,11 +56,16 @@ devel@Stretch:/work$ mkdir build_psoc_host
 * assume the project source code (see above) is locate within directory _psoc-host-application_
 * run cmake to create Makefiles
 ```bash
-devel@Stretch:/work/build_psoc_host$ cmake -D CMAKE_TOOLCHAIN_FILE=../psoc-host-application/arm-linux-gnueabihf-toolchain.CMakeCrossSysroot.txt CMakeLists.txt ../psoc-host-application/
+devel@Stretch:/work/build_psoc_host$ cmake -D CMAKE_TOOLCHAIN_FILE=../psoc-host-application/arm-linux-gnueabihf-toolchain.CMakeCross.txt CMakeLists.txt ../psoc-host-application/
 ```
 * build binaries
 ```bash
 devel@Stretch:/work/build_psoc_host$ make
+```
+
+* create Debian packages
+```bash
+devel@Stretch:/work/build_psoc_host$ cpack
 ```
 
 **Optional for using Eclipse IDE**

@@ -1,9 +1,9 @@
+cmake_minimum_required (VERSION 3.13)
 project(psoc-ui-tool)
-cmake_minimum_required(VERSION 2.8)
 
 
 include_directories(
-    ${c-api_INCLUDE_DIRS}
+    ${psoc-drc02_INCLUDE_DIRS}
 )
 
 
@@ -24,11 +24,19 @@ list(APPEND SOURCES
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME}
-    DHCOM_HAL
-    c-api
+    dhcom-hal
+    psoc-drc02
 )
+
 
 target_compile_options(${PROJECT_NAME} PRIVATE -std=c++11)
 
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
+
+include(GNUInstallDirs)
+
+install(TARGETS ${PROJECT_NAME}
+    RUNTIME
+    DESTINATION bin
+    COMPONENT bin
+)
 

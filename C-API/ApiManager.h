@@ -68,11 +68,10 @@ private:
     void        deletePeripherals();
 
     void        resetPic();
-    bool        detectCpu();
     bool        readHwRevision();
     bool        writePicHwRevision();
     bool        writePicMode(bool active);
-    bool	    readPicMode();
+    bool        readPicMode();
     void        stateRestore();
 
     int32_t     periodicActions();

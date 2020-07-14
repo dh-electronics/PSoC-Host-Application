@@ -1,5 +1,9 @@
 psoc-capi-drc02 package
 
+2020-07-02/LZ:
+version 9.8
+ - add STM32MP1 support, refactor CPU detection
+
 2019-10-28/LZ:
 version 9.7
  - remove psoc-bootloader-tool from CMakeList.txt to be built by Yocto
