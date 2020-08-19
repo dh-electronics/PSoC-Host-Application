@@ -24,12 +24,7 @@ install(FILES ${RESOURCE_FILE_LICENSE} ${RESOURCE_FILE_CHANGELOG}
 
 include(CPackComponent)
 
-#add_subdirectory(DHCOM_HAL)      # shared library
-                                  # (uncomment if your sysroot does NOT
-                                  # contain a DHCOM_HAL)
-
 add_subdirectory(Bootloader-Host) # executeable
-                                  # (uncomment to build for debian)
 
 add_subdirectory(C-API)           # shared library
 add_subdirectory(Tool)            # executeable
