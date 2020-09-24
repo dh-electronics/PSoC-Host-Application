@@ -1,0 +1,18 @@
+build-psoc-host-application-arm32v7:
+  image: $CI_REGISTRY/docker-images/debian-build-essential:buster-arm32v7
+  stage: build
+  script:
+    - uname -m
+    - apt-get --no-install-recommends -y install file git libgpiod-dev
+    - dpkg -i libdhcom-hal/libdhcom-hal_1.4+deb10-8-g60c22f2_armhf.deb
+    - dpkg -i libdhcom-hal/libdhcom-hal-dev_1.4+deb10-8-g60c22f2_armhf.deb
+    - mkdir build
+    - cd build
+    - cmake CMakeLists.txt ../
+    - make
+    - cpack
+    - mv *.deb ../
+  artifacts:
+    expire_in: 4 weeks
+    paths:
+      - *libpsoc-drc02*.deb
