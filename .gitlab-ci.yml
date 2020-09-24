@@ -6,6 +6,7 @@ build-psoc-host-application-arm32v7:
     - apt-get --no-install-recommends -y install file git libgpiod-dev
     - dpkg -i libdhcom-hal/libdhcom-hal_1.4+deb10-8-g60c22f2_armhf.deb
     - dpkg -i libdhcom-hal/libdhcom-hal-dev_1.4+deb10-8-g60c22f2_armhf.deb
+    - git config http.sslVerify "false"
     - git submodule update --init --recursive
     - mkdir build
     - cd build
