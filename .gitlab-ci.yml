@@ -15,4 +15,5 @@ build-psoc-host-application-arm32v7:
   artifacts:
     expire_in: 4 weeks
     paths:
-      - *libpsoc-drc02*.deb
+      - libpsoc-drc02*.deb
+      - psoc-drc02*.deb
