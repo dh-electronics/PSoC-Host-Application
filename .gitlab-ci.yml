@@ -3,10 +3,6 @@ build-psoc-host-application-arm32v7:
   stage: build
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
-  before_script:
-    - git config --global http.sslVerify "false"
-    - git submodule sync --recursive
-    - git submodule update --init --recursive
   script:
     - uname -m
     - apt-get --no-install-recommends -y install file git libgpiod-dev
