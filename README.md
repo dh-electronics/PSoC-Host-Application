@@ -14,19 +14,19 @@ This project includes the following subprojects
 ## Project structure
 ```bash
 Root of the PSoC Host Application project (check 'root' CMakeLists.txt)
-├──Bootloader-Tool
+├──Bootloader-Tool (psoc-bootloader-tool)
 │   ├───include
 │   ├───src
 |   └───CMakeLists.txt
-├───C-API
+├───C-API (libpsoc-drc02)
 │   ├───include
 │   ├───src
 |   └───CMakeLists.txt
-├───UI-Tool
+├───UI-Tool (psoc-ui-tool)
 │   ├───include
 │   ├───src
 |   └───CMakeLists.txt
-├───Tests
+├───Tests (psoc-tests)
 │   ├───include
 │   ├───src
 |   └───CMakeLists.txt
@@ -72,5 +72,5 @@ devel@deb10:/work/build_psoc_host$ cpack
 
 * create Eclipse project files/settings
 ```bash
-devel@Stretch:/work/build_psoc_host$ cmake -D CMAKE_TOOLCHAIN_FILE=../psoc-host-application/arm-linux-gnueabihf-toolchain.CMakeCrossSysroot.txt CMakeLists.txt -G "Eclipse CDT4 - Unix Makefiles" ../psoc-host-application/
+devel@Stretch:/work/build_psoc_host$ cmake -D CMAKE_TOOLCHAIN_FILE=../psoc-host-application/arm-linux-gnueabihf-toolchain.CMakeCross.txt CMakeLists.txt -G "Eclipse CDT4 - Unix Makefiles" ../psoc-host-application/
 ```
