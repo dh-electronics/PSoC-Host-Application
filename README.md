@@ -1,20 +1,26 @@
 # PSoC Host Application
 
+## Latest Build
 
-This project includes the following subprojects
+[![pipeline status](https://dhplgl01/sw0028/psoc-host-application/badges/drc02/pipeline.svg)](https://dhplgl01/sw0028/psoc-host-application/commits/drc02)
 
-| Subproject      | Type           | Hosted                                                                   |
-| --------------- |:--------------:| ------------------------------------------------------------------------:|
-| Bootloader-Host | executeable    | git@gitlab.dh-electronics.com:drc02/psoc-bootloader-host-application.git |
-| C-API           | shared library | git@gitlab.dh-electronics.com:drc02/psoc-host-application.git            |
-| UI-Tool         | executeable    | git@gitlab.dh-electronics.com:drc02/psoc-host-application.git            |
-| Tests           | executeable    | git@gitlab.dh-electronics.com:drc02/psoc-host-application.git            |
-| Examples        | executeable    | git@gitlab.dh-electronics.com:drc02/psoc-host-application.git            |
+- [Download Debian Packages *psoc-drc02*_armhf.deb][ci-artifacts-build-armhf]
+
+[ci-artifacts-build-armhf]: https://dhplgl01/sw0028/psoc-host-application/-/jobs/artifacts/drc02/download?job=build-psoc-host-application-arm32v7
+
+## Git Submodules
+
+This project includes the following subproject(s):
+
+| Subproject           | Type           | Hosted at                               |
+| -------------------- |:--------------:| ---------------------------------------:|
+| PSoC-Bootloader-Host | executeable    | ../psoc-bootloader-host-application.git |
+
 
 ## Project structure
 ```bash
 Root of the PSoC Host Application project (check 'root' CMakeLists.txt)
-├──Bootloader-Tool (psoc-bootloader-tool)
+├──Bootloader-Tool (psoc-bootloader-tool) [git submodule]
 │   ├───include
 │   ├───src
 |   └───CMakeLists.txt
@@ -38,14 +44,6 @@ Root of the PSoC Host Application project (check 'root' CMakeLists.txt)
 └─CMakeLists.txt
 ```
 
-## Latest Build
-
-[![pipeline status](https://dhplgl01/sw0028/psoc-host-application/badges/drc02/pipeline.svg)](https://dhplgl01/sw0028/psoc-host-application/commits/drc02)
-
-- [Download Debian Packages *psoc-drc02*_armhf.deb][ci-artifacts-build-armhf]
-
-[ci-artifacts-build-armhf]: https://dhplgl01/sw0028/psoc-host-application/-/jobs/artifacts/drc02/download?job=build-psoc-host-application-arm32v7
-
 ## Build
 
 * build directory should be out of source tree (when using Eclipse IDE)
@@ -68,7 +66,7 @@ devel@deb10:/work/build_psoc_host$ make
 devel@deb10:/work/build_psoc_host$ cpack
 ```
 
-## Optional for using Eclipse IDE**
+## Optional for using Eclipse IDE
 
 * create Eclipse project files/settings
 ```bash
