@@ -38,6 +38,14 @@ Root of the PSoC Host Application project (check 'root' CMakeLists.txt)
 └─CMakeLists.txt
 ```
 
+## Latest Build
+
+[![pipeline status](https://dhplgl01/sw0028/psoc-host-application/badges/drc02/pipeline.svg)](https://dhplgl01/sw0028/psoc-host-application/commits/drc02)
+
+- [Download Debian Packages *psoc-drc02*_armhf.deb][ci-artifacts-build-armhf]
+
+[ci-artifacts-build-armhf]: https://dhplgl01/sw0028/psoc-host-application/-/jobs/artifacts/drc02/download?job=build-psoc-host-application-arm32v7
+
 ## Build
 
 * build directory should be out of source tree (when using Eclipse IDE)
