@@ -234,7 +234,7 @@ RESULT SpiProto::xmit(GenericCommand *command, uint8_t cmdSize, GenericResponse 
 
             if(rspIsBusy(response))
             {
-                //                fprintf(stderr, "Busy, cmd: %hhx\n", command->command_);
+                // syslog(LOG_WARNING, "Busy, cmd: 0x%hhx, code: 0x%hhx, rspSize: %d, cmdSize %d\n", command->command_, rspErrorCode(response), rspSize, cmdSize);
                 // wait and repeat
                 incBusy();
                 usleep(BUSY_WAIT_MS * 1000);
@@ -245,7 +245,7 @@ RESULT SpiProto::xmit(GenericCommand *command, uint8_t cmdSize, GenericResponse 
 
             if(rspIsError(response))
             {
-                syslog(LOG_WARNING, "SPI error in response, command: %hhd, code: %x", command->command_, rspErrorCode(response));
+                syslog(LOG_WARNING, "SPI error in response, command: 0x%hhx, code: 0x%hhx, rspSize: %d, cmdSize %d\n", command->command_, rspErrorCode(response), rspSize, cmdSize);
                 switch(rspErrorCode(response))
                 {
                 case ERR_MODE:
@@ -281,6 +281,9 @@ RESULT SpiProto::xmit(GenericCommand *command, uint8_t cmdSize, GenericResponse 
             }
 
             // printf("\nSPI XFER time: %d", int(xmitMeasurement.elapsed()/1000));
+
+            // wait for the PIC to complete
+            usleep(200);
             return RESULT_OK;
         } // rsp_attempt
     } // cmd_attempt
