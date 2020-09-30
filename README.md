@@ -12,7 +12,7 @@
 
 [DOC_psoc-host-application.pdf (drc02)][ci-artifacts-build-doc]
 
-[ci-artifacts-build-doc]: https://dhplgl01/sw0028/psoc-host-application/-/jobs/artifacts/drc02/raw/DOC_psoc-host-application.pdf?job=build
+[ci-artifacts-build-doc]: https://dhplgl01/sw0028/psoc-host-application/-/jobs/artifacts/drc02/raw/DOC_psoc-host-application.pdf?job=build-latex-doc
 
 ## Git Submodules
 
