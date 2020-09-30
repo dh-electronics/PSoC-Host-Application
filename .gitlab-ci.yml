@@ -19,3 +19,18 @@ build-psoc-host-application-arm32v7:
     paths:
       - libpsoc-drc02*.deb
       - psoc-drc02*.deb
+
+build-latex-doc:
+  image: $CI_REGISTRY/docker-images/latex:latest
+  stage: build
+  script:
+    - apt-get update
+    - apt-get --no-install-recommends -y install doxygen graphviz
+    - cd C-API/doc
+    - doxygen Doxyfile
+    - cd latex
+    - latexmk -shell-escape -interaction=nonstopmode -pdf -f refman.tex
+    - mv refman.pdf ../../../DOC_$CI_PROJECT_NAME.pdf
+  artifacts:
+    paths:
+      - "DOC_$CI_PROJECT_NAME.pdf"
