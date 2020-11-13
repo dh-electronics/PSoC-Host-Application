@@ -43,10 +43,31 @@ void testDisplay()
         }
     }
 
-    cout << "\nTesting contrast ... skipped (blocked in latest Firmware)" << endl;
+    
     displayFill(true);
     displayFlush();
-/*
+
+    cout << "\nTesting OLed Saver ... DimTimeout == 5, OffTimeout == 10 sec" << endl;
+    res = displaySetDimTimeout(5);
+    if(RESULT_OK != res)
+    {
+        cerr << "displaySetDimTimeout: " << getResultCodeString(res) << endl;
+    }
+    res = displaySetOffTimeout(10);
+    if(RESULT_OK != res)
+    {
+        cerr << "displaySetOffTimeout: " << getResultCodeString(res) << endl;
+    }
+
+    sleep(20);
+
+    cout << "\nDisable OLed Screen Saver ... set contrast is allowed!" << endl;
+    res = displaySetOLedSaver(0);
+    if(RESULT_OK != res)
+    {
+        cerr << "displaySetOLedSaver: " << getResultCodeString(res) << endl;
+    }
+
     for(int i = 0; i < 2048; ++i)
     {
         res = displaySetContrast(i & 0xff);
@@ -58,8 +79,19 @@ void testDisplay()
         usleep(10000);
     }
 
-    displayFill();
-    displayFlush();
+    cout << "\nEnable OLed Screen Saver ... set contrast is denied again!" << endl;
+    res = displaySetOLedSaver(1);
+    if(RESULT_OK != res)
+    {
+        cerr << "displaySetOLedSaver: " << getResultCodeString(res) << endl;
+    }
+/*
+    // this !has! to fail
+    res = displaySetContrast(0xff);
+    if(RESULT_OK != res)
+    {
+        cerr << endl << "displaySetContrast: " << getResultCodeString(res) << endl << endl;
+    }
 */
 
     // should pass
@@ -79,12 +111,12 @@ void testDisplay()
     res = displaySetDimTimeout(301);
     if(RESULT_OK != res)
     {
-        cerr << "displaySetDimTimeout: " << getResultCodeString(res) << endl;
+        cerr << endl << "displaySetDimTimeout: " << getResultCodeString(res) << endl << endl;
     }
     res = displaySetOffTimeout(601);
     if(RESULT_OK != res)
     {
-        cerr << "displaySetOffTimeout: " << getResultCodeString(res) << endl;
+        cerr << endl << "displaySetOffTimeout: " << getResultCodeString(res) << endl << endl;
     }
 */
 

@@ -36,7 +36,7 @@ void globalButtonsCallback(BUTTON button, bool pressed)
 
 int infiniteDisplayButtonsTest()
 {
-    printf("\nInfinite display test 3 (Arigo)\n");
+    printf("\nInfinite display test 3\n");
     setButtonsCallback(&globalButtonsCallback);
     displayEnable(true);
 
