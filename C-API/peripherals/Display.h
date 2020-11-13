@@ -31,6 +31,7 @@ public:
     virtual RESULT  setContrast(int value);
     virtual RESULT  setDimTimeout(short value);
     virtual RESULT  setOffTimeout(short value);
+    virtual RESULT  setOLedSaver(int enable);
     virtual void    fill(bool white);
     virtual void    fillRect(int x, int y, int w, int h, bool white);
     virtual void    drawRect(int x, int y, int w, int h, bool white);

@@ -61,7 +61,8 @@ enum RESULT displayEnable(int on);
  *
  * \attention This feature is blocked by latest MCU firmwares.
  * The contrast values are handled by the MCU firmware and can not be adjusted.
- * See displaySetDimTimeout() and displaySetOffTimeout().
+ * See displaySetDimTimeout(), displaySetOffTimeout() and displaySetOLedSaver()
+ * for further details.
  *
  * \param value new display contrast value
  *
@@ -74,7 +75,8 @@ enum RESULT displaySetContrast(int value);
  *
  * After this time the brightness of the OLED display is reduced. The timeout
  * is reseted or/and the display reactivated/brightness increased by touching
- * the PCAP buttons. This serves to protect the OLED display.
+ * the PCAP buttons. This serves to protect the OLED display. The default
+ * value is 300 seconds. The maximum value is 300 seconds.
  *
  * \param value new display dimming timeout [sec]
  *
@@ -88,13 +90,32 @@ enum RESULT displaySetDimTimeout(short value);
  * This timeout starts after the dimming timeout expired and the display
  * brightness was decreased. The switch off timeout does disable the display.
  * The timeout is reseted or/and the display reactivated/brightness increased
- * by touching the PCAP buttons. This serves to protect the OLED display.
+ * by touching the PCAP buttons. This serves to protect the OLED display. The
+ * default value is 600 seconds. The maximum value is 600 seconds.
  *
  * \param value new display switch off timeout [sec]
  *
  * \return result code of requested operation
  */
 enum RESULT displaySetOffTimeout(short value);
+
+/**
+ * \brief enable or disable display OLed-Saver by MCU
+ *
+ * To protect the OLED display, the DimTimeout and OffTimeout timers are used
+ * to dim and then deactivate the display. This is done by the MCU on the
+ * display unit. The only way to reset the timeouts is by touching the
+ * PCAP buttons. This is the standard behavior and the easiest solution
+ * to ensure a long lifetime of the OLED display.
+ * To allow the use of a specific screen saver this can be disabled with this
+ * API call. The timers DimTimeout and OffTimeout are then without function 
+ * and it is again possible to set the display brightness with displaySetContrast().
+ *
+ * \param enable true == enabled (default) / false == disabled
+ *
+ * \return result code of requested operation
+ */
+enum RESULT displaySetOLedSaver(int enable);
 
 /**
  * \brief fill display with single color

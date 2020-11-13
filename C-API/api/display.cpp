@@ -75,6 +75,21 @@ RESULT displaySetOffTimeout(short value)
     }
 }
 
+RESULT displaySetOLedSaver(int enable)
+{
+    IApiManager *man = IApiManager::getIface();
+    if(man)
+    {
+        man->active();
+        IDisplay *display = man->getDisplay();
+        assert(display);
+        return display->setOLedSaver(enable);
+    }
+    else
+    {
+        return RESULT_API_NOT_OPEN;
+    }
+}
 
 RESULT displayFill(bool white)
 {

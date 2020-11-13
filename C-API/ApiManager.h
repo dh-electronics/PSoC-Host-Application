@@ -41,7 +41,7 @@ public:
 private:
     static const int64_t LOG_STATS_PERIOD_uS = 1000000ULL * 3600 * 24; // every 24 hours
     static const int32_t READY_LED_BLINK_PERIOD_mS = 150;   // 150 ms
-    static const uint16_t ACTIVE_MODE_WAITTIME  = 15;       // 15 ms
+    static const uint16_t ACTIVE_MODE_WAITTIME  = 20;       // 20 ms
     static const uint16_t PASSIVE_MODE_WAITTIME = 15;       // 15 ms
     static const int32_t RESET_PULSE_PERIOD_mS = 2;         // 2 ms
     static const int32_t BOOTLOADER_WAIT_PERIOD_mS = 1250;  // 1250 ms

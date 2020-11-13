@@ -109,6 +109,16 @@ RESULT  Display::setOffTimeout(short value)
     return proto_.xmit(cmd, rsp);
 }
 
+RESULT  Display::setOLedSaver(int enable)
+{
+    std::lock_guard<std::recursive_mutex> lock(accessMutex_);
+
+    Command <1> cmd(CMD_DISPLAY_OLEDSAVER);
+    Response <0> rsp;
+    set_8(cmd.data(), 0, enable);
+    return proto_.xmit(cmd, rsp);
+}
+
 
 void Display::fill(bool white)
 {
