@@ -24,7 +24,7 @@ extern "C" {
 #define API_VERSION     9
 
 /** software revision of C-API library */
-#define API_REVISION    9
+#define API_REVISION    10
 
 /**
  * \brief Get count of checksum errors of SPI command detected by MCU
