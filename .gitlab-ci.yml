@@ -24,7 +24,6 @@ build-latex-doc:
   image: $CI_REGISTRY/docker-images/latex:latest
   stage: build
   script:
-    - apt-get update
     - apt-get --no-install-recommends -y install doxygen graphviz
     - cd C-API/doc
     - doxygen Doxyfile
