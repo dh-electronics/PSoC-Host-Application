@@ -122,23 +122,18 @@ void SpiProto::stop()
     struct timespec timeout;
 
     if (clock_gettime(CLOCK_REALTIME, &timeout) == -1)
-	syslog(LOG_ERR, "Failed to get clock time!");
+        syslog(LOG_ERR, "Failed to get clock time!");
 
-    timeout.tv_sec += 2;
+    timeout.tv_sec += 2;  // set 2 sec timeout delay
 
-    running_ = false;
-
-    /* previously pthread_join was used here. Very rarely pthread_join
-     * was blocking.
-     *
-     * The reason could not be found in a intense debugging session.
-     * TODOs:
-     *  - Investigate the usage of waitCondition_
-     */
-    status = pthread_timedjoin_np(pthread_, NULL, &timeout);
-    if (status && status != ESRCH) {
-	syslog(LOG_WARNING, "Failed to join heartbeat thread! status: %s", strerror(status));
-	pthread_cancel(pthread_);
+    if (running_ == true)
+    {
+        running_ = false;
+        status = pthread_timedjoin_np(pthread_, NULL, &timeout);
+        if (status && status != ESRCH) {
+            syslog(LOG_WARNING, "Failed to join heartbeat thread! status: %s", strerror(status));
+            pthread_cancel(pthread_);
+        }
     }
 }
 
