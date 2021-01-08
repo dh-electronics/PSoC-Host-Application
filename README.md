@@ -2,17 +2,17 @@
 
 ## Latest Build
 
-[![pipeline status](https://dhplgl01/sw0028/psoc-host-application/badges/drc02/pipeline.svg)](https://dhplgl01/sw0028/psoc-host-application/commits/drc02)
+[![pipeline status](https://dhplgl01/sw0028/psoc-host-application/badges/dev/drc02/master/pipeline.svg)](https://dhplgl01/sw0028/psoc-host-application/commits/dev/drc02/master)
 
 - [Download Debian Packages *psoc-drc02*_armhf.deb][ci-artifacts-build-armhf]
 
-[ci-artifacts-build-armhf]: https://dhplgl01/sw0028/psoc-host-application/-/jobs/artifacts/drc02/download?job=build-psoc-host-application-arm32v7
+[ci-artifacts-build-armhf]: https://dhplgl01/sw0028/psoc-host-application/-/jobs/artifacts/dev/drc02/master/download?job=build-psoc-host-application-arm32v7
 
 ## Documentation
 
 [DOC_psoc-host-application.pdf (drc02)][ci-artifacts-build-doc]
 
-[ci-artifacts-build-doc]: https://dhplgl01/sw0028/psoc-host-application/-/jobs/artifacts/drc02/raw/DOC_psoc-host-application.pdf?job=build-latex-doc
+[ci-artifacts-build-doc]: https://dhplgl01/sw0028/psoc-host-application/-/jobs/artifacts/dev/drc02/master/raw/DOC_psoc-host-application.pdf?job=build-latex-doc
 
 ## Git Submodules
 
