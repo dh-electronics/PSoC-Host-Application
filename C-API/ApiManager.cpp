@@ -54,6 +54,8 @@ ApiManager::~ApiManager()
 
 bool ApiManager::start()
 {
+    int retrys = 5;
+
     openlog("drc-01", LOG_PERROR, LOG_USER);
     syslog(LOG_INFO, "%s SW version %d.%d, Starting...",
     		API_NAME, API_VERSION, API_REVISION);
@@ -117,16 +119,32 @@ bool ApiManager::start()
     }
 
     // ui must be in the active mode before peripherals are created
-    if(!writePicMode(true))
+    while (true)
     {
-        syslog(LOG_ERR, "Cannot put UI MCU into active mode. Stopping.");
-        return false;
-    }
+        /*
+         * rarely it happend that the MCU mode read was not mode ACTIVE.
+         * - Increase of sleeps for waiting for the MCU to finish seems not to help here.
+         * - Error very hard to reproduce (very rare).
+         * - Workaround: add 5 retrys before aborting with error.
+         */
+        if(!writePicMode(true))
+        {
+            syslog(LOG_ERR, "Cannot put UI MCU into active mode. Stopping.");
+            return false;
+        }
 
-    if(!readPicMode())
-    {
-        syslog(LOG_ERR, "UI MCU not in active mode. Stopping.");
-        return false;
+        if(!readPicMode())
+        {
+            if (retrys)
+            {
+                syslog(LOG_ERR, "UI MCU not in active mode. Retrys left: %d", retrys);
+                retrys--;
+                continue;
+            }
+            syslog(LOG_ERR, "UI MCU not in active mode. Stopping.");
+            return false;
+        }
+        break;
     }
 
     if(!createPeripherals())
@@ -414,6 +432,11 @@ bool ApiManager::readPicMode()
 {
 	RESULT res;
 	PIC_MODE mode = proto_.readMode(&res);
+
+	if(RESULT_OK != res)
+	{
+	    syslog(LOG_ERR, "readPicMode Res: %d", res);
+	}
 
 	return (RESULT_OK == res && mode == PIC_MODE_ACTIVE);
 }
