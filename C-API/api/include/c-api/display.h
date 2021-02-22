@@ -61,7 +61,7 @@ enum RESULT displayEnable(int on);
  *
  * \attention This feature is blocked by latest MCU firmwares.
  * The contrast values are handled by the MCU firmware and can not be adjusted.
- * See displaySetDimTimeout(), displaySetOffTimeout() and displaySetOLedSaver()
+ * See displaySetDimTimeout() and displaySetOffTimeout() 
  * for further details.
  *
  * \param value new display contrast value
