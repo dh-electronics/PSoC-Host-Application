@@ -99,6 +99,7 @@ enum RESULT displaySetDimTimeout(short value);
  */
 enum RESULT displaySetOffTimeout(short value);
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 /**
  * \brief enable or disable display OLed-Saver by MCU
  *
@@ -116,6 +117,7 @@ enum RESULT displaySetOffTimeout(short value);
  * \return result code of requested operation
  */
 enum RESULT displaySetOLedSaver(int enable);
+#endif  /* DOXYGEN_SHOULD_SKIP_THIS */
 
 /**
  * \brief fill display with single color
