@@ -100,7 +100,7 @@
 % Hyperlinks (required, but should be loaded last)
 \usepackage{ifpdf}
 \ifpdf
-  \usepackage[pdftex,pagebackref=true]{hyperref}
+  \usepackage[pdftex,pagebackref=true,pdfencoding=auto]{hyperref}
 \else
   \usepackage[ps2pdf,pagebackref=true]{hyperref}
 \fi
@@ -118,6 +118,27 @@
 
 \usepackage{caption}
 \captionsetup{labelsep=space,justification=centering,font={bf},singlelinecheck=off,skip=4pt,position=top}
+
+%% add missing commands (if required)
+\makeatletter
+\providecommand\doxysection{\@startsection{subsection}{2}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\raggedright\normalfont\large\bfseries}}
+\providecommand\doxysubsection{\@startsection{subsubsection}{3}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\raggedright\normalfont\normalsize\bfseries}}
+\providecommand\doxysubsubsection{\@startsection{paragraph}{8}{\z@}%
+                                    {3.25ex \@plus1ex \@minus.2ex}%
+                                    {-1em}%
+                                    {\raggedright\normalfont\normalsize\bfseries}}
+\providecommand\doxyparagraph{\@startsection{subparagraph}{9}{\parindent}%
+                                       {3.25ex \@plus1ex \@minus .2ex}%
+                                       {-1em}%
+                                      {\raggedright\normalfont\normalsize\bfseries}}
+\makeatother
+%%
 
 %===== C O N T E N T S =====
 
