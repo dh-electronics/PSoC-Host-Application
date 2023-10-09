@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: BSD-3-Clause
+# SPDX-FileCopyrightText: (c) 2016-2023 DH electronics GmbH
+
 cmake_minimum_required (VERSION 3.13)
 project(psoc-drc02 VERSION 9.7 LANGUAGES CXX)
 

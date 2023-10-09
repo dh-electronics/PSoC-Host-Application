@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// SPDX-FileCopyrightText: (c) 2016-2023 DH electronics GmbH
+
 #ifndef GENERICHELPERS_H
 #define GENERICHELPERS_H
 

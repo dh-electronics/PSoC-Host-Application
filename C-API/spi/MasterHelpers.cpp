@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// SPDX-FileCopyrightText: (c) 2014-2023 DH electronics GmbH
+
 #include "spi/MasterHelpers.h"
 #include "spi/GenericHelpers.h"
 

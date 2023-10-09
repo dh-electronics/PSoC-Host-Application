@@ -1,9 +1,5 @@
-/* 
- * File:   MasterHelpers.h
- * Author: pkishalov
- *
- * Created on 5. August 2014, 15:41
- */
+// SPDX-License-Identifier: BSD-3-Clause
+// SPDX-FileCopyrightText: (c) 2014-2023 DH electronics GmbH
 
 #ifndef MASTERHELPERS_H
 #define	MASTERHELPERS_H

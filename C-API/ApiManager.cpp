@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// SPDX-FileCopyrightText: (c) 2016-2023 DH electronics GmbH
+
 #include "ApiManager.h"
 #include "peripherals/LedOnGpio.h"
 #include "peripherals/Buttons.h"

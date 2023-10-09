@@ -1,9 +1,5 @@
-/* 
- * File:   SlaveHelpers.h
- * Author: pkishalov
- *
- * Created on 5. August 2014, 15:47
- */
+// SPDX-License-Identifier: BSD-3-Clause
+// SPDX-FileCopyrightText: (c) 2014-2023 DH electronics GmbH
 
 #ifndef SLAVEHELPERS_H
 #define	SLAVEHELPERS_H

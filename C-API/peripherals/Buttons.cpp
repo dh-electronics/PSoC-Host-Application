@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// SPDX-FileCopyrightText: (c) 2016-2023 DH electronics GmbH
+
 #include "peripherals/Buttons.h"
 #include "spi/Command.h"
 #include "spi/Response.h"
